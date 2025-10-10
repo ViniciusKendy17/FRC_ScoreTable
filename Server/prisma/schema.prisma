@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model alianca {
+  id                                           Int           @id @default(autoincrement())
+  color                                        alianca_color
+  time1                                        Int
+  time2                                        Int
+  auto_pontos                                  Int
+  teleop_pontos                                Int
+  faltas_pontos                                Int
+  total_pontos                                 Int
+  total_rp                                     Int
+  equipe_alianca_time1Toequipe                 equipe        @relation("alianca_time1Toequipe", fields: [time1], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time1")
+  equipe_alianca_time2Toequipe                 equipe        @relation("alianca_time2Toequipe", fields: [time2], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time2")
+  partida_partida_alianca_azul_idToalianca     partida[]     @relation("partida_alianca_azul_idToalianca")
+  partida_partida_alianca_vermelha_idToalianca partida[]     @relation("partida_alianca_vermelha_idToalianca")
+
+  @@index([time1], map: "time1_idx")
+  @@index([time2], map: "time2_idx")
+}
+
+model equipe {
+  numero_equipe                 Int       @id
+  nome                          String    @db.VarChar(100)
+  pontos_ranking                Int
+  media_pontos                  Float
+  alianca_alianca_time1Toequipe alianca[] @relation("alianca_time1Toequipe")
+  alianca_alianca_time2Toequipe alianca[] @relation("alianca_time2Toequipe")
+}
+
+model partida {
+  id                                           Int                  @id @default(autoincrement())
+  tipo_partida                                 partida_tipo_partida
+  azul_pontos                                  Int
+  vermelho_pontos                              Int
+  status                                       partida_status
+  vencedor                                     partida_vencedor
+  alianca_vermelha_id                          Int
+  alianca_azul_id                              Int
+  horario                                      DateTime?            @unique(map: "horario_UNIQUE") @db.Time(0)
+  alianca_partida_alianca_azul_idToalianca     alianca              @relation("partida_alianca_azul_idToalianca", fields: [alianca_azul_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "alianca_azul_id")
+  alianca_partida_alianca_vermelha_idToalianca alianca              @relation("partida_alianca_vermelha_idToalianca", fields: [alianca_vermelha_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "alianca_vermelha_id")
+
+  @@index([alianca_azul_id], map: "alianca_azul_idx")
+  @@index([alianca_vermelha_id], map: "alianca_vermelha_idx")
+}
+
+enum partida_tipo_partida {
+  qualificacao
+  eliminatorias
+}
+
+enum partida_status {
+  agendada
+  em_progresso
+  completada
+}
+
+enum alianca_color {
+  azul
+  vermelho
+}
+
+enum partida_vencedor {
+  azul
+  vermelho
+  empate
+}

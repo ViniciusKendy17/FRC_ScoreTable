@@ -5,7 +5,7 @@
     "rootDir": "./src/",
     "outDir": "./dist/",
     "target": "ES2022",
-    "module": "ESNext",
+    "module": "commonjs",
     "esModuleInterop": true,
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
@@ -31,7 +31,7 @@
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
