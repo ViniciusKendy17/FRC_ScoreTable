@@ -1,22 +1,24 @@
 import express, { type Request, type Response } from "express";
 import { Server } from "socket.io";
+import { getWS, SetUpWs } from "./ws/ws";
+import { SetScores } from "./ws/wsService";
+import router from "./Routers/Router";
+import cors from "cors"
 const app = express();
+
+app.use(express.json())
+app.use(cors())
 
 app.get("/hello", (req: Request, res: Response) => {
   res.json("Hello FRC");
 });
 
-const io = new Server(3001, {
-  cors: {
-    origin: ["http://localhost:5173"],
-    allowedHeaders: ["*"],
-    credentials: true
-  },
-});
+//WebSocket setup
+SetUpWs();
+SetScores();
 
-io.on("connection", (socket) => {
-  console.log(socket.id);
-});
+//Base Router
+app.use('/frc/', router);
 
 app.listen(3000, () => {
   console.log("Rodando");

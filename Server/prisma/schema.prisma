@@ -9,22 +9,28 @@ datasource db {
 }
 
 model alianca {
-  id                                           Int           @id @default(autoincrement())
-  color                                        alianca_color
-  time1                                        Int
-  time2                                        Int
-  auto_pontos                                  Int
-  teleop_pontos                                Int
-  faltas_pontos                                Int
-  total_pontos                                 Int
-  total_rp                                     Int
-  equipe_alianca_time1Toequipe                 equipe        @relation("alianca_time1Toequipe", fields: [time1], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time1")
-  equipe_alianca_time2Toequipe                 equipe        @relation("alianca_time2Toequipe", fields: [time2], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time2")
-  partida_partida_alianca_azul_idToalianca     partida[]     @relation("partida_alianca_azul_idToalianca")
-  partida_partida_alianca_vermelha_idToalianca partida[]     @relation("partida_alianca_vermelha_idToalianca")
+  id                                        Int            @id @default(autoincrement())
+  color                                     alianca_color?
+  time1                                     Int
+  time2                                     Int
+  time3                                     Int
+  teleop_pontos                             Int
+  auto_pontos                               Int
+  faltas_pontos                             Int
+  total_pontos                              Int
+  total_rp                                  Int
+  partida_id                                Int?
+  partida_alianca_partida_idTopartida       partida?       @relation("alianca_partida_idTopartida", fields: [partida_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "partida_id")
+  equipe_alianca_time1Toequipe              equipe         @relation("alianca_time1Toequipe", fields: [time1], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time1")
+  equipe_alianca_time2Toequipe              equipe         @relation("alianca_time2Toequipe", fields: [time2], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time2")
+  equipe_alianca_time3Toequipe              equipe         @relation("alianca_time3Toequipe", fields: [time3], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time3")
+  partida_partida_alianca_azulToalianca     partida[]      @relation("partida_alianca_azulToalianca")
+  partida_partida_alianca_vermelhaToalianca partida[]      @relation("partida_alianca_vermelhaToalianca")
 
   @@index([time1], map: "time1_idx")
   @@index([time2], map: "time2_idx")
+  @@index([partida_id], map: "partida_id_idx")
+  @@index([time3], map: "time3_idx")
 }
 
 model equipe {
@@ -34,28 +40,26 @@ model equipe {
   media_pontos                  Float
   alianca_alianca_time1Toequipe alianca[] @relation("alianca_time1Toequipe")
   alianca_alianca_time2Toequipe alianca[] @relation("alianca_time2Toequipe")
+  alianca_alianca_time3Toequipe alianca[] @relation("alianca_time3Toequipe")
 }
 
 model partida {
-  id                                           Int                  @id @default(autoincrement())
-  tipo_partida                                 partida_tipo_partida
-  azul_pontos                                  Int
-  vermelho_pontos                              Int
-  status                                       partida_status
-  vencedor                                     partida_vencedor
-  alianca_vermelha_id                          Int
-  alianca_azul_id                              Int
-  horario                                      DateTime?            @unique(map: "horario_UNIQUE") @db.Time(0)
-  alianca_partida_alianca_azul_idToalianca     alianca              @relation("partida_alianca_azul_idToalianca", fields: [alianca_azul_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "alianca_azul_id")
-  alianca_partida_alianca_vermelha_idToalianca alianca              @relation("partida_alianca_vermelha_idToalianca", fields: [alianca_vermelha_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "alianca_vermelha_id")
+  id                                        Int                  @id @default(autoincrement())
+  numero_partida                            Int
+  tipo_partida                              partida_tipo_partida
+  azul_pontos                               Int
+  vermelho_pontos                           Int
+  status                                    partida_status
+  vencedor                                  partida_vencedor
+  alianca_vermelha                          Int?
+  alianca_azul                              Int?
+  horario                                   DateTime?            @unique(map: "horario_UNIQUE") @db.Time(0)
+  alianca_alianca_partida_idTopartida       alianca[]            @relation("alianca_partida_idTopartida")
+  alianca_partida_alianca_azulToalianca     alianca?             @relation("partida_alianca_azulToalianca", fields: [alianca_azul], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "alianca_azul")
+  alianca_partida_alianca_vermelhaToalianca alianca?             @relation("partida_alianca_vermelhaToalianca", fields: [alianca_vermelha], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "alianca_vermelha")
 
-  @@index([alianca_azul_id], map: "alianca_azul_idx")
-  @@index([alianca_vermelha_id], map: "alianca_vermelha_idx")
-}
-
-enum partida_tipo_partida {
-  qualificacao
-  eliminatorias
+  @@index([alianca_azul], map: "alianca_azul_idx")
+  @@index([alianca_vermelha], map: "alianca_vermelha_idx")
 }
 
 enum partida_status {
@@ -73,4 +77,11 @@ enum partida_vencedor {
   azul
   vermelho
   empate
+  no
+}
+
+enum partida_tipo_partida {
+  qualificatorias
+  eliminatorias
+  treino
 }

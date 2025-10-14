@@ -1,24 +1,53 @@
 import { useEffect, useState, type ChangeEvent } from "react";
-import { io } from "socket.io-client";
+import { prerenderToNodeStream } from "react-dom/static";
+import { io, Socket } from "socket.io-client";
+
+const sc = io("http://localhost:3001");
+
+interface Scores {
+  bola: number;
+  boia: number;
+  total: number;
+}
 
 export default function TestePlacar() {
-  const [coral, SetCoral] = useState(String);
+  const [score, SetScore] = useState<Scores>({ boia: 0, bola: 0, total: 0 });
 
-  const sc = io("http://localhost:3001");
   useEffect(() => {
-    sc.on("connect", () => {
-      console.log(sc.id);
-    });
-  }, []);
+    SetScore((prev) => ({ ...prev, total: prev.boia + prev.bola }));
+    sc.emit("up_score", score.boia + score.bola);
+  }, [score.bola, score.boia]);
 
-  const MandarParaPlacar = (e: string) => {};
+  useEffect(() => {
+    sc.on("score_update", (novoScore: { bola: number; boia: number }) => {
+      SetScore((prev) => ({
+        ...prev,
+        ...novoScore,
+        total: novoScore.bola + novoScore.boia,
+      }));
+    });
+
+    return () => {
+      sc.off("score_update");
+    };
+  }, []);
 
   return (
     <>
       <input
         type="number"
-        value={coral}
-        onChange={(e) => MandarParaPlacar(e.target.value)}
+        value={score.bola}
+        onChange={(e) =>
+          SetScore((prev) => ({ ...prev, bola: Number(e.target.value) }))
+        }
+      />
+
+      <input
+        type="number"
+        value={score.boia}
+        onChange={(e) =>
+          SetScore((prev) => ({ ...prev, boia: Number(e.target.value) }))
+        }
       />
     </>
   );
