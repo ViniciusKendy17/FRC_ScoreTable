@@ -1,16 +1,17 @@
-import { partida_status, partida_tipo_partida, partida_vencedor } from "../generated/prisma";
+import {
+  partida_status,
+  partida_tipo_partida,
+  partida_vencedor,
+} from "../generated/prisma";
 
 export interface Partida {
   tipo_partida: partida_tipo_partida;
-  numero_partida:number,
+  numero_partida: number;
   azul_pontos: number;
   vermelho_pontos: number;
   status: partida_status;
   vencedor: partida_vencedor;
-  alianca_vermelha_id: number;
-  alianca_azul_id: number;
-  horario: Date;
-  partida_id: number;
+  horario: string;
 }
 
 export enum Tipo_partida {
@@ -25,9 +26,4 @@ export enum Status {
   finalizada = "finalizada",
 }
 
-export enum Vencedor {
-  azul = "azul",
-  vermelho = "vermelho",
-  empate = "empate",
-  no = "no",
-}
+export type Vencedor = "azul" | "vermelho" | "empate" | "no";

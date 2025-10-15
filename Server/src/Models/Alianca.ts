@@ -9,10 +9,14 @@ export interface Alianca {
     time1: number,
     time2: number,
     time3:number,
-    partida_id: number | null
+    partida_id: number | null,
+    idade_media:number,
+    estacionar:number,
+    pre_historico:number,
+    sair:number,
     auto_pontos: number,
     teleop_pontos: number,
     faltas_pontos: number,
-    total_pontos: number,
-    total_rp: number
+    rp_auto:number,
+    rp_estacionar:number,
 }
