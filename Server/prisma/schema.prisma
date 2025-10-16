@@ -62,7 +62,7 @@ view ranking_view {
   numero_equipe    Int
   nome             String   @db.VarChar(100)
   total_rp         Decimal? @db.Decimal(32, 0)
-  partidas_jogadas BigInt   @default(0)
+  partidas_jogadas Int   @default(0)
   ranking_score    Decimal? @db.Decimal(35, 2)
   match_score      Decimal? @db.Decimal(13, 2)
   vitorias         Decimal? @db.Decimal(23, 0)

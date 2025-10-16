@@ -49,7 +49,7 @@ export function CalcularTotal(ali: Alianca) {
 }
 
 export function CalcularRP(ali: Alianca, vencedor: string) {
-  const rp_final = vencedor != "empate" ? 3 : 1;
+  const rp_final = vencedor != "empate" ? 3 : vencedor == "empate" ? 1 : 0;
 
   return ali.rp_estacionar + ali.rp_auto + rp_final;
 }

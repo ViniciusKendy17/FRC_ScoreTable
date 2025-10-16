@@ -110,6 +110,18 @@ export async function EndJudgeScores(req: Request, res: Response) {
   const alianca: Alianca = req.body;
   const match_id = req.params.match_id;
 
+  const match_db = await prisma.partida.findFirst({
+    where: {
+      id: Number(match_id),
+    },
+  });
+
+  if (match_db?.status == "completada") {
+    return res
+      .status(401)
+      .json({ msg: "Partidas já completadas nãp podem ser alteradas" });
+  }
+
   const total = CalcularTotal(alianca);
 
   await prisma.alianca.updateMany({
@@ -125,9 +137,13 @@ export async function EndJudgeScores(req: Request, res: Response) {
       pre_historico: alianca.pre_historico,
       estacionar: alianca.estacionar,
       sair: alianca.sair,
-      total_rp: 0,
+      total_rp: CalcularRP(alianca, "no"),
       total_pontos: total,
     },
+  });
+
+  return res.status(200).json({
+    msg: `Resultado parcial da aliança ${alianca.color} registrada com sucesso `,
   });
 }
 
@@ -209,24 +225,3 @@ export async function EndMatch(req: Request, res: Response) {
 //   })
 // }
 
-// class NotFoundException extends Error {}
-
-// function tryFunc(block: () => void) {
-//   try {
-//     return block()
-//   } catch (error) {
-//         if (error instanceof Prisma.PrismaClientValidationError) {
-//       error.
-//     }
-
-//     if (error instanceof Prisma.PrismaClientRustPanicError) {
-//       error.
-//     }
-
-//     if (error instanceof NotFoundException) {
-//       console.error(error.message)
-//     }
-
-//     console.error(error);
-//   }
-// }
