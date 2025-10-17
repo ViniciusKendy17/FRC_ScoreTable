@@ -1,22 +1,21 @@
 
-export enum Cor {
-    azul = "azul",
-    vermelho = "vermelho"
-}
+export type Cor = "azul" | "vermelho";
 
-export interface Alianca {
-    color: Cor,
-    time1: number,
-    time2: number,
-    time3:number,
-    partida_id: number | null,
-    idade_media:number,
-    estacionar:number,
-    pre_historico:number,
-    sair:number,
-    auto_pontos: number,
-    teleop_pontos: number,
-    faltas_pontos: number,
-    rp_auto:number,
-    rp_estacionar:number,
-}
+export type Alianca = {
+  color: Cor;
+  time1: number;
+  time2: number;
+  time3: number;
+  partida_id: number | null;
+  idade_media: number;
+  estacionar: number;
+  pre_historico: number;
+  sair: number;
+  auto_pontos: number;
+  teleop_pontos: number;
+  faltas_pontos: number;
+  rp_auto: number;
+  rp_estacionar: number;
+};
+
+export type ALiancaParcial = Pick<Alianca, "color" | "time1" | "time2" | "time3">;

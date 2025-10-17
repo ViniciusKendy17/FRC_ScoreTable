@@ -3,7 +3,7 @@ import styles from "./Qualificacao.module.css";
 export default function Qualificacao() {
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
+      <header className={styles.header} id="header-c">
         <h1 className={`${styles.title} ${styles.tipografia}`}>Qualificatória</h1>
       </header>
       <div className={styles.equipesRed}>

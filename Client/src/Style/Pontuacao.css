@@ -1,0 +1,87 @@
+#main-score {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: black solid 2px !important; */
+}
+
+.alianca-container {
+  scale: 1.4;
+  position: absolute;
+  top: 20%;
+  left: 26%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: linear-gradient(to right, #c8102e 50%, #0033a0 50%); */
+  border-radius: 12px;
+  padding: 4px;
+  width: fit-content;
+}
+
+.alianca-content {
+  background: white;
+  border-radius: 10px;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.titulo {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #444;
+  letter-spacing: 0.5px;
+}
+
+.linha {
+  width: 1px;
+  height: 20px;
+  background: #ccc;
+}
+
+.opcoes {
+  display: flex;
+  gap: 16px;
+}
+
+.opcoes label {
+  font-size: 0.8rem;
+  color: #444;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.opcoes input[type="radio"] {
+  accent-color: #444;
+  cursor: pointer;
+}
+
+#box-score{
+    position: absolute;
+    top: 27%;
+    width: 1200px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#times{
+    display: flex;
+    gap: 1rem;
+    color: white;
+}
+
+#box-cards{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
