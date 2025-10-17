@@ -13,6 +13,7 @@ export default function PartidaCard({ partida }: { partida: Partida }) {
       <div
         className="card_partida"
         onClick={(e) => {
+          e.preventDefault();
           e.stopPropagation();
           nav(`/partida/${partida.id}/aliancas`);
         }}
@@ -21,9 +22,30 @@ export default function PartidaCard({ partida }: { partida: Partida }) {
           Partida {partida.tipo_partida} #{partida.numero_partida}
         </h3>
         <section>
-          <img src={Placar} alt="" />
-          <img src={Editar} alt="" />
-          <img src={Apagar} alt="" />
+          <img
+            src={Placar}
+            alt=""
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          />
+          <img
+            src={Editar}
+            alt=""
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          />
+          <img
+            src={Apagar}
+            alt=""
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          />
         </section>
       </div>
     </>

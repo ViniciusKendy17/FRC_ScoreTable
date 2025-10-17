@@ -1,4 +1,4 @@
-import styles from "../Styles/Partida.module.css";
+import styles from "../Style/Partida.module.css";
 
 interface PointsBoxProps {
   colorClass: "red" | "red1" | "blue" | "blue1"; // agora inclui blue1

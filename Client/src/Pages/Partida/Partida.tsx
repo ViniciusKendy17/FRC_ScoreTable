@@ -1,6 +1,6 @@
 import PointsBox from "../../Components/PointsBox";
 import Placar from "../../Components/Placar";
-import styles from "../../Styles/Partida.module.css";
+import styles from "../../Style/Classificacao.module.css";
 import Footer from "../../Components/Footer";
 import Header from "../../Components/Header";
 import TeamMatchs from "../../Components/TeamMatchs";

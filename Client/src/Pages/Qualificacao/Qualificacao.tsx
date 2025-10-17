@@ -1,7 +1,7 @@
 import Footer from "../../Components/Footer";
 import Header from "../../Components/Header";
 import TeamBox from "../../Components/TeamBox";
-import styles from "../../Styles/Qualificacao.module.css";
+import styles from "../../Style/Qualificacao.module.css";
 import Placar from "../../Components/Placar";
 import { useEffect, useState } from "react";
 

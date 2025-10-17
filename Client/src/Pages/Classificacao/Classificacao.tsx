@@ -1,7 +1,7 @@
 import Footer from '../../Components/Footer';
 import GridTable from '../../Components/GridTable';
 import Header from '../../Components/Header';
-import style from '../../Styles/Classificacao.module.css';
+import style from '../../Style/Classificacao.module.css';
 import { useEffect, useState } from 'react';
 
 export default function Classificacao() {
@@ -46,7 +46,7 @@ export default function Classificacao() {
 
     return (
         <div className={style.container}>
-            <Header title="Classificação" />
+            <Header title="Classificação" pesquisa={''} SetPesquisa={undefined} showpesquisa={false} id_partida={0} />
             <div className={style.content}>
                 <div className={style.containerTable}>
                     <GridTable variant="classificacao" rows={6} columns={6} data={[

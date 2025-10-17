@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "../Styles/Qualificacao.module.css";
-import stylesPartida from "../Styles/Partida.module.css";
-import stylesWiner from "../Styles/Resultado.module.css";
+import styles from "../Style/Qualificacao.module.css";
+import stylesPartida from "../Style/Partida.module.css";
+import stylesWiner from "../Style/Resultado.module.css";
 
 interface PlacarProps {
   className?: string;

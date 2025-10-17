@@ -25,6 +25,7 @@ export default function Pontuacao() {
       endgame: 0,
       idade_media: 0,
       pre_historico: 0,
+      saida: 0,
     })),
     azul: elements.map((el) => ({
       id: Number(el.id),
@@ -33,12 +34,19 @@ export default function Pontuacao() {
       endgame: 0,
       idade_media: 0,
       pre_historico: 0,
+      saida: 0,
     })),
   });
 
   const updateScore = (
     id: number,
-    field: "auto" | "teleop" | "endgame" | "idade_media" | "pre_historico",
+    field:
+      | "auto"
+      | "teleop"
+      | "endgame"
+      | "idade_media"
+      | "pre_historico"
+      | "saida",
     value: number
   ) => {
     setScores((prev) => ({
@@ -49,61 +57,80 @@ export default function Pontuacao() {
     }));
   };
 
+  //total de pontos por aliança
   const totalAll = scores[alianca].reduce((acc, s) => {
     const el = elements.find((e) => Number(e.id) === s.id);
-    if (!el) return acc;
-    return (
-      acc +
-      s.auto * (el.pontos.auto_pontos ?? 0) +
-      s.teleop * (el.pontos.teleop_pontos ?? 0) +
-      s.endgame * (el.pontos.estacionar ?? 0)
-    );
+    if (!el || !el.pontos) return acc;
+
+    const autoPoints =
+      s.auto *
+      ((el.pontos.au_idade_media ?? 0) +
+        (el.pontos.au_pre_historico ?? 0) +
+        (el.pontos.au_estacionar ?? 0));
+
+    const teleopPoints =
+      s.teleop *
+      ((el.pontos.op_idade_media ?? 0) + (el.pontos.op_pre_historico ?? 0));
+
+    const endgamePoints = s.endgame * (el.pontos.estacionar ?? 0);
+    const saidaPoints = s.saida * (el.pontos.sair ?? 0);
+
+    return acc + autoPoints + teleopPoints + endgamePoints + saidaPoints;
   }, 0);
 
   const selected_alianca = aliancas?.find((ali) => ali.color == alianca);
-
-  const final_score: Pontos = {
-    color: alianca,
-    teleop_pontos: 0,
-    auto_pontos: 0,
-    faltas_pontos: 0,
-    idade_media: 0,
-    pre_historico: 0,
-    estacionar: 0,
-    sair: 0,
-    rp_estacionar: 0,
-    rp_auto: 0,
-  };
 
   function GetFinalScore(
     cor: Cor,
     pontos: typeof scores,
     elementos: typeof elements
   ) {
+    const final_score: Pontos = {
+      color: cor,
+      teleop_pontos: 0,
+      auto_pontos: 0,
+      faltas_pontos: 0,
+      idade_media: 0,
+      pre_historico: 0,
+      estacionar: 0,
+      sair: 0,
+      rp_estacionar: 0,
+      rp_auto: 0,
+    };
+
     pontos[cor].forEach((sc) => {
       const el = elementos.find((e) => Number(e.id) === sc.id);
       if (!el || !el.pontos) return;
 
-      final_score.auto_pontos += sc.auto * (el.pontos.auto_pontos ?? 0);
-      final_score.teleop_pontos += sc.teleop * (el.pontos.teleop_pontos ?? 0);
+      // Auto e teleop
+      final_score.auto_pontos +=
+        sc.auto *
+        ((el.pontos.au_idade_media ?? 0) +
+          (el.pontos.au_pre_historico ?? 0) +
+          (el.pontos.au_estacionar ?? 0));
+
+      final_score.teleop_pontos +=
+        sc.teleop *
+        ((el.pontos.op_idade_media ?? 0) + (el.pontos.op_pre_historico ?? 0));
+
       final_score.estacionar += sc.endgame * (el.pontos.estacionar ?? 0);
 
-      final_score.idade_media += sc.idade_media;
-      final_score.pre_historico += sc.pre_historico;
+      // RP de estacionar só se marcou pontos
+      if (sc.endgame * (el.pontos.estacionar ?? 0) >= 6) {
+        final_score.rp_estacionar = 1;
+      }
 
-      console.log(el.pontos.teleop_pontos);
-      console.log(sc.teleop);
-      // if (el.pontos.faltas_pontos)
-      //   final_score.faltas_pontos += sc.teleop * el.pontos.faltas_pontos;
+      final_score.sair += sc.saida * (el.pontos.sair ?? 0);
 
-      // console.log(final_score.idade_media);
+      final_score.idade_media +=
+        sc.auto * (el.pontos.au_idade_media ?? 0) +
+        sc.teleop * (el.pontos.op_idade_media ?? 0);
 
-      // if (el.pontos.sair) final_score.sair += sc.endgame * el.pontos.sair;
+      final_score.pre_historico +=
+        sc.auto * (el.pontos.au_pre_historico ?? 0) +
+        sc.teleop * (el.pontos.op_pre_historico ?? 0);
 
-      // if (el.pontos.rp_auto) final_score.rp_auto += sc.auto * el.pontos.rp_auto;
-
-      // if (el.pontos.rp_estacionar)
-      //   final_score.rp_estacionar += sc.endgame * el.pontos.rp_estacionar;
+      final_score.rp_auto = final_score.auto_pontos > 3 ? 1 : 0;
     });
 
     return final_score;
@@ -131,7 +158,9 @@ export default function Pontuacao() {
           showpesquisa={false}
           id_partida={Number(id)}
           pesquisa=""
-          SetPesquisa="" title={""}        />
+          SetPesquisa=""
+          title={""}
+        />
 
         <main id="main-score">
           <div className="alianca-container">

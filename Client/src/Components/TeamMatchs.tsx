@@ -1,5 +1,4 @@
-import React from "react";
-import styles from "../Styles/Partida.module.css";
+import styles from "../Style/Partida.module.css";
 
 interface TeamMatchsProps {
   leftTeams: number[];  // Ex: [9991, 9992, 9993]

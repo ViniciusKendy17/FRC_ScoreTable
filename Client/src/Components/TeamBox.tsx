@@ -1,4 +1,4 @@
-import styles from "../Styles/Qualificacao.module.css";
+import styles from "../Style/Qualificacao.module.css";
 
 interface TeamBoxProps {
   color: "red" | "blue";
