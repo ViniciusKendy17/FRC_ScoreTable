@@ -39,8 +39,7 @@ export default function Home() {
           pesquisa={pesquisa}
           id_partida={0}
           showpesquisa={true}
-          SetPesquisa={SetPesquisa}
-        />
+          SetPesquisa={SetPesquisa} title={""}        />
 
         <main id="main-judge">
           <section id="out-partidas">

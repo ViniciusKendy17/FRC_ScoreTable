@@ -13,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/game" element={<TestePlacar />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/qualificacao" element={<Qualificacao />} />
+          <Route path="/classificacao" element={<Qualificacao />} />
           <Route path="/resultado" element={<Resultado />} />
           <Route path="/partida" element={<Partida />} />
           <Route path="/partida/:id/placar" element={''}/>

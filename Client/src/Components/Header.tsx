@@ -10,11 +10,13 @@ export default function Header({
   SetPesquisa,
   showpesquisa,
   id_partida,
+  title
 }: {
   pesquisa: string;
   SetPesquisa: any;
   showpesquisa: boolean;
   id_partida: number;
+  title:string
 }) {
   const [btnativo, SetBtnativo] = useState<string>(
     showpesquisa ? "partidas" : ""

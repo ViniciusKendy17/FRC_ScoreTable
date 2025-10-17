@@ -62,24 +62,24 @@ export default function Pontuacao() {
 
   const selected_alianca = aliancas?.find((ali) => ali.color == alianca);
 
+  const final_score: Pontos = {
+    color: alianca,
+    teleop_pontos: 0,
+    auto_pontos: 0,
+    faltas_pontos: 0,
+    idade_media: 0,
+    pre_historico: 0,
+    estacionar: 0,
+    sair: 0,
+    rp_estacionar: 0,
+    rp_auto: 0,
+  };
+
   function GetFinalScore(
     cor: Cor,
     pontos: typeof scores,
     elementos: typeof elements
   ) {
-    const final_score: Pontos = {
-      color: cor,
-      teleop_pontos: 0,
-      auto_pontos: 0,
-      faltas_pontos: 0,
-      idade_media: 0,
-      pre_historico: 0,
-      estacionar: 0,
-      sair: 0,
-      rp_estacionar: 0,
-      rp_auto: 0,
-    };
-
     pontos[cor].forEach((sc) => {
       const el = elementos.find((e) => Number(e.id) === sc.id);
       if (!el || !el.pontos) return;
@@ -88,13 +88,13 @@ export default function Pontuacao() {
       final_score.teleop_pontos += sc.teleop * (el.pontos.teleop_pontos ?? 0);
       final_score.estacionar += sc.endgame * (el.pontos.estacionar ?? 0);
 
-      final_score.idade_media += sc.idade_media * (el.pontos.idade_media ?? 0);
+      final_score.idade_media += sc.idade_media;
       final_score.pre_historico += sc.pre_historico;
 
-      console.log(sc.pre_historico)
+      console.log(el.pontos.teleop_pontos);
+      console.log(sc.teleop);
       // if (el.pontos.faltas_pontos)
       //   final_score.faltas_pontos += sc.teleop * el.pontos.faltas_pontos;
-
 
       // console.log(final_score.idade_media);
 
@@ -114,11 +114,10 @@ export default function Pontuacao() {
   }, [alianca, scores, elements]);
 
   console.log(jsonAPI);
-  
+
   async function DefineAlliences() {
     const data = await PartidaService.GetAlliencesByMatch(Number(id));
     SetAliancas(data);
-    console.log(data);
   }
 
   useEffect(() => {
@@ -132,8 +131,7 @@ export default function Pontuacao() {
           showpesquisa={false}
           id_partida={Number(id)}
           pesquisa=""
-          SetPesquisa=""
-        />
+          SetPesquisa="" title={""}        />
 
         <main id="main-score">
           <div className="alianca-container">

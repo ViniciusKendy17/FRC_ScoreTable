@@ -1,260 +1,75 @@
-import styles from "./Qualificacao.module.css";
+import Footer from "../../Components/Footer";
+import Header from "../../Components/Header";
+import TeamBox from "../../Components/TeamBox";
+import styles from "../../Styles/Qualificacao.module.css";
+import Placar from "../../Components/Placar";
+import { useEffect, useState } from "react";
 
 export default function Qualificacao() {
+  const endpoint = "http://172.25.10.14:3000/frc/";
+  const [data, setData] = useState<any[]>([]);
+
+  const getMatches = async () => {
+    try {
+      const response = await fetch(endpoint + "matches");
+      if (!response.ok)
+        throw new Error(`Erro na requisição: ${response.status}`);
+
+      const json = await response.json();
+      setData(json); // <-- atualiza o estado
+      console.log(json);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Falha ao buscar matches:", error.message);
+      } else {
+        console.error("Falha ao buscar matches:", String(error));
+      }
+    }
+  };
+
+  useEffect(() => {
+    getMatches();
+  }, []);
+
   return (
     <div className={styles.container}>
-      <header className={styles.header} id="header-c">
-        <h1 className={`${styles.title} ${styles.tipografia}`}>Qualificatória</h1>
-      </header>
+      <Header
+        title="Qualificatoria"
+        pesquisa={""}
+        SetPesquisa={undefined}
+        showpesquisa={false}
+        id_partida={0}
+      />
+
       <div className={styles.equipesRed}>
-        <div className={`${styles.box} ${styles.red}`}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "clamp(445px, 25%, 450px)",
-              padding: "0 10px", // afasta do canto
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", gap: "5px" }}>
-              <p className={`${styles.tipografia}`}>40009</p>
-              <p className={`${styles.tipografia}`}>4096</p>
-            </div>
-            <p className={`${styles.tipografia}`}>1</p>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "5px",
-              padding: "5px",
-            }}
-          >
-            <p
-              className={`${styles.tipografia}`}
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-            >
-              Team Teste
-            </p>
-          </div>
-        </div>
-        <div className={`${styles.box} ${styles.red} ${styles.tipografia}`}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "clamp(445px, 25%, 450px)",
-              padding: "0 10px",
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", gap: "5px" }}>
-              <p className={`${styles.tipografia}`}>40009</p>
-              <p className={`${styles.tipografia}`}>4096</p>
-            </div>
-            <p className={`${styles.tipografia}`}>1</p>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "5px",
-              padding: "5px",
-            }}
-          >
-            <p
-              className={`${styles.tipografia}`}
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-            >
-              Team Teste
-            </p>
-          </div>
-        </div>
-        <div className={`${styles.box} ${styles.red} ${styles.tipografia}`}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "clamp(445px, 25%, 450px)",
-              padding: "0 10px",
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", gap: "5px" }}>
-              <p className={`${styles.tipografia}`}>40009</p>
-              <p className={`${styles.tipografia}`}>4096</p>
-            </div>
-            <p className={`${styles.tipografia}`}>1</p>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "5px",
-              padding: "5px",
-            }}
-          >
-            <p
-              className={`${styles.tipografia}`}
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-            >
-              Team Teste
-            </p>
-          </div>
-        </div>
+        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
+        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
+        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
       </div>
-        
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gridColumn: '2 / 3', gridRow: '2 / 3'}}>
-          <div className={styles.placar}></div>
-        </div>
+
+      <div className={styles.containerPlacar}>
+        <Placar className={styles.placar} />
+      </div>
 
       <div className={styles.equipesBlue}>
-        <div className={`${styles.box} ${styles.blue}`}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "clamp(445px, 25%, 450px)",
-              padding: "0 10px", // afasta do canto
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", gap: "5px" }}>
-              <p className={`${styles.tipografia}`}>40009</p>
-              <p className={`${styles.tipografia}`}>4096</p>
-            </div>
-            <p className={`${styles.tipografia}`}>1</p>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "5px",
-              padding: "5px",
-            }}
-          >
-            <p
-              className={`${styles.tipografia}`}
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-            >
-              Team Teste
-            </p>
-          </div>
-        </div>
-        <div className={`${styles.box} ${styles.blue}`}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "clamp(445px, 25%, 450px)",
-              padding: "0 10px", // afasta do canto
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", gap: "5px" }}>
-              <p className={`${styles.tipografia}`}>40009</p>
-              <p className={`${styles.tipografia}`}>4096</p>
-            </div>
-            <p className={`${styles.tipografia}`}>1</p>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "5px",
-              padding: "5px",
-            }}
-          >
-            <p
-              className={`${styles.tipografia}`}
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-            >
-              Team Teste
-            </p>
-          </div>
-        </div>
-        <div className={`${styles.box} ${styles.blue}`}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "clamp(445px, 25%, 450px)",
-              padding: "0 10px", // afasta do canto
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", gap: "5px" }}>
-              <p className={`${styles.tipografia}`}>40009</p>
-              <p className={`${styles.tipografia}`}>4096</p>
-            </div>
-            <p className={`${styles.tipografia}`}>1</p>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "5px",
-              padding: "5px",
-            }}
-          >
-            <p
-              className={`${styles.tipografia}`}
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-            >
-              Team Teste
-            </p>
-          </div>
-        </div>
+        <TeamBox
+          color="blue"
+          numbers={[40009, 4096, 1]}
+          teamName="Team Teste"
+        />
+        <TeamBox
+          color="blue"
+          numbers={[40009, 4096, 1]}
+          teamName="Team Teste"
+        />
+        <TeamBox
+          color="blue"
+          numbers={[40009, 4096, 1]}
+          teamName="Team Teste"
+        />
       </div>
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <p className={styles.footerText}>FRC Score Table</p>
-        </div>
-      </footer>
 
+      <Footer text="FRC Score Table" />
     </div>
   );
 }
