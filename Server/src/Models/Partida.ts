@@ -4,7 +4,7 @@ import {
   partida_vencedor,
 } from "../generated/prisma";
 
-export interface Partida {
+export type Partida = {
   tipo_partida: partida_tipo_partida;
   numero_partida: number;
   azul_pontos: number;
@@ -12,18 +12,28 @@ export interface Partida {
   status: partida_status;
   vencedor: partida_vencedor;
   horario: string;
-}
+};
 
-export enum Tipo_partida {
-  treino = "treino",
-  qualificatorias = "qualificatorias",
-  eliminatorias = "eliminatorias",
-}
 
-export enum Status {
-  agendada = "agendada",
-  em_progresso = "em_progresso",
-  finalizada = "finalizada",
-}
+type PartidaParcial = Partial<Partida>;
+
+// type MiniPatida = Pick<Partida, "status" | "tipo_partida">;
+
+type PartidaRecord = Record<string, PartidaParcial>;
+
+// const part: PartidaRecord = {
+//   partida1: { azul_pontos: 1 },
+// };
+
+// type User = {
+//   usename: string;
+//   password: string;
+// };
+
+// type UserDto = Omit<User, "password">;
+
+export type Tipo_partida = "treino" | "qualificatorias" | "eliminatorias";
+
+export type Status = "agendada" | "em_progresso" | "finalizada";
 
 export type Vencedor = "azul" | "vermelho" | "empate" | "no";

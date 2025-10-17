@@ -1,4 +1,4 @@
-export interface Equipe {
+export type Equipe = {
     numero_equipe: number,
     nome: string,
     pontos_ranking: number,

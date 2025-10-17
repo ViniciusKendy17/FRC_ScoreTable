@@ -5,22 +5,22 @@ import {
   PrismaClient,
 } from "../generated/prisma";
 import { Partida, Vencedor } from "../Models/Partida";
-import { Alianca } from "../Models/Alianca";
+import { Alianca, ALiancaParcial } from "../Models/Alianca";
 import {
   CalcularRP,
   CalcularTotal,
   NewAliance,
 } from "../Services/AllianceService";
 import { prisma } from "../Services/GenericServices";
-import { AliancaEdit } from "../Models/AliancaEdit";
 
-export async function GetAllMatches(res: Response) {
+export async function GetAllMatches(req: Request, res: Response) {
   const matches = await prisma.partida.findMany();
+
   if (!matches) {
     return res.status(404).json({ msg: "Sem partidas disponiveis" });
   }
 
-  return res.status(200).json(matches);
+  return res.status(200).json({ partidas: matches });
 }
 
 export async function NewMatch(req: Request, res: Response) {
@@ -45,7 +45,7 @@ export async function NewMatch(req: Request, res: Response) {
 }
 
 export async function EditMatch(req: Request, res: Response) {
-  const aliancas: AliancaEdit[] = req.body.aliancas;
+  const aliancas: ALiancaParcial[] = req.body.aliancas;
   const match_id = req.params.match_id;
 
   const id_db = await prisma.partida.findUnique({
@@ -212,6 +212,24 @@ export async function EndMatch(req: Request, res: Response) {
   });
 }
 
+export async function GetalliancesByMatchId(req: Request, res: Response) {
+  const match_id = req.params.match_id;
+
+  const aliancas = await prisma.alianca.findMany({
+    where: {
+      partida_id: Number(match_id),
+    },
+  });
+
+  if (aliancas.length == 0) {
+    return res.status(404).json({ msg: "Alianças não encontradas" });
+  }
+
+  return res
+    .status(200)
+    .json({ msg: "Aliancas encontradas com sucesso", aliancas: aliancas });
+}
+
 //   const a  = tryFunc(async () => {
 //        return await prisma.partida.update({
 //       where: {
@@ -224,4 +242,3 @@ export async function EndMatch(req: Request, res: Response) {
 //     });
 //   })
 // }
-

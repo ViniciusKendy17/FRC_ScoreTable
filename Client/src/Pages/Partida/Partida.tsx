@@ -8,7 +8,7 @@ import TeamMatchs from "../../Components/TeamMatchs";
 export default function Resultado() {
   return (
     <div className={styles.container}>
-      <Header title="Partida" />
+      <Header title="Partida" pesquisa={""} SetPesquisa={undefined} showpesquisa={false} id_partida={0} />
 
       <div className={styles.equipesRed}>
         <PointsBox colorClass="red" pointsText="0/4" />
