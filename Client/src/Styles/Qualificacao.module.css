@@ -1,4 +1,4 @@
-/* Container com grid 3 colunas e 3 linhas */
+
 .container {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -6,7 +6,7 @@
     height: 100vh;
     width: 100vw;
     gap: 20px;
-    background-image: url('../../assets/telaQualificacao/Ativo 4.png');
+    background-image: url('../assets/TelaQualificacao/Ativo\ 4.png');
     background-size: cover;
     background-position: center;
     box-sizing: border-box;
@@ -21,24 +21,24 @@ header {
     aspect-ratio: 8000 / 525;
     max-height: 10vh;
     width: 100%;
-    background-image: url('../../assets/telaQualificacao/Ativo 5.png');
+    background-image: url('../assets/telaQualificacao/Ativo 5.png');
     background-size: cover;
     background-position: center;
 }
 
 footer {
-  grid-column: 1 / 4;     /* ocupa toda a largura */
-  grid-row: 4 / 4;        /* posiciona na última linha */
+  grid-column: 1 / 4;     
+  grid-row: 4 / 4;        
   
   display: flex;
   justify-content: center;
   align-items: center;
   
-  aspect-ratio: 8000 / 525;   /* mesma proporção da faixa superior */
+  aspect-ratio: 8001 / 525;   
   max-height: 10vh;
   width: 100%;
 
-  background-image: url('../../assets/telaQualificacao/Ativo 5.png');
+  background-image: url('../assets/TelaResultados/Ativo 59.png');
   background-size: cover;
   background-position: center;
 }
@@ -51,7 +51,7 @@ footer {
   justify-content: space-evenly; 
   height: 100%;                  
   gap: 10px;
-  padding-top: 10%; /* desce toda a coluna */
+  padding-top: 10%; 
 }
 
 .placar {
@@ -61,7 +61,7 @@ footer {
     transform: translate(-50%, -50%); 
 
     padding: clamp(35px, 5%, 50px);
-    background-image: url('../../assets/telaQualificacao/Ativo 2.png');
+    background-image: url('../assets/telaQualificacao/Ativo 2.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -98,11 +98,11 @@ footer {
 }
 
 .red {
-    background-image: url('../../assets/telaQualificacao/Ativo 1.png');
+    background-image: url('../assets/telaQualificacao/Ativo 1.png');
 }
 
 .blue {
-    background-image: url('../../assets/telaQualificacao/Ativo 3.png');
+    background-image: url('../assets/telaQualificacao/Ativo 3.png');
 }
 
 @font-face {
@@ -120,11 +120,10 @@ footer {
     font-weight: 700;
 }
 
-.teste {
-    width: clamp(1px, 25%, 300px);
-    aspect-ratio: 1080 / 1080;
-    background-image: url('../../assets/miner.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+.containerPlacar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
 }

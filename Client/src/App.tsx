@@ -6,6 +6,7 @@ import TesteJuiz from "./Pages/TesteJuiz";
 import Qualificacao from "./Pages/Qualificacao/Qualificacao";
 import Resultado from "./Pages/Resultados/Resultado"; // Adjust the path if necessary
 import Partida from './Pages/Partida/Partida';
+import Classificacao from "./Pages/Classificacao/Classificacao";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/qualificacao" element={<Qualificacao />} />
           <Route path="/resultado" element={<Resultado />} />
           <Route path="/partida" element={<Partida />} />
+          <Route path="/classificacao" element={<Classificacao />} />
         </Routes>
       </BrowserRouter>
     </>

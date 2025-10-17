@@ -1,0 +1,24 @@
+.footer {
+  grid-column: 1 / 4;
+  grid-row: 4 / 5; /* linha agora existe */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+
+    position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.footerContent {
+    text-align: center;
+}
+
+.footerText {
+    font-family: 'NeoSansProBold', sans-serif;
+    font-size: clamp(14px, 1.5vw, 20px);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+}
