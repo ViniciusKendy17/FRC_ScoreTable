@@ -1,32 +1,32 @@
-#back{
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-attachment: fixed;
-    background-size: cover;
-    background-image: url("../assets/Tela1_juiz/Ativo 61.png");
-    background-repeat: no-repeat;
+#back {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-attachment: fixed;
+  background-size: cover;
+  background-image: url("../assets/Tela1_juiz/Ativo 61.png");
+  background-repeat: no-repeat;
 }
-#main-judge{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#main-judge {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#out-partidas{
-    margin-top: 150px;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3rem;
-    width: 65%;
-    height: 75vh;
-    overflow-y: scroll;
-    padding: 0 0 20px 0;
+#out-partidas {
+  margin-top: 150px;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  width: 65%;
+  height: 75vh;
+  overflow-y: scroll;
+  padding: 0 0 20px 0;
 }
 
 /* Aplica globalmente */
@@ -37,7 +37,12 @@
 
 /* Fundo da scrollbar */
 ::-webkit-scrollbar-track {
-  background: rgba(177, 176, 176, 0.323); /* deixa invisível ou use algo como rgba(0, 0, 0, 0.1) */
+  background: rgba(
+    177,
+    176,
+    176,
+    0.323
+  ); /* deixa invisível ou use algo como rgba(0, 0, 0, 0.1) */
 }
 
 /* Barra em si (thumb) */
@@ -55,4 +60,30 @@
 /* Opcional — torna a barra ainda mais discreta */
 ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+#finish {
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  height: 60px;
+  width: 30%;
+  font-size: 19px;
+  background-color: black;
+  color: white;
+}
+
+#out-times {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#add{
+  position: absolute;
+  top:92%;
+  scale: 3.5;
+  color: white;
+  right: 4%;
 }

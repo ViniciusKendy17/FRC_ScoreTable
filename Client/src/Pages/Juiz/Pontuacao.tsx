@@ -7,6 +7,8 @@ import Header from "../../Components/Header";
 import "../../Style/HomeJudge.css";
 import { elements, type Pontos, type Score } from "../../utils/ScoreTable";
 import ScoreCard from "../../Components/ScoreSection";
+import { toast, ToastContainer } from "react-toastify";
+import { toast_pro } from "../../utils/Util";
 
 export default function Pontuacao() {
   const { id } = useParams();
@@ -26,6 +28,7 @@ export default function Pontuacao() {
       idade_media: 0,
       pre_historico: 0,
       saida: 0,
+      estacionar_poco: 0,
     })),
     azul: elements.map((el) => ({
       id: Number(el.id),
@@ -35,8 +38,20 @@ export default function Pontuacao() {
       idade_media: 0,
       pre_historico: 0,
       saida: 0,
+      estacionar_poco: 0,
     })),
   });
+
+  async function EndJudgeMatch() {
+    const data = await PartidaService.EndJudgeMatch(Number(id), jsonAPI);
+
+    if (!data) {
+      toast.error("Erro no servidor, tente novamente", toast_pro);
+      return;
+    }
+
+    toast.success("Partida foi parcialmente finalizada com sucesso");
+  }
 
   const updateScore = (
     id: number,
@@ -46,7 +61,8 @@ export default function Pontuacao() {
       | "endgame"
       | "idade_media"
       | "pre_historico"
-      | "saida",
+      | "saida"
+      | "estacionar_poco",
     value: number
   ) => {
     setScores((prev) => ({
@@ -72,7 +88,11 @@ export default function Pontuacao() {
       s.teleop *
       ((el.pontos.op_idade_media ?? 0) + (el.pontos.op_pre_historico ?? 0));
 
-    const endgamePoints = s.endgame * (el.pontos.estacionar ?? 0);
+    const estacionar_poco =
+      s.estacionar_poco * (el.pontos.estacionar_poco ?? 0);
+
+    const endgamePoints =
+      s.endgame * (el.pontos.estacionar ?? 0) + estacionar_poco;
     const saidaPoints = s.saida * (el.pontos.sair ?? 0);
 
     return acc + autoPoints + teleopPoints + endgamePoints + saidaPoints;
@@ -113,10 +133,14 @@ export default function Pontuacao() {
         sc.teleop *
         ((el.pontos.op_idade_media ?? 0) + (el.pontos.op_pre_historico ?? 0));
 
-      final_score.estacionar += sc.endgame * (el.pontos.estacionar ?? 0);
+      const estacionar_poco =
+        sc.estacionar_poco * (el.pontos.estacionar_poco ?? 0);
+
+      final_score.estacionar +=
+        sc.endgame * (el.pontos.estacionar ?? 0) + estacionar_poco;
 
       // RP de estacionar só se marcou pontos
-      if (sc.endgame * (el.pontos.estacionar ?? 0) >= 6) {
+      if (sc.estacionar_poco * (el.pontos.estacionar_poco ?? 0) >= 6) {
         final_score.rp_estacionar = 1;
       }
 
@@ -154,6 +178,7 @@ export default function Pontuacao() {
   return (
     <>
       <div id="back">
+        <ToastContainer />
         <Header
           showpesquisa={false}
           id_partida={Number(id)}
@@ -192,11 +217,17 @@ export default function Pontuacao() {
               backgroundColor: alianca === "azul" ? "#0b90d3" : "#ff002b",
             }}
           >
-            <div id="times">
-              <p>Equipes:</p>
-              <p>{selected_alianca?.time1}</p>
-              <p>{selected_alianca?.time2}</p>
-              <p>{selected_alianca?.time3}</p>
+            <div id="out-times">
+              <div id="times">
+                <p>Equipes:</p>
+                <p>{selected_alianca?.time1}</p>
+                <p>{selected_alianca?.time2}</p>
+                <p>{selected_alianca?.time3}</p>
+              </div>
+
+              <div style={{ fontWeight: "bold", color: "#fff" }}>
+                Total da aliança {alianca}: {totalAll} pts
+              </div>
             </div>
 
             <section id="box-cards">
@@ -216,9 +247,19 @@ export default function Pontuacao() {
               })}
             </section>
 
-            <div style={{ marginTop: 10, fontWeight: "bold", color: "#fff" }}>
-              Total da aliança {alianca}: {totalAll} pts
-            </div>
+            <button
+              style={{
+                backgroundColor:
+                  alianca == "vermelho"
+                    ? "rgba(175, 4, 38, 1)"
+                    : "rgb(0, 85, 137)",
+              }}
+              id="finish"
+              type="button"
+              onClick={() => EndJudgeMatch()}
+            >
+              Finalizar Pontuação de aliança
+            </button>
           </div>
         </main>
       </div>

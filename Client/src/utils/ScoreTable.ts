@@ -8,6 +8,7 @@ export type ValoresPontos = {
   op_pre_historico: number;
   au_pre_historico: number;
   estacionar: number;
+  estacionar_poco: number;
   au_estacionar: number;
   sair: number;
 };
@@ -21,7 +22,8 @@ export type Score = {
   endgame: number;
   idade_media: number;
   pre_historico: number;
-  saida:number
+  saida: number;
+  estacionar_poco: number;
 };
 
 export type GameElement = {
@@ -45,7 +47,7 @@ export const elements: GameElement[] = [
   {
     id: 3,
     nome: "POÇO DE ESCAVAÇÃO",
-    pontos: { au_estacionar: 3, estacionar: 2 },
+    pontos: { au_estacionar: 3, estacionar_poco: 2 },
   },
   {
     id: 4,

@@ -28,6 +28,11 @@ export async function NewMatch(req: Request, res: Response) {
     const match: Partida = req.body.match;
     const aliancas: Alianca[] = req.body.aliancas;
 
+    match.azul_pontos = 0;
+    match.vermelho_pontos = 0;
+    match.vencedor = "no";
+    match.status = "agendada";
+
     const new_match = await prisma.partida.create({
       data: match,
     });
@@ -107,7 +112,7 @@ export async function DeleteMatch(req: Request, res: Response) {
 }
 
 export async function EndJudgeScores(req: Request, res: Response) {
-  const alianca: Alianca = req.body;
+  const alianca: Alianca = req.body.alianca;
   const match_id = req.params.match_id;
 
   const match_db = await prisma.partida.findFirst({

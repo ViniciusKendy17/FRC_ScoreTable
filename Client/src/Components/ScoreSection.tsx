@@ -9,15 +9,16 @@ type Props = {
     teleop: number;
     endgame: number;
     saida: number;
+    estacionar_poco: number;
   };
   onChange: (
-    field: "auto" | "teleop" | "endgame" | "saida",
+    field: "auto" | "teleop" | "endgame" | "saida" | "estacionar_poco",
     value: number
   ) => void;
 };
 
 export default function ScoreCard({ element, score, onChange }: Props) {
-  const { nome, pontos, cor = "1px" } = element;
+  const { nome, pontos, cor = "0px" } = element;
   if (!pontos) return null;
 
   // calcula total baseado nos campos existentes
@@ -29,7 +30,8 @@ export default function ScoreCard({ element, score, onChange }: Props) {
     score.teleop *
       ((pontos.op_idade_media ?? 0) + (pontos.op_pre_historico ?? 0)) +
     score.endgame * (pontos.estacionar ?? 0) +
-    score.saida * (pontos.sair ?? 0);
+    score.saida * (pontos.sair ?? 0) +
+    score.estacionar_poco * (pontos.estacionar_poco ?? 0);
 
   return (
     <div className="score-card" style={{ borderColor: cor }}>
@@ -94,6 +96,32 @@ export default function ScoreCard({ element, score, onChange }: Props) {
               </button>
               <span>{score.endgame}</span>
               <button onClick={() => onChange("endgame", score.endgame + 1)}>
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {pontos.estacionar_poco !== undefined && (
+          <div className="phase">
+            <span>Estacionar Poço ({pontos.estacionar_poco} pts/unidade)</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange(
+                    "estacionar_poco",
+                    Math.max(0, score.estacionar_poco - 1)
+                  )
+                }
+              >
+                −
+              </button>
+              <span>{score.estacionar_poco}</span>
+              <button
+                onClick={() =>
+                  onChange("estacionar_poco", score.estacionar_poco + 1)
+                }
+              >
                 +
               </button>
             </div>

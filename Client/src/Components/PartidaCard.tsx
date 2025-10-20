@@ -1,12 +1,24 @@
 import type { Partida } from "../utils/Types";
 import "../Style/PartidaCard.css";
 import Apagar from "../assets/Tela1_juiz/Ativo 68.png";
-import Editar from "../assets/Tela1_juiz/Ativo 67.png";
 import Placar from "../assets/Tela1_juiz/Ativo 66.png";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import ModalDelete from "./ModalDelete";
+import { toast } from "react-toastify";
+import { toast_pro } from "../utils/Util";
+import { FaPen } from "react-icons/fa";
 
-export default function PartidaCard({ partida }: { partida: Partida }) {
+export default function PartidaCard({
+  partida,
+  DefinirPartidas,
+}: {
+  partida: Partida;
+  DefinirPartidas: any;
+}) {
   const nav = useNavigate();
+
+  const [modal, SetModal] = useState(false);
 
   return (
     <>
@@ -15,12 +27,16 @@ export default function PartidaCard({ partida }: { partida: Partida }) {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          nav(`/partida/${partida.id}/aliancas`);
         }}
       >
         <h3>
           Partida {partida.tipo_partida} #{partida.numero_partida}
         </h3>
+
+        <button id="edit" className="edit-btn" onClick={() => nav("")}>
+          <FaPen className="edit-icon" />
+        </button>
+
         <section>
           <img
             src={Placar}
@@ -28,26 +44,46 @@ export default function PartidaCard({ partida }: { partida: Partida }) {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              nav("/partida");
             }}
           />
-          <img
-            src={Editar}
-            alt=""
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+
+          <button
+            id="pont"
+            onClick={() => {
+              if (partida.status == "finalizada") {
+                toast.warn(
+                  "Partidas finalizadas não podem ser mais acessadas",
+                  toast_pro
+                );
+                return;
+              }
+              nav(`/partida/${partida.id}/aliancas`);
             }}
-          />
+            type="button"
+          >
+            Pontuação
+          </button>
+
           <img
             src={Apagar}
             alt=""
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              SetModal(true);
             }}
           />
         </section>
       </div>
+
+      {modal && (
+        <ModalDelete
+          DefinirPartidas={DefinirPartidas}
+          id={partida.id}
+          SetModal={SetModal}
+        />
+      )}
     </>
   );
 }
