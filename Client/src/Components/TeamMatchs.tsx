@@ -1,5 +1,4 @@
-import React from "react";
-import styles from "../Styles/Partida.module.css";
+import "../Styles/Partida.css"; // ← usando CSS global
 
 interface TeamMatchsProps {
   leftTeams: number[];  // Ex: [9991, 9992, 9993]
@@ -8,22 +7,22 @@ interface TeamMatchsProps {
 
 export default function TeamMatchs({ leftTeams, rightTeams }: TeamMatchsProps) {
   return (
-      <div className={styles.containerEquipes}>
-        <div className={styles.equipeBox}>
-          {leftTeams.map((team, index) => (
-            <p key={`left-${index}`} className={styles.tipografiaEquipes}>
-              {team}
-            </p>
-          ))}
-        </div>
-
-        <div className={styles.equipeBox}>
-          {rightTeams.map((team, index) => (
-            <p key={`right-${index}`} className={styles.tipografiaEquipes}>
-              {team}
-            </p>
-          ))}
-        </div>
+    <div className="containerEquipes">
+      <div className="equipeBox">
+        {leftTeams.map((team, index) => (
+          <p key={`left-${index}`} className="tipografiaEquipes">
+            {team}
+          </p>
+        ))}
       </div>
+
+      <div className="equipeBox">
+        {rightTeams.map((team, index) => (
+          <p key={`right-${index}`} className="tipografiaEquipes">
+            {team}
+          </p>
+        ))}
+      </div>
+    </div>
   );
 }

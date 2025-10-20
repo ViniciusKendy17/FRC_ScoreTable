@@ -1,0 +1,40 @@
+.header {
+  grid-column: 1 / 4;
+  grid-row: 1 / 2;
+  position: relative;
+  display: flex;
+  justify-content: space-between; /* texto à esquerda, logo à direita */
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding: 10px 2px;
+  background-image: url('../assets/telaQualificacao/Ativo 5.png');
+  background-size: cover;
+  background-position: center;
+}
+
+@font-face {
+  font-family: 'NeoSansProBold';
+  src: url('../assets/fonts/NeoSansProBold.OTF') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* título à esquerda */
+.tipografia {
+  font-family: 'NeoSansProBold', sans-serif;
+  font-size: clamp(16px, 2vw, 24px);
+  color: white;
+  text-align: left;
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: 700;
+  margin-left: 20px; /* distância da borda esquerda */
+}
+
+/* logo à direita com folga */
+.logoHeader {
+  margin-right: 40px; /* distância da borda direita */
+  height: auto;
+  max-height: 80%;
+}

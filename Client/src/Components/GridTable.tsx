@@ -1,11 +1,11 @@
-import styles from "../Styles/Resultado.module.css";
-import stylesClassificaco from "../Styles/Classificacao.module.css";
+import "../Styles/Resultado.css";
+import "../Styles/Classificacao.css";
 
 interface GridTableProps {
   rows?: number; 
   columns?: number; 
   data?: (string | number)[][];
-  variant?: "resultado" | "classificacao"; // novo parâmetro
+  variant?: "resultado" | "classificacao";
 }
 
 export default function GridTable({
@@ -18,11 +18,9 @@ export default function GridTable({
     Array.from({ length: columns }, () => "")
   );
 
-  // Escolhe a classe baseada no variant
+  // Define a classe conforme o tipo de tabela
   const tableClass =
-    variant === "resultado"
-      ? styles.tipografiaResultado
-      : stylesClassificaco.tipografia;
+    variant === "resultado" ? "tipografiaResultado" : "tipografia";
 
   return (
     <table className={tableClass}>

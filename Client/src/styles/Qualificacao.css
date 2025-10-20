@@ -54,25 +54,6 @@ footer {
   padding-top: 10%; 
 }
 
-.placar {
-    position: absolute;      
-    top: 50%;                
-    left: 50%;                
-    transform: translate(-50%, -50%); 
-
-    padding: clamp(35px, 5%, 50px);
-    background-image: url('../assets/telaQualificacao/Ativo 2.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    
-    grid-column: 2 / 3;
-    aspect-ratio: 724/274;
-    width: clamp(10px, 30%, 20px);
-    height: auto;
-    grid-row: 2 / 3;
-}
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -86,16 +67,19 @@ footer {
 }
 
 .box {
-    width: clamp(450px, 25%, 300px);
-    aspect-ratio: 2961 / 548;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    margin: auto;
+  width: clamp(800px, 90%, 600px); /* ocupa quase toda a área, mas limitado */
+  aspect-ratio: 2961 / 548;
+  border-radius: 8px;
 
-        opacity: 0 ;
-    animation: fadeIn 2s ease forwards;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: auto;
+
+  opacity: 0;
+  animation: fadeIn 2s ease forwards;
 }
+
 
 .red {
     background-image: url('../assets/telaQualificacao/Ativo 1.png');

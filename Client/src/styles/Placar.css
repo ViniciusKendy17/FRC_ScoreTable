@@ -1,0 +1,76 @@
+/* Fonte utilizada nos placares */
+@font-face {
+  font-family: "NeoSansProBold";
+  src: url("../assets/fonts/NeoSansProBold.OTF") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Base para todos os placares */
+.placar {
+  display: flex;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ---------------- Variantes ---------------- */
+
+/* Qualificatória (ajuste dimensões conforme seu layout) */
+.placar--qualificatoria {
+  /* Sinta-se à vontade para ajustar estes valores */
+  width: 60vh;
+  max-width: 100%;
+  aspect-ratio: 2456 / 1011;
+  justify-content: center;
+}
+
+/* Partida: tinha inline (row, 35%, space-around) */
+.placar--partida {
+  flex-direction: row;
+  width: 35%;
+  justify-content: space-around;
+}
+
+/* Winner: usava o background de Resultado.css (Ativo 19.png) */
+.placar--winner {
+  flex-direction: row;
+  justify-content: center;
+  gap: 80px;          /* distância entre os scores */
+  width: 100%;        /* ocupa a coluna central */
+  max-width: 600px;   /* limite visual */
+  margin-top: 60px;   /* distância do topo */
+  background-image: url("../assets/TelaResultados/Ativo 19.png");
+}
+
+/* ---------------- Tipografia ---------------- */
+
+.placar__score {
+  font-family: "NeoSansProBold", sans-serif;
+  font-size: clamp(45px, 2vw, 50px);
+  color: #fff;
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: 700;
+  margin: 0;
+  /* replicando o translate do inline antigo (20px para baixo) */
+  transform: translateY(20px);
+}
+
+.placar__time {
+  font-family: "NeoSansProBold", sans-serif;
+  font-size: clamp(20px, 4vw, 24px);
+  color: #fff;
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: 700;
+  margin: 0;
+  transform: translateY(20px);
+}
+
+/* Se quiser variações de cor por tema, pode ajustar aqui */
+.placar--winner .placar__score,
+.placar--winner .placar__time {
+  color: #fff;
+}

@@ -1,11 +1,11 @@
-import styles from "../Styles/Qualificacao.module.css";
+import "../Styles/TeamBox.css"; // ← Importa o CSS global
 
 interface TeamBoxProps {
   color: "red" | "blue";
   numbers: [number, number, number];
   teamName: string;
-  justifyNumbers?: "space-between" | "center"; // nova prop para controlar alinhamento
-  widthNumbers?: string;                       // largura opcional para o container dos números
+  justifyNumbers?: "space-between" | "center";
+  widthNumbers?: string;
 }
 
 export default function TeamBox({
@@ -13,25 +13,25 @@ export default function TeamBox({
   numbers,
   teamName,
   justifyNumbers = "space-between",
-  widthNumbers = "clamp(445px, 25%, 450px)"
+  widthNumbers = "clamp(445px, 25%, 450px)",
 }: TeamBoxProps) {
   return (
-    <div className={`${styles.box} ${color === "red" ? styles.red : styles.blue}`}>
+    <div className={`box ${color}`}>
       <div
         style={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: justifyNumbers, // usa a prop
-          width: widthNumbers,            // usa a prop
+          justifyContent: justifyNumbers,
+          width: widthNumbers,
           padding: "0 10px",
+          maxWidth: "800px",
         }}
       >
         <div style={{ display: "flex", gap: "5px" }}>
-          <p className={styles.tipografia}>{numbers[0]}</p>
-          <p className={styles.tipografia}>{numbers[1]}</p>
+          <p className="tipografia">{numbers[0]}</p>
         </div>
-        <p className={styles.tipografia}>{numbers[2]}</p>
+        <p className="tipografia">{numbers[2]}</p>
       </div>
 
       <div
@@ -45,7 +45,7 @@ export default function TeamBox({
         }}
       >
         <p
-          className={styles.tipografia}
+          className="tipografia"
           style={{ color: "black", fontWeight: "bold", fontStyle: "italic" }}
         >
           {teamName}

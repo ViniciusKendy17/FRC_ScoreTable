@@ -1,0 +1,23 @@
+/* Styles/TeamBox.css */
+.box {
+  width: clamp(800px, 25vw, 450px);
+  max-height: 100%;
+  aspect-ratio: 2961 / 548;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+}
+
+.red  { background-image: url("../assets/telaQualificacao/Ativo 1.png"); }
+.blue { background-image: url("../assets/telaQualificacao/Ativo 3.png"); }
+
+.tipografia {
+  font-family: "NeoSansProBold", sans-serif;
+  font-size: clamp(16px, 2vw, 24px);
+  color: white;
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: 700;
+  text-align: center;
+}
