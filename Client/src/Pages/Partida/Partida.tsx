@@ -1,4 +1,4 @@
-import "../../Styles/Partida.css"; // ← CSS global
+import styles from "../../styles/Partida.module.css"; // ← CSS global
 import PointsBox from "../../Components/PointsBox";
 import Placar from "../../Components/Placar";
 import Footer from "../../Components/Footer";
@@ -7,12 +7,12 @@ import TeamMatchs from "../../Components/TeamMatchs";
 
 export default function Partida() {
   return (
-    <div className="partida container">
+    <div className={`${styles.container}`}>
       <Header title="Partida 01"
       />
 
-      <div className="equipesRed">
-        <PointsBox colorClass="redpartida" pointsText="0/4" />
+       <div className={`${styles.equipesRed}`}>
+        <PointsBox colorClass="red" pointsText="0/4" />
         <PointsBox colorClass="red1" pointsText="2/4" />
       </div>
 
@@ -21,28 +21,28 @@ export default function Partida() {
         rightTeams={[9994, 9995, 9996]}
       />
 
-      <Placar
-        className="placar"
+     <Placar
+        className={`${styles.placar}`}
         variant="partida"
         scoreLeft={80}
         scoreRight={70}
         time="1:35"
       />
 
-      <div className="equipesBlue">
+    <div className={`${styles.equipesBlue}`}>
         <PointsBox
-          colorClass="bluepartida"
+          colorClass="blue"
           pointsText="1/4"
-          transform="translate(-20px, 8.5px)"
+          transform="translate(-45px, -10.5px)"
         />
         <PointsBox
           colorClass="blue1"
           pointsText="3/4"
-          transform="translate(-20px, 8.5px)"
+          transform="translate(-45px, -10.5px)"
         />
       </div>
 
-      <Footer text="FRC Score Table" />
+      <Footer text="FRC Score Table" /> 
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import "../../Styles/Resultado.css"; // ← Importa o CSS global
+import styles from "../../styles/Resultado.module.css"; // ← Importa o CSS global
 import ImageById from "../../Components/ImageById";
 import Header from "../../Components/HeaderPages";
 import Footer from "../../Components/Footer";
@@ -8,11 +8,11 @@ import GridTable from "../../Components/GridTable";
 
 export default function Resultado() {
   return (
-    <div className="container">
-      <Header />
+    <div className={styles.container}>
+      <Header title="Resultado"/>
 
       {/* Equipes Vermelhas */}
-      <div className="equipesRed">
+      <div className={styles.equipesRed}>
         <div
           style={{
             display: "flex",
@@ -45,11 +45,11 @@ export default function Resultado() {
           />
         </div>
 
-        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
-        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
-        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
+        <TeamBox color="red" numbers={[40009, 1]} teamName="Team Teste" variant="resultado"/>
+        <TeamBox color="red" numbers={[40009, 1]} teamName="Team Teste" variant="resultado"/>
+        <TeamBox color="red" numbers={[40009, 1]} teamName="Team Teste" variant="resultado"/>
 
-        <div className="rankingPoints"></div>
+        <div className={styles.rankingPoints}></div>
 
         <div
           style={{
@@ -92,10 +92,10 @@ export default function Resultado() {
         </div>
       </div>
 
-      {/* Placar e Tabela
-      <div className="placarContainer">
+      {/* Placar e Tabela */}
+      <div className={styles.placarContainer}>
         <Placar
-          className="placar"
+          className={styles.placar}
           variant="winner"
           scoreLeft={120}
           scoreRight={125}
@@ -108,10 +108,10 @@ export default function Resultado() {
             ["A4", "B4", "C4"],
           ]}
         />
-      </div> */}
+      </div>
 
       {/* Equipes Azuis */}
-      <div className="equipesBlue">
+      <div className={styles.equipesBlue}>
         <div
           style={{
             display: "flex",
@@ -144,11 +144,11 @@ export default function Resultado() {
           />
         </div>
 
-        <TeamBox color="blue" numbers={[40009, 4096, 1]} teamName="Team Teste" />
-        <TeamBox color="blue" numbers={[40009, 4096, 1]} teamName="Team Teste" />
-        <TeamBox color="blue" numbers={[40009, 4096, 1]} teamName="Team Teste" />
+        <TeamBox color="blue" numbers={[40009, 1]} teamName="Team Teste" variant="resultado"/>
+        <TeamBox color="blue" numbers={[40009, 1]} teamName="Team Teste" variant="resultado"/>
+        <TeamBox color="blue" numbers={[40009, 1]} teamName="Team Teste" variant="resultado"/>
 
-        <div className="rankingPoints"></div>
+        <div className={styles.rankingPoints}></div>
 
         <div
           style={{
@@ -191,7 +191,7 @@ export default function Resultado() {
         </div>
       </div>
 
-      <Footer />
+      <Footer /> 
     </div>
   );
 }

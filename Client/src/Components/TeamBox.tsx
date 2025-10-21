@@ -1,11 +1,12 @@
-import "../Styles/TeamBox.css"; // ← Importa o CSS global
+import "../Styles/TeamBox.css";
 
 interface TeamBoxProps {
   color: "red" | "blue";
-  numbers: [number, number, number];
+  numbers: [number,  number];
   teamName: string;
   justifyNumbers?: "space-between" | "center";
   widthNumbers?: string;
+  variant?: "qualificatoria" | "resultado";
 }
 
 export default function TeamBox({
@@ -13,43 +14,34 @@ export default function TeamBox({
   numbers,
   teamName,
   justifyNumbers = "space-between",
-  widthNumbers = "clamp(445px, 25%, 450px)",
+  variant = "qualificatoria",
+  widthNumbers = variant === "resultado" ? "clamp(550px, 25%, 450px)" : "clamp(445px, 25%, 450px)",
 }: TeamBoxProps) {
+  // mapeia a variant para a classe correta
+  const variantClass =
+    variant === "resultado" ? "box-resultado" : "box-qualificatoria";
+
   return (
-    <div className={`box ${color}`}>
+    <div className={`box ${color} ${variantClass}`}>
+      {/* Linha dos números */}
       <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: justifyNumbers,
-          width: widthNumbers,
-          padding: "0 10px",
-          maxWidth: "800px",
-        }}
+        className="teamBox-numbers"
+        style={{ justifyContent: justifyNumbers, width: widthNumbers }}
       >
-        <div style={{ display: "flex", gap: "5px" }}>
-          <p className="tipografia">{numbers[0]}</p>
-        </div>
-        <p className="tipografia">{numbers[2]}</p>
+        {/* Número esquerdo */}
+        <p className={`teamBoxTipografia tipografia-${variant}`}>{numbers[0]}</p>
+
+
+          <p className={`teamBoxTipografia teamBoxPosition-${variant}`}>{numbers[1]}</p>
+
+
+        {/* Número direito */}
+        {/* <p className="teamBoxTipografia">{numbers[1]}</p> */}
       </div>
 
-      <div
-        style={{
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: "5px",
-          padding: "5px",
-        }}
-      >
-        <p
-          className="tipografia"
-          style={{ color: "black", fontWeight: "bold", fontStyle: "italic" }}
-        >
-          {teamName}
-        </p>
+      {/* Nome do time */}
+      <div className="teamBox-nameContainer">
+        <p className="teamBoxName">{teamName}</p>
       </div>
     </div>
   );

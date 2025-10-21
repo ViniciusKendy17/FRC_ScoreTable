@@ -35,13 +35,18 @@
 
 /* Winner: usava o background de Resultado.css (Ativo 19.png) */
 .placar--winner {
-  flex-direction: row;
-  justify-content: center;
-  gap: 80px;          /* distância entre os scores */
-  width: 100%;        /* ocupa a coluna central */
-  max-width: 600px;   /* limite visual */
-  margin-top: 60px;   /* distância do topo */
+  width: 60vh;
+  max-width: 100%;
+  aspect-ratio: 2456 / 1011;
+  padding: 0 30px;
   background-image: url("../assets/TelaResultados/Ativo 19.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* ---------------- Tipografia ---------------- */

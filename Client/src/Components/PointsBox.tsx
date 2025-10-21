@@ -1,18 +1,23 @@
-import "../Styles/Partida.css"; // ← agora é CSS global
+import styles from "../styles/Partida.module.css";
 
 interface PointsBoxProps {
-  colorClass: "redpartida" | "red1" | "bluepartida" | "blue1";
+  colorClass: "red" | "red1" | "blue" | "blue1"; // agora inclui blue1
   pointsText: string;
   transform?: string;
 }
 
-export default function PointsBox({
-  colorClass,
-  pointsText,
-  transform,
-}: PointsBoxProps) {
+export default function PointsBox({ colorClass, pointsText, transform }: PointsBoxProps) {
+  const boxClass =
+    colorClass === "red"
+      ? styles.red
+      : colorClass === "red1"
+      ? styles.red1
+      : colorClass === "blue"
+      ? styles.blue
+      : styles.blue1; 
+
   return (
-    <div className={`box ${colorClass}`}>
+    <div className={`${styles.box} ${boxClass}`}>
       <div
         style={{
           display: "flex",
@@ -28,10 +33,10 @@ export default function PointsBox({
             alignItems: "center",
             justifyContent: "center",
             margin: 0,
-            transform: transform || "translate(20px, 8.5px)",
+            transform: transform || "translateY(-13px) translateX(40px) ",
           }}
         >
-          <p className="tipografiaPartida">{pointsText}</p>
+          <p className={styles.tipografia}>{pointsText}</p>
         </div>
       </div>
     </div>

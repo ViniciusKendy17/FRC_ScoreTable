@@ -1,7 +1,7 @@
 import Footer from '../../Components/Footer';
 import GridTable from '../../Components/GridTable';
 import Header from '../../Components/HeaderPages'
-import '../../styles/Classificacao.css'; // ← import direto do CSS global
+import styles from '../../styles/Classificacao.module.css'; // ← import direto do CSS global
 import { useEffect, useState } from 'react';
 
 export default function Classificacao() {
@@ -42,10 +42,10 @@ export default function Classificacao() {
   }, []);
 
   return (
-    <div className="container">
+    <div className={styles.container}>
       <Header title="Classificação" />
-      <div className="content">
-        <div className="containerTable">
+      <div className={styles.content}>
+        <div className={styles.containerTable}>
           <GridTable
             variant="classificacao"
             rows={6}

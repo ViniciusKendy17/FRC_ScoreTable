@@ -1,12 +1,13 @@
 import Footer from "../../Components/Footer";
-import Header from "../../Components/Header";
+import Header from "../../Components/HeaderPages";
 import TeamBox from "../../Components/TeamBox";
 import styles from "../../Styles/Qualificacao.module.css";
-import Placar from "../../Components/Placar";
-import { useEffect, useState } from "react";
+import Placar from '../../Components/Placar';
+import { useEffect, useState } from 'react';
 
 export default function Qualificacao() {
-  const endpoint = "http://172.25.10.14:3000/frc/";
+
+  const endpoint = 'http://172.25.10.14:3000/frc/';
   const [data, setData] = useState<any[]>([]);
 
   const getMatches = async () => {
@@ -31,41 +32,39 @@ export default function Qualificacao() {
     getMatches();
   }, []);
 
+
   return (
     <div className={styles.container}>
-      <Header
-        title="Qualificatoria"
-        pesquisa={""}
-        SetPesquisa={undefined}
-        showpesquisa={false}
-        id_partida={0}
-      />
+      <Header title="Qualificatoria" />
 
       <div className={styles.equipesRed}>
-        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
-        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
-        <TeamBox color="red" numbers={[40009, 4096, 1]} teamName="Team Teste" />
+        <TeamBox color="red" numbers={[40009, 1]} teamName="Team Teste" variant="qualificatoria"/>
+        <TeamBox color="red" numbers={[40009, 1]} teamName="Team Teste" variant="qualificatoria"/>
+        <TeamBox color="red" numbers={[40009, 1]} teamName="Team Teste" variant="qualificatoria"/>
       </div>
 
       <div className={styles.containerPlacar}>
-        <Placar className={styles.placar} />
+       <Placar className={styles.placar}/>
       </div>
 
       <div className={styles.equipesBlue}>
         <TeamBox
           color="blue"
-          numbers={[40009, 4096, 1]}
+          numbers={[40009,  1]}
           teamName="Team Teste"
+          variant="qualificatoria"
         />
         <TeamBox
           color="blue"
-          numbers={[40009, 4096, 1]}
+          numbers={[40009,  1]}
           teamName="Team Teste"
+          variant="qualificatoria"
         />
         <TeamBox
           color="blue"
-          numbers={[40009, 4096, 1]}
+          numbers={[40009,  1]}
           teamName="Team Teste"
+          variant="qualificatoria"
         />
       </div>
 
