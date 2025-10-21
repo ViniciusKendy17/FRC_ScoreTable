@@ -6,6 +6,9 @@ export function SetUpWs() {
   if (io) return io;
 
   io = new Server(3001, {
+    serveClient: false,
+    pingInterval: 10000,
+    pingTimeout: 5000,
     cors: {
       origin: "*",
       allowedHeaders: ["*"],
@@ -13,13 +16,7 @@ export function SetUpWs() {
     },
   });
 
-  io.sockets.setMaxListeners(20);
-
-  io.on("connection", (socket) => {
-    io.on("disconnect", () => {
-      console.log("disconnected");
-    });
-  });
+  io.sockets.setMaxListeners(10);
 
   return io;
 }

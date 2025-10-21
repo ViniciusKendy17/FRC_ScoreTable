@@ -1,4 +1,4 @@
-import  "../Styles/Footer.css"; 
+import styles from "../Style/Footer.module.css"; 
 
 interface FooterProps {
   text?: string; 

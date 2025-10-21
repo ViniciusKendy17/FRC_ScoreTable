@@ -27,7 +27,7 @@
     max-width: 90%;
 }
 
-header {
+/* header {
     grid-column: 1 / 4;
     grid-row: 1 / 2;
     display: flex;
@@ -39,7 +39,7 @@ header {
     background-image: url('../assets/telaQualificacao/Ativo 5.png');
     background-size: cover;
     background-position: center;
-}
+} */
 
 footer {
   grid-column: 1 / 4;     

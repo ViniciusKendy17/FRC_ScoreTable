@@ -1,0 +1,66 @@
+#out-modal {
+  top: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 2;
+}
+
+#modal {
+  padding: 24px;
+  width: 400px;
+  background-color: white;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  flex-direction: column;
+}
+
+#trash {
+  padding: 10px;
+  background-color: rgb(255, 210, 210);
+  border-radius: 50%;
+  color: red;
+  scale: 1.2;
+}
+
+#xx {
+  position: absolute;
+  right: 5%;
+  scale: 1.5;
+  top: 10%;
+}
+
+#out-btn {
+  display: flex;
+  gap: 1rem;
+}
+
+#out-btn button {
+  font-weight: bolder;
+  font-size: 15px;
+  width: 150px;
+  border-radius: 10px;
+}
+
+#cancel {
+  background-color: white;
+  border: gray solid 1px;
+  color: black;
+  padding: 10px;
+  font-size: 15px;
+}
+
+#confirm {
+  background-color: red;
+  color: white;
+  border: none;
+}

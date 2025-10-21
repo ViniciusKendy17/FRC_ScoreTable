@@ -15,7 +15,7 @@ export default function Header({
   pesquisa: string;
   SetPesquisa: any;
   showpesquisa: boolean;
-  id_partida: number;
+  id_partida: any;
   title:string
 }) {
   const [btnativo, SetBtnativo] = useState<string>(
@@ -35,7 +35,7 @@ export default function Header({
             type="button"
             onClick={() => {
               SetBtnativo("partidas");
-              nav("/home");
+              nav("/");
             }}
             id="partidas"
           >
@@ -66,8 +66,8 @@ export default function Header({
             </div>
           )}
 
-          {!showpesquisa && (
-            <h3 style={{ color: "white" }}>ID DA PARTIDA: {id_partida}</h3>
+          {id_partida != null && (
+            <h3 style={{ color: "white" }}>PARTIDA: {id_partida}</h3>
           )}
         </nav>
       </header>
