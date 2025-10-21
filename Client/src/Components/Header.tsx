@@ -1,5 +1,5 @@
 import type React from "react";
-import "../Style/Header.css";
+import "../styles/Header.css";
 import lupa from "../assets/Tela1_juiz/Ativo 62.png";
 import type { Partida } from "../utils/Types";
 import { useState } from "react";

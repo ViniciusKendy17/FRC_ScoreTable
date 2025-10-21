@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "../Style/Qualificacao.module.css";
-import stylesPartida from "../Style/Partida.module.css";
-import stylesWiner from "../Style/Resultado.module.css";
+import styles from "../styles/Qualificacao.module.css";
+import stylesPartida from "../styles/Partida.module.css";
+import stylesWiner from "../styles/Resultado.module.css";
 
 interface PlacarProps {
   className?: string;
@@ -49,10 +49,9 @@ export default function Placar({
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      gap: "80px",        // distância entre os scores
-      width: "100%",      // ocupa toda a coluna central
-      maxWidth: "600px",  // limitar tamanho do placar
-      marginTop: "60px",  // distância do topo (ajustável)
+      gap: "80px",       
+      width: "400px",      
+      maxWidth: "100%",  
     }}
   >
     <p style={{paddingTop:"20px"}} className={stylesWiner.tipografiaPlacar}>{scoreLeft}</p>

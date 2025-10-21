@@ -1,11 +1,12 @@
-import styles from "../Style/Qualificacao.module.css";
+import "../Styles/TeamBox.css";
 
 interface TeamBoxProps {
   color: "red" | "blue";
-  numbers: [number, number, number];
+  numbers: [number,  number];
   teamName: string;
-  justifyNumbers?: "space-between" | "center"; // nova prop para controlar alinhamento
-  widthNumbers?: string;                       // largura opcional para o container dos números
+  justifyNumbers?: "space-between" | "center";
+  widthNumbers?: string;
+  variant?: "qualificatoria" | "resultado";
 }
 
 export default function TeamBox({
@@ -13,43 +14,34 @@ export default function TeamBox({
   numbers,
   teamName,
   justifyNumbers = "space-between",
-  widthNumbers = "clamp(445px, 25%, 450px)"
+  variant = "qualificatoria",
+  widthNumbers = variant === "resultado" ? "clamp(550px, 25%, 450px)" : "clamp(445px, 25%, 450px)",
 }: TeamBoxProps) {
+  // mapeia a variant para a classe correta
+  const variantClass =
+    variant === "resultado" ? "box-resultado" : "box-qualificatoria";
+
   return (
-    <div className={`${styles.box} ${color === "red" ? styles.red : styles.blue}`}>
+    <div className={`box ${color} ${variantClass}`}>
+      {/* Linha dos números */}
       <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: justifyNumbers, // usa a prop
-          width: widthNumbers,            // usa a prop
-          padding: "0 10px",
-        }}
+        className="teamBox-numbers"
+        style={{ justifyContent: justifyNumbers, width: widthNumbers }}
       >
-        <div style={{ display: "flex", gap: "5px" }}>
-          <p className={styles.tipografia}>{numbers[0]}</p>
-          <p className={styles.tipografia}>{numbers[1]}</p>
-        </div>
-        <p className={styles.tipografia}>{numbers[2]}</p>
+        {/* Número esquerdo */}
+        <p className={`teamBoxTipografia tipografia-${variant}`}>{numbers[0]}</p>
+
+
+          <p className={`teamBoxTipografia teamBoxPosition-${variant}`}>{numbers[1]}</p>
+
+
+        {/* Número direito */}
+        {/* <p className="teamBoxTipografia">{numbers[1]}</p> */}
       </div>
 
-      <div
-        style={{
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: "5px",
-          padding: "5px",
-        }}
-      >
-        <p
-          className={styles.tipografia}
-          style={{ color: "black", fontWeight: "bold", fontStyle: "italic" }}
-        >
-          {teamName}
-        </p>
+      {/* Nome do time */}
+      <div className="teamBox-nameContainer">
+        <p className="teamBoxName">{teamName}</p>
       </div>
     </div>
   );

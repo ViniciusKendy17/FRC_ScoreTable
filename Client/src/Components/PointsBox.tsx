@@ -1,4 +1,4 @@
-import styles from "../Style/Partida.module.css";
+import styles from "../styles/Partida.module.css";
 
 interface PointsBoxProps {
   colorClass: "red" | "red1" | "blue" | "blue1"; // agora inclui blue1
@@ -33,7 +33,7 @@ export default function PointsBox({ colorClass, pointsText, transform }: PointsB
             alignItems: "center",
             justifyContent: "center",
             margin: 0,
-            transform: transform || "translate(20px, 8.5px)",
+            transform: transform || "translateY(-13px) translateX(40px) ",
           }}
         >
           <p className={styles.tipografia}>{pointsText}</p>

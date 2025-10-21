@@ -6,9 +6,9 @@ interface FooterProps {
 
 export default function Footer({ text = "FRC Score Table" }: FooterProps) {
   return (
-    <footer className={styles.footer}>
-      <div className={styles.footerContent}>
-        <p className={styles.footerText}>{text}</p>
+    <footer className="footer">
+      <div className="footerContent">
+        <p className="footerText">{text}</p>
       </div>
     </footer>
   );

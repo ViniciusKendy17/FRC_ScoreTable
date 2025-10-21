@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-.equipesRed {
+.equipesRed  {
   grid-column: 1 / 2;
   display: flex;
   flex-direction: column;
@@ -19,6 +19,8 @@
   justify-content: center;
   gap: 20px;           
   margin-top: 50px;     
+  transform: scale(0.55) translateX(5%) translateY(-10%);
+
 }
 
 .equipesBlue {
@@ -29,11 +31,13 @@
   justify-content: center;
   gap: 20px; 
   margin-top: 50px;     
+  transform: scale(0.55) translateX(-20%) translateY(-10%);
+
 }
 
 .box {
   width: 100%;
-  max-width: 30vh;
+  max-width: 50vh;
   aspect-ratio: 1187 / 354;            
   background-size: cover;
   background-position: center;
@@ -64,7 +68,7 @@
 
 .tipografiaEquipes{
   font-family: 'NeoSansProBold', sans-serif;
-  font-size: clamp(16px, 2vw, 18px);
+  font-size: clamp(16px, 2vw, 26px);
   color: black;
   text-align: center;
   text-transform: uppercase;
@@ -74,7 +78,7 @@
 
 .tipografia{
     font-family: 'NeoSansProBold', sans-serif;
-    font-size: clamp(28px, 2vw, 24px);
+    font-size: clamp(50px, 2vw, 24px);
     color: white;
     text-align: center;
     text-transform: uppercase;
