@@ -1,23 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 
-
-  const sc = io("http://localhost:3001");
+type Score = {
+  azul: number;
+  vermelho: number;
+};
 
 export default function TesteJuiz() {
+  const [scores, SetScores] = useState<Score>({ azul: 0, vermelho: 0 });
 
-  const [num, SetNum] = useState<number>();
+  const sc = useMemo(() => io("http://localhost:3001"), []);
 
   useEffect(() => {
-    sc.on("score_update", SetNum);
+    const handleUpdate = (data: Score) => {
+      SetScores(data);
+    };
+
+    sc.on("score_update", handleUpdate);
+
     return () => {
-      sc.off("score_update");
+      sc.off("score_update", handleUpdate); // remove listener corretamente
     };
   }, []);
+  console.log(scores);
 
   return (
     <>
-      <p>{num}</p>
+      <p>{scores.azul}</p>
+      <p>{scores.vermelho}</p>
     </>
   );
 }

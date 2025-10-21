@@ -9,12 +9,15 @@ import { elements, type Pontos, type Score } from "../../utils/ScoreTable";
 import ScoreCard from "../../Components/ScoreSection";
 import { toast, ToastContainer } from "react-toastify";
 import { toast_pro } from "../../utils/Util";
+import { io } from "socket.io-client";
 
 export default function Pontuacao() {
   const { id } = useParams();
+  const sc = io("http://localhost:3001");
 
   const [aliancas, SetAliancas] = useState<Aliança[] | null>([]);
   const [alianca, setAlianca] = useState<"vermelho" | "azul">("vermelho");
+  const [publicScores, setPublicScores] = useState({ vermelho: 0, azul: 0 });
 
   const [scores, setScores] = useState<{
     vermelho: Score[];
@@ -42,17 +45,34 @@ export default function Pontuacao() {
     })),
   });
 
-  async function EndJudgeMatch() {
-    const data = await PartidaService.EndJudgeMatch(Number(id), jsonAPI);
+  // Calcula o total de uma aliança
+  function calcTotal(aliancaScores: Score[]) {
+    return aliancaScores.reduce((acc, s) => {
+      const el = elements.find((e) => Number(e.id) === s.id);
+      if (!el || !el.pontos) return acc;
 
-    if (!data) {
-      toast.error("Erro no servidor, tente novamente", toast_pro);
-      return;
-    }
+      const autoPoints =
+        s.auto *
+        ((el.pontos.au_idade_media ?? 0) +
+          (el.pontos.au_pre_historico ?? 0) +
+          (el.pontos.au_estacionar ?? 0));
 
-    toast.success("Partida foi parcialmente finalizada com sucesso");
+      const teleopPoints =
+        s.teleop *
+        ((el.pontos.op_idade_media ?? 0) + (el.pontos.op_pre_historico ?? 0));
+
+      const estacionar_poco =
+        s.estacionar_poco * (el.pontos.estacionar_poco ?? 0);
+
+      const endgamePoints =
+        s.endgame * (el.pontos.estacionar ?? 0) + estacionar_poco;
+      const saidaPoints = s.saida * (el.pontos.sair ?? 0);
+
+      return acc + autoPoints + teleopPoints + endgamePoints + saidaPoints;
+    }, 0);
   }
 
+  // Atualiza a pontuação de um elemento
   const updateScore = (
     id: number,
     field:
@@ -65,38 +85,47 @@ export default function Pontuacao() {
       | "estacionar_poco",
     value: number
   ) => {
-    setScores((prev) => ({
-      ...prev,
-      [alianca]: prev[alianca as "vermelho" | "azul"].map((s) =>
-        s.id === id ? { ...s, [field]: value } : s
-      ),
-    }));
+    setScores((prev) => {
+      const updated = {
+        ...prev,
+        [alianca]: prev[alianca].map((s) =>
+          s.id === id ? { ...s, [field]: value } : s
+        ),
+      };
+
+      // recalcula os totais
+      const totalVermelho = calcTotal(updated.vermelho);
+      const totalAzul = calcTotal(updated.azul);
+
+      console.log(totalVermelho);
+
+      // envia pelo WebSocket
+      sc.emit("update_alliance_score", {
+        alliance: alianca,
+        total: publicScores[alianca],
+      });
+
+      // atualiza localmente
+      setPublicScores({ vermelho: totalVermelho, azul: totalAzul });
+
+      return updated;
+    });
   };
 
-  //total de pontos por aliança
-  const totalAll = scores[alianca].reduce((acc, s) => {
-    const el = elements.find((e) => Number(e.id) === s.id);
-    if (!el || !el.pontos) return acc;
+  // useEffect(() => {
+  //   sc.emit("update_alliance_score", { vermelho: 10, azul: 10 });
+  // }, []);
 
-    const autoPoints =
-      s.auto *
-      ((el.pontos.au_idade_media ?? 0) +
-        (el.pontos.au_pre_historico ?? 0) +
-        (el.pontos.au_estacionar ?? 0));
+  async function EndJudgeMatch() {
+    const data = await PartidaService.EndJudgeMatch(Number(id), jsonAPI);
 
-    const teleopPoints =
-      s.teleop *
-      ((el.pontos.op_idade_media ?? 0) + (el.pontos.op_pre_historico ?? 0));
+    if (!data) {
+      toast.error("Erro no servidor, tente novamente", toast_pro);
+      return;
+    }
 
-    const estacionar_poco =
-      s.estacionar_poco * (el.pontos.estacionar_poco ?? 0);
-
-    const endgamePoints =
-      s.endgame * (el.pontos.estacionar ?? 0) + estacionar_poco;
-    const saidaPoints = s.saida * (el.pontos.sair ?? 0);
-
-    return acc + autoPoints + teleopPoints + endgamePoints + saidaPoints;
-  }, 0);
+    toast.success("Partida foi parcialmente finalizada com sucesso");
+  }
 
   const selected_alianca = aliancas?.find((ali) => ali.color == alianca);
 
@@ -122,7 +151,6 @@ export default function Pontuacao() {
       const el = elementos.find((e) => Number(e.id) === sc.id);
       if (!el || !el.pontos) return;
 
-      // Auto e teleop
       final_score.auto_pontos +=
         sc.auto *
         ((el.pontos.au_idade_media ?? 0) +
@@ -139,7 +167,6 @@ export default function Pontuacao() {
       final_score.estacionar +=
         sc.endgame * (el.pontos.estacionar ?? 0) + estacionar_poco;
 
-      // RP de estacionar só se marcou pontos
       if (sc.estacionar_poco * (el.pontos.estacionar_poco ?? 0) >= 6) {
         final_score.rp_estacionar = 1;
       }
@@ -163,8 +190,6 @@ export default function Pontuacao() {
   const jsonAPI = useMemo(() => {
     return { alianca: GetFinalScore(alianca, scores, elements) };
   }, [alianca, scores, elements]);
-
-  console.log(jsonAPI);
 
   async function DefineAlliences() {
     const data = await PartidaService.GetAlliencesByMatch(Number(id));
@@ -226,14 +251,14 @@ export default function Pontuacao() {
               </div>
 
               <div style={{ fontWeight: "bold", color: "#fff" }}>
-                Total da aliança {alianca}: {totalAll} pts
+                Total da aliança {alianca}: {publicScores[alianca]} pts
               </div>
             </div>
 
             <section id="box-cards">
               {elements.map((el) => {
                 const score = scores[alianca].find((s) => s.id === el.id);
-                if (!score) return null; // evita que ScoreCard receba undefined
+                if (!score) return null;
                 return (
                   <ScoreCard
                     key={el.id}

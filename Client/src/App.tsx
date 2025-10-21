@@ -8,13 +8,14 @@ import Home from "./Pages/Juiz/Home";
 import Pontuacao from "./Pages/Juiz/Pontuacao";
 import { ToastContainer } from "react-toastify";
 import FormPartida from "./Pages/FormPartida";
+import TesteJuiz from "./Pages/TesteJuiz";
 function App() {
   return (
     <>
     <ToastContainer/>
       <BrowserRouter>
         <Routes>
-          <Route path="/game" element={<TestePlacar />} />
+          <Route path="/game" element={<TesteJuiz/>} />
           <Route path="/" element={<Home />} />
           <Route path="/classificacao" element={<Qualificacao />} />
           <Route path="/resultado" element={<Resultado />} />

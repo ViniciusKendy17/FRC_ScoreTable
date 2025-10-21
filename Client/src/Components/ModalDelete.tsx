@@ -24,14 +24,15 @@ export default function ModalDelete({
 
     if (data) {
       toast.success("Partida deletada com sucesso", toast_pro);
-      setTimeout(async () => await GetMatches(), 3000);
+      setTimeout(async () => {
+        SetModal(false);
+        await GetMatches();
+      }, 300);
     }
   }
 
   return (
     <>
-      <ToastContainer />
-
       <div id="out-modal" onClick={() => SetModal(false)}>
         <div
           id="modal"

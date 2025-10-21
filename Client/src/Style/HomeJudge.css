@@ -63,14 +63,17 @@
 }
 
 #finish {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 28px;
   border: none;
-  border-radius: 10px;
-  padding: 10px;
-  height: 60px;
-  width: 30%;
-  font-size: 19px;
-  background-color: black;
-  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 #out-times {
@@ -80,9 +83,9 @@
   align-items: center;
 }
 
-#add{
+#add {
   position: absolute;
-  top:92%;
+  top: 92%;
   scale: 3.5;
   color: white;
   right: 4%;

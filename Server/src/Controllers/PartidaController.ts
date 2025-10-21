@@ -14,7 +14,11 @@ import {
 import { prisma } from "../Services/GenericServices";
 
 export async function GetAllMatches(req: Request, res: Response) {
-  const matches = await prisma.partida.findMany();
+  const matches = await prisma.partida.findMany({
+    orderBy: {
+      numero_partida: "asc",
+    },
+  });
 
   if (!matches) {
     return res.status(404).json({ msg: "Sem partidas disponiveis" });

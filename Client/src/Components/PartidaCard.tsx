@@ -1,13 +1,12 @@
 import type { Partida } from "../utils/Types";
 import "../Style/PartidaCard.css";
-import Apagar from "../assets/Tela1_juiz/Ativo 68.png";
-import Placar from "../assets/Tela1_juiz/Ativo 66.png";
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ModalDelete from "./ModalDelete";
 import { toast } from "react-toastify";
 import { toast_pro } from "../utils/Util";
-import { FaPen } from "react-icons/fa";
+import { FaCalendarAlt, FaPen, FaTrash, FaBullseye } from "react-icons/fa";
 
 export default function PartidaCard({
   partida,
@@ -38,18 +37,22 @@ export default function PartidaCard({
         </button>
 
         <section>
-          <img
-            src={Placar}
-            alt=""
+          <button
+            id="placar-btn"
+            className="btnss"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               nav("/partida");
             }}
-          />
+          >
+            <FaCalendarAlt className="btn-icon" />
+            <span>PLACAR</span>
+          </button>
 
           <button
             id="pont"
+            className="btnss"
             onClick={() => {
               if (partida.status == "finalizada") {
                 toast.warn(
@@ -62,18 +65,22 @@ export default function PartidaCard({
             }}
             type="button"
           >
-            Pontuação
+            <FaBullseye />
+            <span>PONTUAÇÃO</span>
           </button>
 
-          <img
-            src={Apagar}
-            alt=""
+          <button
+            id="apagar-btn"
+            className="btnss"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               SetModal(true);
             }}
-          />
+          >
+            <FaTrash className="btn-icon" />
+            <span>APAGAR</span>
+          </button>
         </section>
       </div>
 

@@ -8,6 +8,7 @@ import PartidaCard from "../../Components/PartidaCard";
 import Toast from "../../Components/Toast";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   const [partidas, SetPartidas] = useState<Partida[] | null>(null);
@@ -17,10 +18,6 @@ export default function Home() {
 
   async function DefinirPartidas() {
     const todas_partidas = await PartidaService.GetMatches();
-
-    todas_partidas?.sort((a, b) => {
-      return a.numero_partida - b.numero_partida;
-    });
 
     SetPartidas(todas_partidas);
   }
@@ -44,6 +41,8 @@ export default function Home() {
   return (
     <>
       <div id="back">
+        <ToastContainer />
+
         <Header
           pesquisa={pesquisa}
           id_partida={null}
