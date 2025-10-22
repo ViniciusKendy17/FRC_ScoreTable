@@ -12,7 +12,7 @@ export default function TesteJuiz() {
 
   useEffect(() => {
     // Cria a conexão apenas uma vez
-    socketRef.current = io("http://localhost:3001", {
+    socketRef.current = io("http://172.25.10.13:3001", {
       transports: ["websocket", "polling"],
     });
 

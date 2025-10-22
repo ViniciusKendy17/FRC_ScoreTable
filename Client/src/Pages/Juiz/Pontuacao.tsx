@@ -46,7 +46,7 @@ export default function Pontuacao() {
   });
 
   useEffect(() => {
-    const socket = io("http://localhost:3001", {
+    const socket = io("http://172.25.10.13:3001", {
       transports: ["websocket", "polling"],
     });
     SetSc(socket);

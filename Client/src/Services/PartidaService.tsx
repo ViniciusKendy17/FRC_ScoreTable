@@ -106,7 +106,7 @@ export const PartidaService = {
 
   GetMatchInfo: (id: number) => {
     return HandleTry(async () => {
-      const res = await fetch(`http://localhost:3000/frc/match/${id}/score`);
+      const res = await fetch(`http://172.25.10.13:3000/frc/match/${id}/score`);
 
       const { match_info, alliances } = await res.json();
 
