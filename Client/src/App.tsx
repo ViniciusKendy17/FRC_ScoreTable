@@ -20,6 +20,8 @@ function App() {
         <Routes>
           <Route path="/game" element={<TesteJuiz/>} />
           <Route path="/" element={<Home />} />
+          <Route path="/classificacao" element={<Classificacao />} />
+          <Route path="/qualificatoria/:id" element={<Qualificatoria />} />
           <Route path="/resultado" element={<Resultado />} />
           <Route path="/partida" element={<Partida />} />
           <Route path="/partida/:id/placar" element={""} />
@@ -28,10 +30,6 @@ function App() {
           <Route path="/partida/nova" element={<FormPartida />} />
           {/* <Route path="/game" element={<TestePlacar />} />
           <Route path="/home" element={<Home />} /> */}
-          <Route path="/classificacao" element={<Classificacao />} />
-          <Route path="/qualificatoria" element={<Qualificatoria />} />
-          <Route path="/resultado" element={<Resultado />} />
-          <Route path="/partida" element={<Partida />} />
           {/*   <Route path="/partida/:id/placar" element={''}/>
           <Route path="/partida/:id/aliancas" element={<Pontuacao/>}/> */}
         </Routes>

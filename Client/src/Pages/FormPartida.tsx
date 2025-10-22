@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../Components/Header";
-import "../Style/Form.css";
+import "../styles/Form.css";
 import type { Equipe } from "../utils/Types";
 import { PartidaService } from "../Services/PartidaService";
 import { toast, ToastContainer } from "react-toastify";

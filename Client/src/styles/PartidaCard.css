@@ -15,6 +15,7 @@
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 20px;
   color: rgb(98, 98, 98);
+  margin-left: 20px;
 }
 
 .card_partida section {
@@ -53,6 +54,26 @@
   position: absolute;
   top: 10%;
   right: 2%;
+}
+
+.edit-btn1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: rgb(127, 154, 228); /* azul escuro */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 14px;
+  /* padding: 8px 20px; */
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: absolute;
+  top: 10%;
+  right: 10%;
 }
 
 .edit-btn:hover {
@@ -97,3 +118,18 @@ button:hover {
 #apagar-btn {
   background-color: #000000;
 }
+
+.partida-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px; /* espaço entre os botões */
+}
+
+
