@@ -13,7 +13,6 @@ export type Aliança = {
   color: Cor;
   time1: number;
   time2: number;
-  time3: number;
   idade_media: number;
   estacionar: number;
   pre_historico: number;
@@ -24,6 +23,19 @@ export type Aliança = {
   rp_auto: number;
   rp_estacionar: number;
 };
+
+export type AliancaParcial = Omit<
+  Aliança,
+  | "idade_media"
+  | "estacionar"
+  | "pre_historico"
+  | "sair"
+  | "auto_pontos"
+  | "teleop_pontos"
+  | "faltas_pontos"
+  | "rp_auto"
+  | "rp_estacionar"
+>;
 
 export type Equipe = {
   numero_equipe: number;
@@ -43,4 +55,3 @@ type Status = "agendada" | "em_progresso" | "finalizada";
 type Vencedor = "azul" | "vermelho" | "empate" | "no";
 
 //Game Score
-

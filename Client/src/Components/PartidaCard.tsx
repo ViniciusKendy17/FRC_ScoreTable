@@ -45,6 +45,13 @@ export default function PartidaCard({
       </div>
 
 
+        {/* <button
+          className="edit-btn1"
+          onClick={() => nav(`/qualificatoria/${partida.id}`)}
+        >
+          <FaList className="edit-icon" />
+        </button> */}
+
         <section>
           <button
             id="placar-btn"
@@ -52,7 +59,7 @@ export default function PartidaCard({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              nav("/partida");
+              nav(`/partida/${partida.id}/placar`);
             }}
           >
             <FaCalendarAlt className="btn-icon" />

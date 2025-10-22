@@ -15,7 +15,7 @@ export type Partida = {
 };
 
 
-type PartidaParcial = Partial<Partida>;
+export type PartidaParcial = Partial<Partida>;
 
 // type MiniPatida = Pick<Partida, "status" | "tipo_partida">;
 

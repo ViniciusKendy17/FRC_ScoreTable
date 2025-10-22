@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
-import '../../styles/HomeJudge.css';
+import "../../styles/HomeJudge.css";
 import type { Partida } from "../../utils/Types";
 import { PartidaService } from "../../Services/PartidaService";
 import Header from "../../Components/Header";

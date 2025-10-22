@@ -1,3 +1,4 @@
+import { Alianca } from "../Models/Alianca";
 import { getWS } from "./ws";
 
 type Score = {
@@ -5,7 +6,15 @@ type Score = {
   vermelho: number;
 };
 
+const matches: Record<number, Score> = {};
+
+let scoreSetup = false;
+
 export function SetScores() {
+  if (scoreSetup) return;
+
+  scoreSetup = true;
+
   const io = getWS();
 
   let scores: Score = {
@@ -14,13 +23,17 @@ export function SetScores() {
   };
 
   io.on("connection", (socket) => {
-    // console.log("Juiz conectado:", socket.id);
+    console.log("Juiz conectado:", socket.id);
 
-    // socket.emit("score_update", scores);
+    socket.emit("score_update", scores);
 
     socket.on(
       "update_alliance_score",
-      (payload: { alliance: "vermelho" | "azul"; total: number }) => {
+      (payload: {
+        alliance: "vermelho" | "azul";
+        total: number;
+        score: Alianca;
+      }) => {
         scores[payload.alliance] = payload.total;
 
         console.log(payload);

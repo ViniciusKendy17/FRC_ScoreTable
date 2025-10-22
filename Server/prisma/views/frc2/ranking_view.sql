@@ -104,9 +104,7 @@ FROM
     (
       `frc2`.`equipe` `e`
       LEFT JOIN `frc2`.`alianca` `a` ON(
-        (
-          `e`.`numero_equipe` IN (`a`.`time1`, `a`.`time2`, `a`.`time3`)
-        )
+        (`e`.`numero_equipe` IN (`a`.`time1`, `a`.`time2`))
       )
     )
     LEFT JOIN `frc2`.`partida` `p` ON((`p`.`id` = `a`.`partida_id`))

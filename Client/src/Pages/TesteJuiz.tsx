@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { io } from "socket.io-client";
+import { useEffect, useRef, useState } from "react";
+import { io, type Socket } from "socket.io-client";
 
 type Score = {
   azul: number;
@@ -8,26 +8,33 @@ type Score = {
 
 export default function TesteJuiz() {
   const [scores, SetScores] = useState<Score>({ azul: 0, vermelho: 0 });
-
-  const sc = useMemo(() => io("http://localhost:3001"), []);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const handleUpdate = (data: Score) => {
-      SetScores(data);
-    };
+    // Cria a conexão apenas uma vez
+    socketRef.current = io("http://localhost:3001", {
+      transports: ["websocket", "polling"],
+    });
 
-    sc.on("score_update", handleUpdate);
+    const socket = socketRef.current;
+
+    socket.on("connect", () => {
+      console.log("Conectado ao WebSocket!", socket.id);
+    });
+
+    socket.on("score_update", (data: Score) => {
+      SetScores(data);
+    });
 
     return () => {
-      sc.off("score_update", handleUpdate); // remove listener corretamente
+      socket.disconnect();
     };
   }, []);
-  console.log(scores);
 
   return (
     <>
-      <p>{scores.azul}</p>
-      <p>{scores.vermelho}</p>
+      <p>Azul: {scores.azul}</p>
+      <p>Vermelho: {scores.vermelho}</p>
     </>
   );
 }

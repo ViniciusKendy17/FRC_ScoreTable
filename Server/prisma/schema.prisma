@@ -14,7 +14,6 @@ model alianca {
   color                               alianca_color?
   time1                               Int
   time2                               Int
-  time3                               Int
   teleop_pontos                       Int
   auto_pontos                         Int
   faltas_pontos                       Int
@@ -28,12 +27,10 @@ model alianca {
   partida_alianca_partida_idTopartida partida?       @relation("alianca_partida_idTopartida", fields: [partida_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "partida_id")
   equipe_alianca_time1Toequipe        equipe         @relation("alianca_time1Toequipe", fields: [time1], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time1")
   equipe_alianca_time2Toequipe        equipe         @relation("alianca_time2Toequipe", fields: [time2], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time2")
-  equipe_alianca_time3Toequipe        equipe         @relation("alianca_time3Toequipe", fields: [time3], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time3")
 
   @@index([time1], map: "time1_idx")
   @@index([time2], map: "time2_idx")
   @@index([partida_id], map: "partida_id_idx")
-  @@index([time3], map: "time3_idx")
 }
 
 model equipe {
@@ -43,7 +40,6 @@ model equipe {
   media_pontos                  Float
   alianca_alianca_time1Toequipe alianca[] @relation("alianca_time1Toequipe")
   alianca_alianca_time2Toequipe alianca[] @relation("alianca_time2Toequipe")
-  alianca_alianca_time3Toequipe alianca[] @relation("alianca_time3Toequipe")
 }
 
 model partida {
@@ -52,7 +48,7 @@ model partida {
   tipo_partida                        partida_tipo_partida
   azul_pontos                         Int
   vermelho_pontos                     Int
-  status                              partida_status
+  status                              partida_status       @default(agendada)
   vencedor                            partida_vencedor
   horario                             String?              @db.VarChar(14)
   alianca_alianca_partida_idTopartida alianca[]            @relation("alianca_partida_idTopartida")
@@ -62,7 +58,7 @@ view ranking_view {
   numero_equipe    Int
   nome             String   @db.VarChar(100)
   total_rp         Decimal? @db.Decimal(32, 0)
-  partidas_jogadas Int   @default(0)
+  partidas_jogadas BigInt   @default(0)
   ranking_score    Decimal? @db.Decimal(35, 2)
   match_score      Decimal? @db.Decimal(13, 2)
   vitorias         Decimal? @db.Decimal(23, 0)

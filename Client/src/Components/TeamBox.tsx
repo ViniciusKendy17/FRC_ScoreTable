@@ -15,7 +15,9 @@ export default function TeamBox({
   teamName,
   justifyNumbers = "space-between",
   variant = "qualificatoria",
-  widthNumbers = variant === "resultado" ? "clamp(550px, 25%, 450px)" : "clamp(445px, 25%, 450px)",
+  widthNumbers = variant === "resultado"
+    ? "clamp(550px, 25%, 450px)"
+    : "clamp(445px, 25%, 450px)",
 }: TeamBoxProps) {
   // mapeia a variant para a classe correta
   const variantClass =
@@ -29,11 +31,13 @@ export default function TeamBox({
         style={{ justifyContent: justifyNumbers, width: widthNumbers }}
       >
         {/* Número esquerdo */}
-        <p className={`teamBoxTipografia tipografia-${variant}`}>{numbers[0]}</p>
+        <p className={`teamBoxTipografia tipografia-${variant}`}>
+          {numbers[0]}
+        </p>
 
-
-          <p className={`teamBoxTipografia teamBoxPosition-${variant}`}>{numbers[1]}</p>
-
+        <p className={`teamBoxTipografia teamBoxPosition-${variant}`}>
+          {numbers[1]}
+        </p>
 
         {/* Número direito */}
         {/* <p className="teamBoxTipografia">{numbers[1]}</p> */}

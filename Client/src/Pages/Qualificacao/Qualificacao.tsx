@@ -30,7 +30,14 @@ export default function Qualificacao() {
   const [nome, setNome] = useState<any[]>([]);
   const [numero_partida, setNumeroPartida] = useState<number | null>(null);
 
+<<<<<<< HEAD
+  const endpoint = 'http://172.25.10.13:3000/frc/';
+  const [data, setData] = useState<any[]>([]);
+
+  const getMatches = async () => {
+=======
   const getNomes = async () => {
+>>>>>>> 4460994f9b49d0415b67b5a00baa92d85ca9d8d9
     try {
       const response = await fetch(`${endpoint}teams`);
       if (!response.ok) throw new Error(`Erro ${response.status}`);

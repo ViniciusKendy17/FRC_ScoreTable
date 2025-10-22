@@ -13,7 +13,7 @@ import { io } from "socket.io-client";
 
 export default function Pontuacao() {
   const { id } = useParams();
-  const sc = io("http://localhost:3001");
+  const [sc, SetSc] = useState<any>(null);
 
   const [aliancas, SetAliancas] = useState<Aliança[] | null>([]);
   const [alianca, setAlianca] = useState<"vermelho" | "azul">("vermelho");
@@ -44,6 +44,21 @@ export default function Pontuacao() {
       estacionar_poco: 0,
     })),
   });
+
+  useEffect(() => {
+    const socket = io("http://localhost:3001", {
+      transports: ["websocket", "polling"],
+    });
+    SetSc(socket);
+
+    socket.on("connect", () => {
+      console.log("Conectado ao WebSocket!", socket.id);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   // Calcula o total de uma aliança
   function calcTotal(aliancaScores: Score[]) {
@@ -100,21 +115,19 @@ export default function Pontuacao() {
       console.log(totalVermelho);
 
       // envia pelo WebSocket
-      sc.emit("update_alliance_score", {
-        alliance: alianca,
-        total: publicScores[alianca],
-      });
 
       // atualiza localmente
       setPublicScores({ vermelho: totalVermelho, azul: totalAzul });
 
+      sc.emit("update_alliance_score", {
+        alliance: alianca,
+        total: alianca == "azul" ? totalAzul : totalVermelho,
+        scores: alianca == "azul" ? scores.azul : scores.vermelho,
+      });
+
       return updated;
     });
   };
-
-  // useEffect(() => {
-  //   sc.emit("update_alliance_score", { vermelho: 10, azul: 10 });
-  // }, []);
 
   async function EndJudgeMatch() {
     const data = await PartidaService.EndJudgeMatch(Number(id), jsonAPI);
@@ -247,7 +260,6 @@ export default function Pontuacao() {
                 <p>Equipes:</p>
                 <p>{selected_alianca?.time1}</p>
                 <p>{selected_alianca?.time2}</p>
-                <p>{selected_alianca?.time3}</p>
               </div>
 
               <div style={{ fontWeight: "bold", color: "#fff" }}>
