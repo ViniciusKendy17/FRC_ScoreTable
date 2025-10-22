@@ -2,7 +2,7 @@ import "../Styles/TeamBox.css";
 
 interface TeamBoxProps {
   color: "red" | "blue";
-  numbers: [number, number, number];
+  numbers: [number, number];
   teamName: string;
   justifyNumbers?: "space-between" | "center";
   widthNumbers?: string;

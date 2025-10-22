@@ -6,13 +6,7 @@ import { useState } from "react";
 import ModalDelete from "./ModalDelete";
 import { toast } from "react-toastify";
 import { toast_pro } from "../utils/Util";
-import {
-  FaCalendarAlt,
-  FaPen,
-  FaTrash,
-  FaBullseye,
-  FaList,
-} from "react-icons/fa";
+import { FaCalendarAlt, FaPen, FaTrash, FaBullseye, FaList } from "react-icons/fa";
 
 export default function PartidaCard({
   partida,
@@ -34,13 +28,22 @@ export default function PartidaCard({
           e.stopPropagation();
         }}
       >
+
+      <div className="partida-header">
         <h3>
           Partida {partida.tipo_partida} #{partida.numero_partida}
         </h3>
 
-        <button id="edit" className="edit-btn" onClick={() => nav("")}>
-          <FaPen className="edit-icon" />
-        </button>
+        <div className="button-group">
+          <button className="edit-btn" onClick={() => nav("")}>
+            <FaPen className="edit-icon" />
+          </button>
+            <button className="edit-btn1" onClick={() => nav(`/qualificatoria/${partida.id}`)}>
+              <FaList className="edit-icon" />
+            </button>
+        </div>
+      </div>
+
 
         {/* <button
           className="edit-btn1"
