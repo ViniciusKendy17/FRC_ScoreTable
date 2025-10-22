@@ -1,4 +1,4 @@
-import styles from "../Style/Partida.module.css";
+import styles from "../styles/Partida.module.css";
 
 interface TeamMatchsProps {
   leftTeams: number[];  // Ex: [9991, 9992, 9993]
