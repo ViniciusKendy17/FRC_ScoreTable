@@ -217,7 +217,7 @@ export async function EndMatch(req: Request, res: Response) {
         data: {
           teleop_pontos: ali.teleop_pontos,
           auto_pontos: ali.auto_pontos,
-          faltas_pontos: ali.faltas_pontos,
+          faltas_pontos: ali.color == "azul" ? alianca_vermelho.faltas_pontos : alianca_azul.faltas_pontos,
           idade_media: ali.idade_media,
           pre_historico: ali.pre_historico,
           estacionar: ali.estacionar,

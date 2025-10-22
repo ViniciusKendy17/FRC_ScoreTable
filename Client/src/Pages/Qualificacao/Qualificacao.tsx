@@ -11,7 +11,6 @@ interface Alianca {
   color: "azul" | "vermelho";
   time1: number;
   time2: number;
-  time3: number;
   partida_id: number;
   total_pontos: number;
 }
@@ -24,19 +23,12 @@ interface TeamInfo {
 
 export default function Qualificacao() {
   const { id } = useParams<{ id: string }>();
-  const endpoint = "http://172.25.10.14:3000/frc/";
+  const endpoint = "http://172.25.10.13:3000/frc/";
   const [data, setData] = useState<Alianca[]>([]);
   const [loading, setLoading] = useState(true);
   const [nome, setNome] = useState<any[]>([]);
 
-<<<<<<< HEAD
-  const endpoint = 'http://172.25.10.13:3000/frc/';
-  const [data, setData] = useState<any[]>([]);
-
-  const getMatches = async () => {
-=======
   const getNomes = async () => {
->>>>>>> 4460994f9b49d0415b67b5a00baa92d85ca9d8d9
     try {
       const response = await fetch(`${endpoint}teams`);
       if (!response.ok) throw new Error(`Erro ${response.status}`);
@@ -86,7 +78,7 @@ export default function Qualificacao() {
       <div className={` ${styles.equipesRed} ${styles.equipesRedBox}`}>
         {data
           .filter((t) => t.color === "vermelho")
-          .flatMap((t) => [t.time1, t.time2, t.time3])
+          .flatMap((t) => [t.time1, t.time2])
           .map((numero, i) => {
             const nomeEncontrado = nome.find(
               (team) => team.id === numero
@@ -96,7 +88,7 @@ export default function Qualificacao() {
               <TeamBox
                 key={`red-${i}`}
                 color="red"
-                numbers={[numero, 0, 0]}
+                numbers={[numero, 0]}
                 teamName={nomeEncontrado || `Time ${numero}`}
                 variant="qualificatoria"
               />
@@ -111,7 +103,7 @@ export default function Qualificacao() {
       <div className={`${styles.equipesBlue} ${styles.equipesBlueBox}`}>
         {data
           .filter((t) => t.color === "azul")
-          .flatMap((t) => [t.time1, t.time2, t.time3])
+          .flatMap((t) => [t.time1, t.time2])
           .map((numero, i) => {
             const nomeEncontrado = nome.find(
               (team) => team.id === numero
@@ -121,7 +113,7 @@ export default function Qualificacao() {
               <TeamBox
                 key={`blue-${i}`}
                 color="blue"
-                numbers={[numero, 0, 0]}
+                numbers={[numero, 0]}
                 teamName={nomeEncontrado || `Time ${numero}`}
                 variant="qualificatoria"
               />
