@@ -5,7 +5,7 @@ import styles from '../../styles/Classificacao.module.css'; // ← import direto
 import { useEffect, useState } from 'react';
 
 export default function Classificacao() {
-  const endpoint = 'http://172.25.10.14:3000/frc/';
+  const endpoint = 'http://172.25.10.13:3000/frc/';
   const [rankingData, setRankingData] = useState<any[]>([]);
 
   const getRanking = async () => {
