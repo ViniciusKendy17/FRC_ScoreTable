@@ -9,6 +9,9 @@ import Toast from "../../Components/Toast";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { ToastContainer } from "react-toastify";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { BiCross, BiCrosshair, BiPlus, BiPlusCircle } from "react-icons/bi";
+import { PiPlusCircleBold } from "react-icons/pi";
 
 export default function Home() {
   const [partidas, SetPartidas] = useState<Partida[] | null>(null);
@@ -71,18 +74,7 @@ export default function Home() {
       </div>
 
       <div>
-        <svg
-          id="add"
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          className="bi bi-plus-circle-fill"
-          viewBox="0 0 16 16"
-          onClick={() => nav("/partida/nova")}
-        >
-          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-        </svg>
+        <PiPlusCircleBold id="add" onClick={() => nav("/partida/nova")} />
       </div>
     </>
   );

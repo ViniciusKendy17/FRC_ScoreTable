@@ -56,20 +56,14 @@
   right: 2%;
 }
 
-<<<<<<< HEAD
-.edit-btn-1 {
-=======
+
 .edit-btn1 {
->>>>>>> 4460994f9b49d0415b67b5a00baa92d85ca9d8d9
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-<<<<<<< HEAD
   background-color: rgb(242, 177, 56); /* azul escuro */
-=======
   background-color: rgb(127, 154, 228); /* azul escuro */
->>>>>>> 4460994f9b49d0415b67b5a00baa92d85ca9d8d9
   color: white;
   border: none;
   border-radius: 50%;
@@ -81,11 +75,8 @@
   transition: background-color 0.2s;
   position: absolute;
   top: 10%;
-<<<<<<< HEAD
   right: 2%;
-=======
   right: 10%;
->>>>>>> 4460994f9b49d0415b67b5a00baa92d85ca9d8d9
 }
 
 .edit-btn:hover {

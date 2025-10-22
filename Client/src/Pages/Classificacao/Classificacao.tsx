@@ -87,7 +87,7 @@ export default function Qualificacao() {
               <TeamBox
                 key={`red-${i}`}
                 color="red"
-                numbers={[numero, 0, 0]}
+                numbers={[numero, 0]}
                 teamName={nomeEncontrado || `Time ${numero}`}
                 variant="qualificatoria"
               />
@@ -112,7 +112,7 @@ export default function Qualificacao() {
               <TeamBox
                 key={`blue-${i}`}
                 color="blue"
-                numbers={[numero, 0, 0]}
+                numbers={[numero, 0]}
                 teamName={nomeEncontrado || `Time ${numero}`}
                 variant="qualificatoria"
               />

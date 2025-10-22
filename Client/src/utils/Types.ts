@@ -19,6 +19,7 @@ export type Aliança = {
   sair: number;
   auto_pontos: number;
   teleop_pontos: number;
+  
   faltas_pontos: number;
   rp_auto: number;
   rp_estacionar: number;
