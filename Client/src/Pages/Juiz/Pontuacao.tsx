@@ -32,6 +32,10 @@ export default function Pontuacao() {
       pre_historico: 0,
       saida: 0,
       estacionar_poco: 0,
+      falta_branca: 0,
+      falta_estacionar: 0,
+      falta_prh: 0,
+      falta_transp: 0,
     })),
     azul: elements.map((el) => ({
       id: Number(el.id),
@@ -42,11 +46,15 @@ export default function Pontuacao() {
       pre_historico: 0,
       saida: 0,
       estacionar_poco: 0,
+      falta_branca: 0,
+      falta_estacionar: 0,
+      falta_prh: 0,
+      falta_transp: 0,
     })),
   });
 
   useEffect(() => {
-    const socket = io("http://172.25.10.13:3001", {
+    const socket = io("http://192.168.0.100:3001", {
       transports: ["websocket", "polling"],
     });
     SetSc(socket);
@@ -88,18 +96,7 @@ export default function Pontuacao() {
   }
 
   // Atualiza a pontuação de um elemento
-  const updateScore = (
-    id: number,
-    field:
-      | "auto"
-      | "teleop"
-      | "endgame"
-      | "idade_media"
-      | "pre_historico"
-      | "saida"
-      | "estacionar_poco",
-    value: number
-  ) => {
+  const updateScore = (id: number, field: elements, value: number) => {
     setScores((prev) => {
       const updated = {
         ...prev,
@@ -111,8 +108,6 @@ export default function Pontuacao() {
       // recalcula os totais
       const totalVermelho = calcTotal(updated.vermelho);
       const totalAzul = calcTotal(updated.azul);
-
-      console.log(totalVermelho);
 
       // envia pelo WebSocket
 
@@ -186,6 +181,12 @@ export default function Pontuacao() {
 
       final_score.sair += sc.saida * (el.pontos.sair ?? 0);
 
+      final_score.faltas_pontos +=
+        sc.falta_branca * (el.pontos.falta_branca ?? 0) +
+        sc.falta_estacionar * (el.pontos.falta_estacionar ?? 0) +
+        sc.falta_prh * (el.pontos.falta_prh ?? 0) +
+        sc.falta_transp * (el.pontos.falta_transp ?? 0);
+
       final_score.idade_media +=
         sc.auto * (el.pontos.au_idade_media ?? 0) +
         sc.teleop * (el.pontos.op_idade_media ?? 0);
@@ -208,6 +209,7 @@ export default function Pontuacao() {
     const data = await PartidaService.GetAlliencesByMatch(Number(id));
     SetAliancas(data);
   }
+
 
   useEffect(() => {
     DefineAlliences();

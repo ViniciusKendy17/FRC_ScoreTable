@@ -12,6 +12,7 @@ import TesteJuiz from "./Pages/TesteJuiz";
 // import Home from "./Pages/Juiz/Home";
 // import Pontuacao from "./Pages/Juiz/Pontuacao";
 import Classificacao from "./Pages/Classificacao/Classificacao";
+import Login from "./Pages/Login/Login";
 function App() {
   return (
     <>
@@ -25,12 +26,10 @@ function App() {
           <Route path="/resultado" element={<Resultado />} />
           <Route path="/partida/:id/placar" element={<Partida />} />
           <Route path="/partida/:id/aliancas" element={<Pontuacao />} />
-
           <Route path="/partida/nova" element={<FormPartida />} />
-{/* 
-          <Route path="/classificacao" element={<Classificacao />} />
           <Route path="/qualificatoria" element={<Qualificatoria />} />
-          <Route path="/resultado" element={<Resultado />} /> */}
+          <Route path="/resultado" element={<Resultado />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </>
