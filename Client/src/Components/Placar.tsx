@@ -39,19 +39,19 @@ export default function Placar({
         >
           <p
             className={stylesPartida.tipografiaPlacar}
-            style={{ margin: 0, transform: "translate(0px, 20px)" }}
+            style={{ margin: 0, transform: "translate(-26px, 20px)" }}
           >
             {scoreLeft}
           </p>
           <p
             className={stylesPartida.tipografiaResultado}
-            style={{ margin: 0, transform: "translate(0px, 20px)" }}
+            style={{ margin: 0, transform: "translate(-35px, 20px)" }}
           >
             {time}
           </p>
           <p
             className={stylesPartida.tipografiaPlacar}
-            style={{ margin: 0, transform: "translate(0px, 20px)" }}
+            style={{ margin: 0, transform: "translate(-15px, 20px)" }}
           >
             {scoreRight}
           </p>

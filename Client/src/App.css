@@ -14,12 +14,14 @@
 }
 
 body,html, #root {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
- font-family: "NeoSansProRegular", sans-serif;
+  overflow-x: hidden; 
+  overflow: hidden;
+  background: #000;
+  font-family: "NeoSansProRegular", sans-serif;
 }
 
 *{

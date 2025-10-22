@@ -1,15 +1,19 @@
 
 .container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto 1fr auto; /* 👈 header e footer têm altura automática */
-  height: 100vh;
+  position: relative;
   width: 100vw;
-  gap: 20px;
+  height: 100vh;
+  display: grid;
+
+  /* grade da página */
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto 1fr auto; /* header | main | footer */
+
+
   background-image: url('../assets/TelaQualificacao/Ativo 4.png');
   background-size: cover;
   background-position: center;
-  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .header {
@@ -43,7 +47,7 @@ footer {
   height: 100%;                  
   gap: 50px;
   padding-top: 10%; 
-  transform: translateY(-50px);
+  transform: translateY(-100px);
 }
 
 .equipesRedBox{
@@ -115,7 +119,7 @@ footer {
 
 .placar {
     position: absolute;      
-    top: 50%;                
+    top: 40%;                
     left: 50%;                
     transform: translate(-50%, -50%); 
 

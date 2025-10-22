@@ -1,15 +1,23 @@
 .footer {
-  grid-column: 1 / 4;
-  grid-row: 4 / 5; /* linha agora existe */
+  position: fixed; /* fixa no fundo da viewport */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
 
-    position: absolute;
-  bottom: 0;
-  width: 100%;
+  background-image: url('../assets/TelaResultados/Ativo 59.png');
+  background-size: cover;
+  background-position: center;
+
+  padding: 10px 0;
+  z-index: 10; /* garante que fique acima do conteúdo */
 }
+
+
 
 .footerContent {
     text-align: center;
