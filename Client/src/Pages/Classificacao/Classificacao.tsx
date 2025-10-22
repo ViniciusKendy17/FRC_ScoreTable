@@ -43,27 +43,54 @@ export default function Classificacao() {
 
   return (
     <div className={styles.container}>
-      <Header title="Classificação" />
-      <div className={styles.content}>
-        <div className={styles.containerTable}>
-          <GridTable
-            variant="classificacao"
-            rows={6}
-            columns={6}
-            data={[
-              ['Rank', 'Team', 'Ranking \nScore', 'AVG\nMatch', 'Record\n(W-L-T)', 'Total Ranking\nPoints'],
-              ...rankingData.map((team, index) => [
-                index + 1,
-                team.numero_equipe,
-                team.ranking_score,
-                team.match_score,
-                `${team.vitorias}-${team.derrotas}-${team.empates}`,
-                team.ranking_score
-              ])
-            ]}
-          />
-        </div>
+      <Header title={`Qualificatória #${id}`} />
+
+      <div className={` ${styles.equipesRed} ${styles.equipesRedBox}`}>
+        {data
+          .filter((t) => t.color === "vermelho")
+          .flatMap((t) => [t.time1, t.time2])
+          .map((numero, i) => {
+            const nomeEncontrado = nome.find(
+              (team) => team.id === numero
+            )?.nome;
+
+            return (
+              <TeamBox
+                key={`red-${i}`}
+                color="red"
+                numbers={[numero, 0]}
+                teamName={nomeEncontrado || `Time ${numero}`}
+                variant="qualificatoria"
+              />
+            );
+          })}
       </div>
+
+      <div className={styles.containerPlacar}>
+        <Placar className={styles.placar} />
+      </div>
+
+      <div className={`${styles.equipesBlue} ${styles.equipesBlueBox}`}>
+        {data
+          .filter((t) => t.color === "azul")
+          .flatMap((t) => [t.time1, t.time2])
+          .map((numero, i) => {
+            const nomeEncontrado = nome.find(
+              (team) => team.id === numero
+            )?.nome;
+
+            return (
+              <TeamBox
+                key={`blue-${i}`}
+                color="blue"
+                numbers={[numero, 0]}
+                teamName={nomeEncontrado || `Time ${numero}`}
+                variant="qualificatoria"
+              />
+            );
+          })}
+      </div>
+
       <Footer text="FRC Score Table" />
     </div>
   );

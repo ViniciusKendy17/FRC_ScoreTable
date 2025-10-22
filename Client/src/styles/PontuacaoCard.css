@@ -2,12 +2,12 @@
   /* border: 2px solid #ffb347; */
   border-radius: 10px;
   padding: 10px;
-  margin: 8px 0;
+  /* margin: 8px 0; */
   background: #fff;
   font-family: "Segoe UI", sans-serif;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   width: 100%;
-  max-width: 320px;
+  max-width: 400px;
   transition: transform 0.2s;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .phase span {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
@@ -62,13 +62,13 @@
 }
 
 .buttons button {
-  width: 28px;
-  height: 28px;
+  width: 35px;
+  height: 35px;
   border-radius: 6px;
   border: none;
   background: #ffb347;
   color: #fff;
-  font-size: 16px;
+  font-size: 22px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s;

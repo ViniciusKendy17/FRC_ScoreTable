@@ -1,6 +1,19 @@
 import type { Aliança } from "./Types";
 
-export type Pontos = Omit<Aliança, "time1" | "time2" >;
+export type Pontos = Omit<Aliança, "time1" | "time2">;
+
+export type elements =
+  | "auto"
+  | "teleop"
+  | "endgame"
+  | "idade_media"
+  | "pre_historico"
+  | "saida"
+  | "estacionar_poco"
+  | "falta_branca"
+  | "falta_prh"
+  | "falta_transp"
+  | "falta_estacionar";
 
 export type ValoresPontos = {
   au_idade_media: number;
@@ -11,9 +24,15 @@ export type ValoresPontos = {
   estacionar_poco: number;
   au_estacionar: number;
   sair: number;
+  falta_branca: number;
+  falta_prh: number;
+  falta_transp: number;
+  falta_estacionar: number;
 };
 
 type PartialPontos = Partial<ValoresPontos>;
+
+export type PartialScore = Omit<Score, "idade_media" | "pre_historico">;
 
 export type Score = {
   id: number;
@@ -24,6 +43,10 @@ export type Score = {
   pre_historico: number;
   saida: number;
   estacionar_poco: number;
+  falta_branca: number;
+  falta_prh: number;
+  falta_transp: number;
+  falta_estacionar: number;
 };
 
 export type GameElement = {
@@ -58,5 +81,25 @@ export const elements: GameElement[] = [
     id: 5,
     nome: "SAÍDA",
     pontos: { sair: 1 },
+  },
+  {
+    id: 6,
+    nome: "FALTA - IMPEDIR PONTUAÇÃO",
+    pontos: { falta_branca: 2 },
+  },
+  {
+    id: 7,
+    nome: "FALTA - JOGAR ARTEFATO",
+    pontos: { falta_prh: 6 },
+  },
+  {
+    id: 8,
+    nome: "FALTA - 2 ELEMENTOS DE JOGO",
+    pontos: { falta_transp: 2 },
+  },
+  {
+    id: 9,
+    nome: "FALTA - ESTACIONAR NO POÇO ",
+    pontos: { falta_estacionar: 6 },
   },
 ];

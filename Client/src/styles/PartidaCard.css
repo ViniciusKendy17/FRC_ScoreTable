@@ -56,11 +56,13 @@
   right: 2%;
 }
 
+
 .edit-btn1 {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  background-color: rgb(242, 177, 56); /* azul escuro */
   background-color: rgb(127, 154, 228); /* azul escuro */
   color: white;
   border: none;
@@ -73,6 +75,7 @@
   transition: background-color 0.2s;
   position: absolute;
   top: 10%;
+  right: 2%;
   right: 10%;
 }
 

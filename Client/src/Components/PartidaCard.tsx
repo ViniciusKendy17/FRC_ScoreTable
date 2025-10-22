@@ -2,11 +2,18 @@ import type { Partida } from "../utils/Types";
 import "../styles/PartidaCard.css";
 
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { use, useState } from "react";
 import ModalDelete from "./ModalDelete";
 import { toast } from "react-toastify";
 import { toast_pro } from "../utils/Util";
-import { FaCalendarAlt, FaPen, FaTrash, FaBullseye, FaList } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaPen,
+  FaTrash,
+  FaBullseye,
+  FaList,
+} from "react-icons/fa";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 export default function PartidaCard({
   partida,
@@ -16,6 +23,7 @@ export default function PartidaCard({
   DefinirPartidas: any;
 }) {
   const nav = useNavigate();
+  const [user, SetUser] = useLocalStorage("user");
 
   const [modal, SetModal] = useState(false);
 
@@ -28,29 +36,25 @@ export default function PartidaCard({
           e.stopPropagation();
         }}
       >
+        <div className="partida-header">
+          <h3>
+            Partida {partida.tipo_partida} #{partida.numero_partida}
+          </h3>
 
-      <div className="partida-header">
-        <h3 style={{fontFamily: "NeoSansProBold", color: "#000", fontSize: "22px"}}>
-          Partida {partida.tipo_partida} #{partida.numero_partida}
-        </h3>
-
-        <div className="button-group">
-          <button className="edit-btn" onClick={() => nav("")}>
-            <FaPen className="edit-icon" />
-          </button>
-            <button className="edit-btn1" onClick={() => nav(`/qualificatoria/${partida.id}`)}>
-              <FaList className="edit-icon" />
-            </button>
+          {user == "fta" && (
+            <div className="button-group">
+              <button className="edit-btn" onClick={() => nav("")}>
+                <FaPen className="edit-icon" />
+              </button>
+              <button
+                className="edit-btn1"
+                onClick={() => nav(`/qualificatoria/${partida.id}`)}
+              >
+                <FaList className="edit-icon" />
+              </button>
+            </div>
+          )}
         </div>
-      </div>
-
-
-        {/* <button
-          className="edit-btn1"
-          onClick={() => nav(`/qualificatoria/${partida.id}`)}
-        >
-          <FaList className="edit-icon" />
-        </button> */}
 
         <section>
           <button
@@ -85,18 +89,20 @@ export default function PartidaCard({
             <span>PONTUAÇÃO</span>
           </button>
 
-          <button
-            id="apagar-btn"
-            className="btnss"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              SetModal(true);
-            }}
-          >
-            <FaTrash className="btn-icon" />
-            <span>APAGAR</span>
-          </button>
+          {user == "fta" && (
+            <button
+              id="apagar-btn"
+              className="btnss"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                SetModal(true);
+              }}
+            >
+              <FaTrash className="btn-icon" />
+              <span>APAGAR</span>
+            </button>
+          )}
         </section>
       </div>
 

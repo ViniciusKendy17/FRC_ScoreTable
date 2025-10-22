@@ -1,20 +1,10 @@
-import type { GameElement } from "../utils/ScoreTable";
+import type { elements, GameElement, PartialScore } from "../utils/ScoreTable";
 import "../styles/PontuacaoCard.css";
 
 type Props = {
   element: GameElement;
-  score: {
-    id: number;
-    auto: number;
-    teleop: number;
-    endgame: number;
-    saida: number;
-    estacionar_poco: number;
-  };
-  onChange: (
-    field: "auto" | "teleop" | "endgame" | "saida" | "estacionar_poco",
-    value: number
-  ) => void;
+  score: PartialScore;
+  onChange: (field: elements, value: number) => void;
 };
 
 export default function ScoreCard({ element, score, onChange }: Props) {
@@ -27,11 +17,14 @@ export default function ScoreCard({ element, score, onChange }: Props) {
       ((pontos.au_idade_media ?? 0) +
         (pontos.au_pre_historico ?? 0) +
         (pontos.au_estacionar ?? 0)) +
-    score.teleop *
-      ((pontos.op_idade_media ?? 0) + (pontos.op_pre_historico ?? 0)) +
+    score.teleop *((pontos.op_idade_media ?? 0) + (pontos.op_pre_historico ?? 0)) +
     score.endgame * (pontos.estacionar ?? 0) +
     score.saida * (pontos.sair ?? 0) +
-    score.estacionar_poco * (pontos.estacionar_poco ?? 0);
+    score.estacionar_poco * (pontos.estacionar_poco ?? 0) +
+    score.falta_branca * (pontos.falta_branca ?? 0) +
+    score.falta_estacionar * (pontos.falta_estacionar ?? 0) +
+    score.falta_prh * (pontos.falta_prh ?? 0) +
+    score.falta_transp * (pontos.falta_transp ?? 0);
 
   return (
     <div className="score-card" style={{ borderColor: cor }}>
@@ -121,6 +114,99 @@ export default function ScoreCard({ element, score, onChange }: Props) {
                 onClick={() =>
                   onChange("estacionar_poco", score.estacionar_poco + 1)
                 }
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/*  */}
+        {pontos.falta_branca !== undefined && (
+          <div className="phase">
+            <span>Falta</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange("falta_branca", Math.max(0, score.falta_branca - 1))
+                }
+              >
+                −
+              </button>
+              <span>{score.falta_branca}</span>
+              <button
+                onClick={() => onChange("falta_branca", score.falta_branca + 1)}
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* FALTA ESTACIONAR */}
+        {pontos.falta_estacionar !== undefined && (
+          <div className="phase">
+            <span>Falta</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange(
+                    "falta_estacionar",
+                    Math.max(0, score.falta_estacionar - 1)
+                  )
+                }
+              >
+                −
+              </button>
+              <span>{score.falta_estacionar}</span>
+              <button
+                onClick={() =>
+                  onChange("falta_estacionar", score.falta_estacionar + 1)
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* FALTA ARTEFATO NA HORA ERRADA */}
+        {pontos.falta_prh !== undefined && (
+          <div className="phase">
+            <span>Falta</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange("falta_prh", Math.max(0, score.falta_prh - 1))
+                }
+              >
+                −
+              </button>
+              <span>{score.falta_prh}</span>
+              <button
+                onClick={() => onChange("falta_prh", score.falta_prh + 1)}
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* FALTA - 2 ELEMENTOS NO ROBO */}
+        {pontos.falta_transp !== undefined && (
+          <div className="phase">
+            <span>Falta</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange("falta_transp", Math.max(0, score.falta_transp - 1))
+                }
+              >
+                −
+              </button>
+              <span>{score.falta_transp}</span>
+              <button
+                onClick={() => onChange("falta_transp", score.falta_transp + 1)}
               >
                 +
               </button>

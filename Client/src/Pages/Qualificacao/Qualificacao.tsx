@@ -104,7 +104,7 @@ export default function Qualificacao() {
               <TeamBox
                 key={`red-${i}`}
                 color="red"
-                numbers={[numero, 0, ]}
+                numbers={[numero, 0]}
                 teamName={nomeEncontrado || `Time ${numero}`}
                 variant="qualificatoria"
               />

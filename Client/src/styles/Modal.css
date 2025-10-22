@@ -24,9 +24,10 @@
   flex-direction: column;
 }
 
-#trash {
-  padding: 10px;
-  background-color: rgb(255, 210, 210);
+#trashh {
+  width: 50px;
+  height: 25px;
+  /* background-color: rgb(255, 210, 210); */
   border-radius: 50%;
   color: red;
   scale: 1.2;
@@ -37,6 +38,10 @@
   right: 5%;
   scale: 1.5;
   top: 10%;
+}
+
+#xx:hover{
+  cursor: pointer;
 }
 
 #out-btn {
@@ -63,4 +68,12 @@
   background-color: red;
   color: white;
   border: none;
+}
+
+#confirm:hover{
+  cursor:pointer;
+}
+
+#cancel:hover{
+  cursor:pointer;
 }
