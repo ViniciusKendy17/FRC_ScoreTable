@@ -27,6 +27,7 @@ export default function Qualificacao() {
   const [data, setData] = useState<Alianca[]>([]);
   const [loading, setLoading] = useState(true);
   const [nome, setNome] = useState<any[]>([]);
+  const [numero_partida, setNumeroPartida] = useState<number | null>(null);
 
   const getNomes = async () => {
     try {
@@ -38,9 +39,25 @@ export default function Qualificacao() {
         nome: team.nome
       }));
       setNome(teamNames)
-      console.log("Nomes dos times:", teamNames);
     } catch (error) {
       console.error("Erro ao buscar nomes dos times:", error);
+    }
+  };
+
+  const getNumeroPartida = async () => {
+    try {
+      const response = await fetch(`${endpoint}matches`);
+      if (!response.ok) throw new Error(`Erro ${response.status}`);
+      const json = await response.json();
+
+      const partidaEncontrada = json.partidas.find(
+        (p: any) => p.id.toString() === id
+      );
+      const numero = partidaEncontrada?.numero_partida ?? null;
+
+      setNumeroPartida(numero);
+    } catch (error) {
+      console.error("Erro ao buscar partida:", error);
     }
   };
 
@@ -51,9 +68,6 @@ export default function Qualificacao() {
         if (!response.ok) throw new Error(`Erro ${response.status}`);
 
         const json = await response.json();
-        console.log("Retorno da API:", json);
-
-        // ✅ Aqui está a correção
         setData(json.aliancas || []);
       } catch (error) {
         console.error("Erro ao buscar partida:", error);
@@ -63,6 +77,7 @@ export default function Qualificacao() {
     };
 
     getNomes();
+    getNumeroPartida();
 
     if (id) getMatch();
   }, [id]);
@@ -73,7 +88,7 @@ export default function Qualificacao() {
 
   return (
     <div className={styles.container}>
-      <Header title={`Qualificatória #${id}`} />
+      <Header title={`Qualificatória #${numero_partida}`} />
 
       <div className={` ${styles.equipesRed} ${styles.equipesRedBox}`}>
         {data

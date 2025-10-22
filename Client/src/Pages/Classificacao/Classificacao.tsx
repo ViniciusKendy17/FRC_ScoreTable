@@ -1,74 +1,45 @@
-import Footer from "../../Components/Footer";
-import Header from "../../Components/HeaderPages";
-import TeamBox from "../../Components/TeamBox";
-import styles from "../../Styles/Qualificacao.module.css";
-import Placar from "../../Components/Placar";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import Footer from '../../Components/Footer';
+import GridTable from '../../Components/GridTable';
+import Header from '../../Components/HeaderPages'
+import styles from '../../styles/Classificacao.module.css'; // ← import direto do CSS global
+import { useEffect, useState } from 'react';
 
-interface Alianca {
-  id: number;
-  color: "azul" | "vermelho";
-  time1: number;
-  time2: number;
-  partida_id: number;
-  total_pontos: number;
-}
+export default function Classificacao() {
+  const endpoint = 'http://172.25.10.14:3000/frc/';
+  const [rankingData, setRankingData] = useState<any[]>([]);
 
-interface TeamInfo {
-  id: number;
-  nome: string;
-}
-
-export default function Qualificacao() {
-  const { id } = useParams<{ id: string }>();
-  const endpoint = "http://172.25.10.13:3000/frc/";
-  const [data, setData] = useState<Alianca[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [nome, setNome] = useState<any[]>([]);
-
-  const getNomes = async () => {
+  const getRanking = async () => {
     try {
-      const response = await fetch(`${endpoint}teams`);
-      if (!response.ok) throw new Error(`Erro ${response.status}`);
+      const response = await fetch(endpoint + "ranking");
+      if (!response.ok) throw new Error(`Erro na requisição: ${response.status}`);
+
       const json = await response.json();
-      const teamNames: TeamInfo[] = json.equipes.map((team: any) => ({
-        id: team.numero_equipe,
-        nome: team.nome,
-      }));
-      setNome(teamNames);
-      console.log("Nomes dos times:", teamNames);
+      const sorted = ranking(json.ranking);
+      setRankingData(sorted);
     } catch (error) {
-      console.error("Erro ao buscar nomes dos times:", error);
+      if (error instanceof Error) {
+        console.error("Falha ao buscar ranking:", error.message);
+      } else {
+        console.error("Falha ao buscar ranking:", String(error));
+      }
     }
   };
 
+  const ranking = (data: any[]) => {
+    return [...data].sort((a, b) => {
+      const rpA = Number(a.total_rp);
+      const rpB = Number(b.total_rp);
+
+      if (rpA !== rpB) return rpB - rpA;
+      const scoreA = Number(a.ranking_score);
+      const scoreB = Number(b.ranking_score);
+      return scoreB - scoreA;
+    });
+  };
+
   useEffect(() => {
-    const getMatch = async () => {
-      try {
-        const response = await fetch(`${endpoint}match/${id}/alliances`);
-        if (!response.ok) throw new Error(`Erro ${response.status}`);
-
-        const json = await response.json();
-        console.log("Retorno da API:", json);
-
-        // ✅ Aqui está a correção
-        setData(json.aliancas || []);
-      } catch (error) {
-        console.error("Erro ao buscar partida:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getNomes();
-
-    if (id) getMatch();
-  }, [id]);
-
-  if (loading) return <p>Carregando...</p>;
-  if (!Array.isArray(data) || data.length === 0)
-    return <p>Nenhum dado encontrado.</p>;
+    getRanking();
+  }, []);
 
   return (
     <div className={styles.container}>

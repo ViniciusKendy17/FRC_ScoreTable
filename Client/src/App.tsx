@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import TestePlacar from "./Pages/TestePlacar";
 import Qualificatoria from "./Pages/Qualificacao/Qualificacao";
-import Resultado from "./Pages/Resultados/Resultado"; // Adjust the path if necessary
+import Resultado from "./Pages/Resultados/Resultado";
 import Partida from "./Pages/Partida/Partida";
 import Home from "./Pages/Juiz/Home";
 import Pontuacao from "./Pages/Juiz/Pontuacao";

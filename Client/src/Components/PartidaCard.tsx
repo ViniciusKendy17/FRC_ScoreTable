@@ -85,7 +85,7 @@ export default function PartidaCard({
             }}
             type="button"
           >
-            <FaBullseye />
+            <FaBullseye className="btn-icon" />
             <span>PONTUAÇÃO</span>
           </button>
 

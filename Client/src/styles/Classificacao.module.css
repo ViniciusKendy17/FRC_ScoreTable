@@ -2,7 +2,7 @@
 .container {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    grid-template-rows: 1fr auto 1fr;
+    grid-template-rows: auto 1fr auto;
     height: 100vh;
     width: 100vw;
     gap: 20px;
@@ -22,24 +22,20 @@
   height: auto;
 }
 
-.containerTable{
-    width: 100%;
-    max-width: 90%;
+.containerTable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 75%; /* 👈 aumenta a largura da tabela (ajuste aqui se quiser mais larga) */
+  max-width: 1100px; /* 👈 evita que fique estourando em telas grandes */
+  margin: 0 auto;
 }
 
-/* header {
-    grid-column: 1 / 4;
-    grid-row: 1 / 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    aspect-ratio: 8000 / 525;
-    max-height: 10vh;
-    width: 100%;
-    background-image: url('../assets/telaQualificacao/Ativo 5.png');
-    background-size: cover;
-    background-position: center;
-} */
+.containerTable table {
+  width: 100%; /* 👈 faz a tabela ocupar toda a área disponível */
+  border-collapse: collapse;
+  text-align: center;
+}
 
 footer {
   grid-column: 1 / 4;     
