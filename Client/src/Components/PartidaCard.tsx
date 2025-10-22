@@ -30,7 +30,7 @@ export default function PartidaCard({
       >
 
       <div className="partida-header">
-        <h3>
+        <h3 style={{fontFamily: "NeoSansProBold", color: "#000", fontSize: "22px"}}>
           Partida {partida.tipo_partida} #{partida.numero_partida}
         </h3>
 
@@ -74,7 +74,7 @@ export default function PartidaCard({
             }}
             type="button"
           >
-            <FaBullseye />
+            <FaBullseye className="btn-icon" />
             <span>PONTUAÇÃO</span>
           </button>
 

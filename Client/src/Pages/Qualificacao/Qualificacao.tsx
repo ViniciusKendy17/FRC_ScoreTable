@@ -11,7 +11,6 @@ interface Alianca {
   color: "azul" | "vermelho";
   time1: number;
   time2: number;
-  time3: number;
   partida_id: number;
   total_pontos: number;
 }
@@ -25,9 +24,11 @@ interface TeamInfo {
 export default function Qualificacao() {
   const { id } = useParams<{ id: string }>();
   const endpoint = "http://172.25.10.13:3000/frc/";
+
   const [data, setData] = useState<Alianca[]>([]);
   const [loading, setLoading] = useState(true);
   const [nome, setNome] = useState<any[]>([]);
+  const [numero_partida, setNumeroPartida] = useState<number | null>(null);
 
   const getNomes = async () => {
     try {
@@ -39,9 +40,25 @@ export default function Qualificacao() {
         nome: team.nome
       }));
       setNome(teamNames)
-      console.log("Nomes dos times:", teamNames);
     } catch (error) {
       console.error("Erro ao buscar nomes dos times:", error);
+    }
+  };
+
+  const getNumeroPartida = async () => {
+    try {
+      const response = await fetch(`${endpoint}matches`);
+      if (!response.ok) throw new Error(`Erro ${response.status}`);
+      const json = await response.json();
+
+      const partidaEncontrada = json.partidas.find(
+        (p: any) => p.id.toString() === id
+      );
+      const numero = partidaEncontrada?.numero_partida ?? null;
+
+      setNumeroPartida(numero);
+    } catch (error) {
+      console.error("Erro ao buscar partida:", error);
     }
   };
 
@@ -52,9 +69,6 @@ export default function Qualificacao() {
         if (!response.ok) throw new Error(`Erro ${response.status}`);
 
         const json = await response.json();
-        console.log("Retorno da API:", json);
-
-        // ✅ Aqui está a correção
         setData(json.aliancas || []);
       } catch (error) {
         console.error("Erro ao buscar partida:", error);
@@ -64,6 +78,7 @@ export default function Qualificacao() {
     };
 
     getNomes();
+    getNumeroPartida();
 
     if (id) getMatch();
   }, [id]);
@@ -74,12 +89,12 @@ export default function Qualificacao() {
 
   return (
     <div className={styles.container}>
-      <Header title={`Qualificatória #${id}`} />
+      <Header title={`Qualificatória #${numero_partida}`} />
 
       <div className={` ${styles.equipesRed} ${styles.equipesRedBox}`}>
         {data
           .filter((t) => t.color === "vermelho")
-          .flatMap((t) => [t.time1, t.time2, t.time3])
+          .flatMap((t) => [t.time1, t.time2])
           .map((numero, i) => {
             const nomeEncontrado = nome.find(
               (team) => team.id === numero
@@ -104,7 +119,7 @@ export default function Qualificacao() {
       <div className={`${styles.equipesBlue} ${styles.equipesBlueBox}`}>
         {data
           .filter((t) => t.color === "azul")
-          .flatMap((t) => [t.time1, t.time2, t.time3])
+          .flatMap((t) => [t.time1, t.time2])
           .map((numero, i) => {
             const nomeEncontrado = nome.find(
               (team) => team.id === numero
