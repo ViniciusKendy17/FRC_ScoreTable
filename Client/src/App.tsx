@@ -15,23 +15,29 @@ import Classificacao from "./Pages/Classificacao/Classificacao";
 function App() {
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       <BrowserRouter>
         <Routes>
-          <Route path="/game" element={<TesteJuiz/>} />
+          <Route path="/game" element={<TesteJuiz />} />
           <Route path="/" element={<Home />} />
           <Route path="/classificacao" element={<Classificacao />} />
           <Route path="/qualificatoria/:id" element={<Qualificatoria />} />
           <Route path="/resultado" element={<Resultado />} />
-          <Route path="/partida" element={<Partida />} />
-          <Route path="/partida/:id/placar" element={""} />
+          <Route path="/partida/:id/placar" element={<Partida />} />
           <Route path="/partida/:id/aliancas" element={<Pontuacao />} />
 
           <Route path="/partida/nova" element={<FormPartida />} />
+<<<<<<< HEAD
+
+          <Route path="/classificacao" element={<Classificacao />} />
+          <Route path="/qualificatoria" element={<Qualificatoria />} />
+          <Route path="/resultado" element={<Resultado />} />
+=======
           {/* <Route path="/game" element={<TestePlacar />} />
           <Route path="/home" element={<Home />} /> */}
           {/*   <Route path="/partida/:id/placar" element={''}/>
           <Route path="/partida/:id/aliancas" element={<Pontuacao/>}/> */}
+>>>>>>> 4460994f9b49d0415b67b5a00baa92d85ca9d8d9
         </Routes>
       </BrowserRouter>
     </>

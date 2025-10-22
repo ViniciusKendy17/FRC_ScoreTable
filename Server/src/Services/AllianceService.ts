@@ -9,21 +9,18 @@ export async function NewAliance(alianca: Alianca, match_id: number) {
       OR: [
         { numero_equipe: alianca.time1 },
         { numero_equipe: alianca.time2 },
-        { numero_equipe: alianca.time3 },
       ],
     },
   });
 
   const equipe1 = equipes.find((e: { numero_equipe: number; }) => e.numero_equipe === alianca.time1);
   const equipe2 = equipes.find((e: { numero_equipe: number; }) => e.numero_equipe === alianca.time2);
-  const equipe3 = equipes.find((e: { numero_equipe: number; }) => e.numero_equipe === alianca.time3);
 
   await prisma.alianca.create({
     data: {
       color: alianca.color,
       time1: equipe1?.numero_equipe,
       time2: equipe2?.numero_equipe,
-      time3: equipe3?.numero_equipe,
       idade_media: 0,
       pre_historico: 0,
       estacionar: 0,
