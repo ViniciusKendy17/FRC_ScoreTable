@@ -1,6 +1,6 @@
 #back {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   margin: 0;
   padding: 0;
   background-attachment: fixed;
@@ -89,4 +89,18 @@
   scale: 3.5;
   color: white;
   right: 4%;
+}
+
+@media (min-width: 1000px) {
+  #back {
+    width: 100%;
+    height: 100vh;
+  }
+}
+
+@media (min-width: 1500px) {
+  #back {
+    width: 100%;
+    height: 100%;
+  }
 }

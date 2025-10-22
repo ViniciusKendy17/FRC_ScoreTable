@@ -16,6 +16,7 @@ import { PiPlusCircleBold } from "react-icons/pi";
 export default function Home() {
   const [partidas, SetPartidas] = useState<Partida[] | null>(null);
   const [pesquisa, SetPesquisa] = useState<string>("");
+  const [user, SetUser] = useLocalStorage("user");
 
   const nav = useNavigate();
 
@@ -73,9 +74,11 @@ export default function Home() {
         </main>
       </div>
 
-      <div>
-        <PiPlusCircleBold id="add" onClick={() => nav("/partida/nova")} />
-      </div>
+      {user == "fta" && (
+        <div>
+          <PiPlusCircleBold id="add" onClick={() => nav("/partida/nova")} />
+        </div>
+      )}
     </>
   );
 }
