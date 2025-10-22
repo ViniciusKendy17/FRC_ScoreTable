@@ -1,12 +1,18 @@
 import type { Partida } from "../utils/Types";
-import "../Style/PartidaCard.css";
+import "../styles/PartidaCard.css";
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ModalDelete from "./ModalDelete";
 import { toast } from "react-toastify";
 import { toast_pro } from "../utils/Util";
-import { FaCalendarAlt, FaPen, FaTrash, FaBullseye } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaPen,
+  FaTrash,
+  FaBullseye,
+  FaList,
+} from "react-icons/fa";
 
 export default function PartidaCard({
   partida,
@@ -36,6 +42,13 @@ export default function PartidaCard({
           <FaPen className="edit-icon" />
         </button>
 
+        {/* <button
+          className="edit-btn1"
+          onClick={() => nav(`/qualificatoria/${partida.id}`)}
+        >
+          <FaList className="edit-icon" />
+        </button> */}
+
         <section>
           <button
             id="placar-btn"
@@ -43,7 +56,7 @@ export default function PartidaCard({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              nav("/partida");
+              nav(`/partida/${partida.id}/placar`);
             }}
           >
             <FaCalendarAlt className="btn-icon" />

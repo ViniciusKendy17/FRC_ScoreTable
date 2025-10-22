@@ -1,6 +1,6 @@
 import type { Aliança } from "./Types";
 
-export type Pontos = Omit<Aliança, "time1" | "time2" | "time3">;
+export type Pontos = Omit<Aliança, "time1" | "time2" >;
 
 export type ValoresPontos = {
   au_idade_media: number;

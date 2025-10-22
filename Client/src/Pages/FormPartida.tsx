@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../Components/Header";
-import "../Style/Form.css";
+import "../styles/Form.css";
 import type { Equipe } from "../utils/Types";
 import { PartidaService } from "../Services/PartidaService";
 import { toast, ToastContainer } from "react-toastify";
@@ -10,7 +10,7 @@ import { toast_pro } from "../utils/Util";
 export default function FormPartida() {
   const [numero, setNumero] = useState<number>(0);
   const [tipo, setTipo] = useState("treino");
-  const [horario, setHorario] = useState("12:00:00");
+  const [horario, setHorario] = useState<string>("");
   const [opcoesTimes, SetTimes] = useState<Equipe[] | null>([]);
 
   const [azul, setAzul] = useState<(number | "")[]>([]);
@@ -48,13 +48,11 @@ export default function FormPartida() {
           color: "azul",
           time1: Number(azul[0]),
           time2: Number(azul[1]),
-          time3: Number(azul[2]),
         },
         {
           color: "vermelho",
           time1: Number(vermelho[0]),
           time2: Number(vermelho[1]),
-          time3: Number(vermelho[2]),
         },
       ],
     };
@@ -110,10 +108,19 @@ export default function FormPartida() {
             </select>
           </div>
 
+          <div className="campo">
+            <label htmlFor="">Horário</label>
+            <input
+              type="time"
+              onChange={(e) => setHorario(e.target.value)}
+              value={horario}
+            />
+          </div>
+
           <div className="aliancas">
             <div className="alianca vermelho">
               <h4>Aliança Vermelha</h4>
-              {[0, 1, 2].map((i) => (
+              {[0, 1].map((i) => (
                 <select
                   key={i}
                   value={vermelho[i]}
@@ -134,7 +141,7 @@ export default function FormPartida() {
 
             <div className="alianca azul">
               <h4>Aliança Azul</h4>
-              {[0, 1, 2].map((i) => (
+              {[0, 1].map((i) => (
                 <select
                   key={i}
                   value={azul[i]}

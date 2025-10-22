@@ -1,6 +1,6 @@
 import { toast, ToastContainer } from "react-toastify";
 import { PartidaService } from "../Services/PartidaService";
-import "../Style/Modal.css";
+import "../styles/Modal.css";
 import { toast_pro } from "../utils/Util";
 
 export default function ModalDelete({

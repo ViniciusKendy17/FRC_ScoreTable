@@ -4,7 +4,7 @@ import {
   Prisma,
   PrismaClient,
 } from "../generated/prisma";
-import { Partida, Vencedor } from "../Models/Partida";
+import { Partida, PartidaParcial, Vencedor } from "../Models/Partida";
 import { Alianca, ALiancaParcial } from "../Models/Alianca";
 import {
   CalcularRP,
@@ -25,6 +25,35 @@ export async function GetAllMatches(req: Request, res: Response) {
   }
 
   return res.status(200).json({ partidas: matches });
+}
+
+export async function GetMatchInfo(req: Request, res: Response) {
+  const match_id = req.params.match_id;
+
+  const [match, result] = await Promise.all([
+    await prisma.partida.findUnique({
+      where: {
+        id: Number(match_id),
+      },
+      select: {
+        numero_partida: true,
+      },
+    }),
+    await prisma.alianca.findMany({
+      where: {
+        partida_id: Number(match_id),
+      },
+      select: {
+        color: true,
+        time1: true,
+        time2: true,
+        idade_media: true,
+        pre_historico: true,
+      },
+    }),
+  ]);
+
+  return res.status(200).json({ match_info: match, alliances: result });
 }
 
 export async function NewMatch(req: Request, res: Response) {
@@ -77,7 +106,6 @@ export async function EditMatch(req: Request, res: Response) {
         data: {
           time1: ali.time1,
           time2: ali.time2,
-          time3: ali.time3,
         },
       });
     })
@@ -238,16 +266,3 @@ export async function GetalliancesByMatchId(req: Request, res: Response) {
     .status(200)
     .json({ msg: "Aliancas encontradas com sucesso", aliancas: aliancas });
 }
-
-//   const a  = tryFunc(async () => {
-//        return await prisma.partida.update({
-//       where: {
-//         id: Number(match_id),
-//       },
-//       data: {
-//         vencedor: vencedor,
-//         status: "completada",
-//       },
-//     });
-//   })
-// }

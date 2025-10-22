@@ -1,5 +1,5 @@
 import type { Pontos } from "../utils/ScoreTable";
-import type { Aliança, Equipe, Partida } from "../utils/Types";
+import type { AliancaParcial, Aliança, Equipe, Partida } from "../utils/Types";
 import { HandleTry } from "../utils/Util";
 
 export const PartidaService = {
@@ -49,8 +49,7 @@ export const PartidaService = {
   EditMatch: async function () {},
   EndJudgeMatch: (id: number, alianca: any) => {
     return HandleTry(async () => {
-
-      console.log(alianca)
+      console.log(alianca);
 
       const res = await fetch(
         `http://localhost:3000/frc/match/judge/end/${id}`,
@@ -104,4 +103,21 @@ export const PartidaService = {
 
       return aliancas as Aliança[];
     }),
+
+  GetMatchInfo: (id: number) => {
+    return HandleTry(async () => {
+      const res = await fetch(`http://localhost:3000/frc/match/${id}/score`);
+
+      const { match_info, alliances } = await res.json();
+
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+
+      return { match_info, alliances } as {
+        match_info: any;
+        alliances: AliancaParcial[];
+      };
+    });
+  },
 };

@@ -1,5 +1,5 @@
 import type { GameElement } from "../utils/ScoreTable";
-import "../Style/PontuacaoCard.css";
+import "../styles/PontuacaoCard.css";
 
 type Props = {
   element: GameElement;

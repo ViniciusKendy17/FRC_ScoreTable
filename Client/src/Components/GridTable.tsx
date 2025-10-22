@@ -1,5 +1,5 @@
-import styles from "../Style/Resultado.module.css";
-import stylesClassificaco from "../Style/Classificacao.module.css";
+import styles from "../styles/Resultado.module.css";
+import stylesClassificaco from "../styles/Classificacao.module.css";
 
 interface GridTableProps {
   rows?: number; 

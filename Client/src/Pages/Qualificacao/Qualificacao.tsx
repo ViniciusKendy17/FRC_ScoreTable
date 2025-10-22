@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 export default function Qualificacao() {
 
-  const endpoint = 'http://172.25.10.14:3000/frc/';
+  const endpoint = 'http://172.25.10.13:3000/frc/';
   const [data, setData] = useState<any[]>([]);
 
   const getMatches = async () => {

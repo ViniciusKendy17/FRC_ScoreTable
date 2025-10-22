@@ -55,6 +55,26 @@
   right: 2%;
 }
 
+.edit-btn-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: rgb(242, 177, 56); /* azul escuro */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 14px;
+  /* padding: 8px 20px; */
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: absolute;
+  top: 10%;
+  right: 2%;
+}
+
 .edit-btn:hover {
   background-color: #fe9926; /* azul um pouco mais claro no hover */
 }

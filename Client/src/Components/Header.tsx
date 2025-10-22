@@ -49,6 +49,7 @@ export default function Header({
             }}
             onClick={() => {
               SetBtnativo("ranking");
+              nav("/classificacao")
             }}
           >
             RANKING
