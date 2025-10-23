@@ -26,7 +26,7 @@ function App() {
           <Route path="/partida/:id/aliancas" element={<Pontuacao />} />
           <Route path="/partida/nova" element={<FormPartida />} />
           <Route path="/qualificatoria" element={<Qualificatoria />} />
-          <Route path="/resultado" element={<Resultado />} />
+          <Route path="/resultado/:id" element={<Resultado />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>

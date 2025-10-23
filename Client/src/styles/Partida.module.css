@@ -90,22 +90,20 @@
 
 .tipografiaPlacar {
   font-family: 'NeoSansProBold', sans-serif;
-  font-size: clamp(45px, 2vw, 50px);
+  font-size: clamp(45px, 4vw, 60px);
   color: white;
-  text-align: center;
   text-transform: uppercase;
   font-style: italic;
+  min-width: 100px;
   font-weight: 700;
 }
 
 .tipografiaResultado {
-  font-family: 'NeoSansProBold', sans-serif;
-  font-size: clamp(45px, 2vw, 50px);
+  font-family: "NeoSansProRegular";
+  font-size: clamp(25px, 3vw, 40px);
   color: black;
   text-align: center;
-  text-transform: uppercase;
-  font-style: italic;
-  font-weight: 700;
+  min-width: 120px;
 }
 
 .placar {
@@ -155,4 +153,17 @@
   width: 25%;
   height: 100%;
   gap: 20px;
+}
+
+.containerPlacar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; 
+  align-items: center;
+  justify-items: center;
+  width: 100%; 
+  margin: 0 auto;
+  text-align: center;
+
+  position: relative;
+  top: 20px;
 }

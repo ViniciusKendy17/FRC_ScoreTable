@@ -7,7 +7,7 @@ type PlacarProps = {
   variant?: "qualificatoria" | "partida" | "winner"; // controla estilo/layout
   scoreLeft?: number;
   scoreRight?: number;
-  time?: string;
+  time?: string | number;
 };
 
 
@@ -29,32 +29,20 @@ export default function Placar({
       {variant === "partida" && (
         <div
           className={`${className ?? ""} ${stylesPartida.placar}`}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            width: "35%",
-            alignItems: "center",
-            justifyContent: "space-around",
-          }}
         >
-          <p
-            className={stylesPartida.tipografiaPlacar}
-            style={{ margin: 0, transform: "translate(-26px, 20px)" }}
-          >
-            {scoreLeft}
-          </p>
-          <p
-            className={stylesPartida.tipografiaResultado}
-            style={{ margin: 0, transform: "translate(-35px, 20px)" }}
-          >
-            {time}
-          </p>
-          <p
-            className={stylesPartida.tipografiaPlacar}
-            style={{ margin: 0, transform: "translate(-15px, 20px)" }}
-          >
-            {scoreRight}
-          </p>
+          <div className={stylesPartida.containerPlacar}>
+            <p className={stylesPartida.tipografiaPlacar} style={{ textAlign: 'left' }}>
+              {scoreLeft}
+            </p>
+            <p
+              className={stylesPartida.tipografiaResultado}
+            >
+              {time}
+            </p>
+            <p className={stylesPartida.tipografiaPlacar}>
+              {scoreRight}
+            </p>
+          </div>
         </div>
       )}
 
