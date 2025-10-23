@@ -5,7 +5,7 @@ import { HandleTry } from "../utils/Util";
 export const PartidaService = {
   GetMatches: () =>
     HandleTry<Partida[]>(async () => {
-      const res = await fetch("http://192.168.0.100:3000/frc/matches");
+      const res = await fetch("http://192.168.0.101:3000/frc/matches");
 
       const { partidas } = await res.json();
 
@@ -18,7 +18,7 @@ export const PartidaService = {
 
   GetTeams: () =>
     HandleTry(async () => {
-      const res = await fetch("http://192.168.0.100:3000/frc/teams");
+      const res = await fetch("http://192.168.0.101:3000/frc/teams");
 
       const { equipes } = await res.json();
 
@@ -31,7 +31,7 @@ export const PartidaService = {
 
   AddMatch: (payload: any) => {
     return HandleTry(async () => {
-      const res = await fetch("http://192.168.0.100:3000/frc/match/new", {
+      const res = await fetch("http://192.168.0.101:3000/frc/match/new", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -52,7 +52,7 @@ export const PartidaService = {
       console.log(alianca);
 
       const res = await fetch(
-        `http://192.168.0.100:3000/frc/match/judge/end/${id}`,
+        `http://192.168.0.101:3000/frc/match/judge/end/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -74,7 +74,7 @@ export const PartidaService = {
   },
   DeleteMatch: (id: number) => {
     return HandleTry(async () => {
-      const res = await fetch(`http://192.168.0.100:3000/frc/match/delete/${id}`, {
+      const res = await fetch(`http://192.168.0.101:3000/frc/match/delete/${id}`, {
         method: "DELETE",
       });
 
@@ -92,7 +92,7 @@ export const PartidaService = {
   GetAlliencesByMatch: (id: number) =>
     HandleTry<Aliança[]>(async () => {
       const res = await fetch(
-        `http://192.168.0.100:3000/frc/match/${id}/alliances`
+        `http://192.168.0.101:3000/frc/match/${id}/alliances`
       );
 
       const { aliancas } = await res.json();
@@ -106,7 +106,7 @@ export const PartidaService = {
 
   GetMatchInfo: (id: number) => {
     return HandleTry(async () => {
-      const res = await fetch(`http://192.168.0.100:3000/frc/match/${id}/score`);
+      const res = await fetch(`http://192.168.0.101:3000/frc/match/${id}/score`);
 
       const { match_info, alliances } = await res.json();
 

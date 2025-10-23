@@ -2,7 +2,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import { prerenderToNodeStream } from "react-dom/static";
 import { io, Socket } from "socket.io-client";
 
-const sc = io("http://192.168.0.100:3001");
+const sc = io("http://192.168.0.101:3001");
 
 interface Scores {
   bola: number;
