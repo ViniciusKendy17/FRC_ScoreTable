@@ -9,8 +9,6 @@ import Pontuacao from "./Pages/Juiz/Pontuacao";
 import { ToastContainer } from "react-toastify";
 import FormPartida from "./Pages/FormPartida";
 import TesteJuiz from "./Pages/TesteJuiz";
-// import Home from "./Pages/Juiz/Home";
-// import Pontuacao from "./Pages/Juiz/Pontuacao";
 import Classificacao from "./Pages/Classificacao/Classificacao";
 import Login from "./Pages/Login/Login";
 function App() {
