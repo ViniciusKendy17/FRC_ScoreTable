@@ -2,19 +2,21 @@ import { Request, Response } from "express";
 import { Alianca, Cor } from "../Models/Alianca";
 import { PrismaClient } from "../generated/prisma";
 import { hasValues, prisma } from "./GenericServices";
+import { Vencedor } from "../Models/Partida";
 
 export async function NewAliance(alianca: Alianca, match_id: number) {
   const equipes = await prisma.equipe.findMany({
     where: {
-      OR: [
-        { numero_equipe: alianca.time1 },
-        { numero_equipe: alianca.time2 },
-      ],
+      OR: [{ numero_equipe: alianca.time1 }, { numero_equipe: alianca.time2 }],
     },
   });
 
-  const equipe1 = equipes.find((e: { numero_equipe: number; }) => e.numero_equipe === alianca.time1);
-  const equipe2 = equipes.find((e: { numero_equipe: number; }) => e.numero_equipe === alianca.time2);
+  const equipe1 = equipes.find(
+    (e: { numero_equipe: number }) => e.numero_equipe === alianca.time1
+  );
+  const equipe2 = equipes.find(
+    (e: { numero_equipe: number }) => e.numero_equipe === alianca.time2
+  );
 
   await prisma.alianca.create({
     data: {
@@ -25,28 +27,53 @@ export async function NewAliance(alianca: Alianca, match_id: number) {
       pre_historico: 0,
       estacionar: 0,
       sair: 0,
+      idade_media_au: 0,
+      pre_historico_au: 0,
+      poco_au: 0,
+      poco_endgame: 0,
+      sitio: 0,
       auto_pontos: 0,
       teleop_pontos: 0,
       faltas_pontos: 0,
       total_pontos: 0,
       total_rp: 0,
+      falta_branca: 0,
+      falta_estacionar: 0,
+      falta_prh: 0,
+      falta_transp: 0,
       partida_id: match_id,
     },
   });
 }
 
-export function CalcularTotal(ali: Alianca) {
+export function CalcularTotal(ali: Alianca, falta: boolean) {
+  const faltas_total = CalcularFaltasTotal(ali);
+
   return (
     ali.sair +
     ali.estacionar +
-    ali.faltas_pontos +
+    (falta ? faltas_total : 0) +
     ali.auto_pontos +
     ali.teleop_pontos
   );
 }
 
-export function CalcularRP(ali: Alianca, vencedor: string) {
-  const rp_final = vencedor != "empate" ? 3 : vencedor == "empate" ? 1 : 0;
+export function CalcularFaltasTotal(ali: Alianca) {
+  return (
+    ali.falta_branca + ali.falta_estacionar + ali.falta_prh + ali.falta_transp
+  );
+}
 
-  return ali.rp_estacionar + ali.rp_auto + rp_final;
+export function CalcularRP(ali: Alianca, vencedor: Vencedor) {
+  let rp_vencedor = 0;
+
+  if (vencedor === "empate") {
+    rp_vencedor = 1;
+  } else if (vencedor === ali.color) {
+    rp_vencedor = 3;
+  } else {
+    rp_vencedor = 0;
+  }
+
+  return ali.rp_estacionar + ali.rp_auto + rp_vencedor;
 }

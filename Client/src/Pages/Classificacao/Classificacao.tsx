@@ -5,7 +5,7 @@ import styles from '../../styles/Classificacao.module.css'; // ← import direto
 import { useEffect, useState } from 'react';
 
 export default function Classificacao() {
-  const endpoint = 'http://172.25.10.14:3000/frc/';
+  const endpoint = 'http://192.168.0.104:3000/frc/';
   const [rankingData, setRankingData] = useState<any[]>([]);
 
   const getRanking = async () => {
@@ -46,7 +46,7 @@ export default function Classificacao() {
       <Header title={`Qualificatória #${id}`} />
 
       <div className={` ${styles.equipesRed} ${styles.equipesRedBox}`}>
-        {data
+        {rankingData
           .filter((t) => t.color === "vermelho")
           .flatMap((t) => [t.time1, t.time2])
           .map((numero, i) => {

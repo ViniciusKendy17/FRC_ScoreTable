@@ -15,7 +15,10 @@ export async function GetTeams(req: Request, res: Response) {
     .json({ msg: "Equipes encontradas com sucesso", equipes: equipes });
 }
 
-export async function GetRanking(req:Request, res: Response) {
+export async function GetRanking(req: Request, res: Response) {
   const ranking = await prisma.ranking_view.findMany();
-  return res.status(200).json({ msg: "Ranking atualizado com sucesso", ranking: ranking });
+
+  return res
+    .status(200)
+    .json({ msg: "Ranking atualizado com sucesso", ranking: ranking });
 }

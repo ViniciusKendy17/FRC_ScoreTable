@@ -3,31 +3,35 @@ import "../styles/Header.css";
 import lupa from "../assets/Tela1_juiz/Ativo 62.png";
 import type { Partida } from "../utils/Types";
 import { useState } from "react";
-import "../App.css"
-import { useNavigate } from "react-router-dom";
+import "../App.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useLocalStorage } from "@uidotdev/usehooks";
 export default function Header({
   pesquisa,
   SetPesquisa,
   showpesquisa,
   id_partida,
-  title
+  title,
 }: {
   pesquisa: string;
   SetPesquisa: any;
   showpesquisa: boolean;
   id_partida: any;
-  title:string
+  title: string;
 }) {
   const [btnativo, SetBtnativo] = useState<string>(
     showpesquisa ? "partidas" : ""
   );
 
   const nav = useNavigate();
+  const location = useLocation();
+  const [user, SetUser] = useLocalStorage("user");
+  const isPartidaPage = location.pathname.endsWith("/aliancas")
 
   return (
     <>
       <header className="header-judge">
-        <nav id="out-buttons">
+        <nav id="out-buttons" style={{justifyContent: isPartidaPage ? "right": "center"}} >
           <button
             style={{
               borderBottom: btnativo == "partidas" ? "white solid 2px" : "",
@@ -41,19 +45,22 @@ export default function Header({
           >
             PARTIDAS
           </button>
-          <button
-            type="button"
-            id="partidas"
-            style={{
-              borderBottom: btnativo == "ranking" ? "white solid 2px" : "",
-            }}
-            onClick={() => {
-              SetBtnativo("ranking");
-              nav("/classificacao")
-            }}
-          >
-            RANKING
-          </button>
+
+          {user == "fta" && (
+            <button
+              type="button"
+              id="partidas"
+              style={{
+                borderBottom: btnativo == "ranking" ? "white solid 2px" : "",
+              }}
+              onClick={() => {
+                SetBtnativo("ranking");
+                nav("/classificacao");
+              }}
+            >
+              RANKING
+            </button>
+          )}
 
           {showpesquisa && (
             <div id="out-search">

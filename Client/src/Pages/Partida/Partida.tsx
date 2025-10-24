@@ -9,9 +9,14 @@ import { PartidaService } from "../../Services/PartidaService";
 import { useEffect, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 
+// type Score = {
+//   azul: number;
+//   vermelho: number;
+// };
+
 type Score = {
-  azul: number;
-  vermelho: number;
+  azul: { total: number; idade_media: number; pre: number };
+  vermelho: { total: number; idade_media: number; pre: number };
 };
 
 export default function Partida() {
@@ -21,7 +26,10 @@ export default function Partida() {
   const [azul, SetAzul] = useState<number[]>();
   const [ver, SetVermelho] = useState<number[]>();
 
-  const [scores, SetScores] = useState<Score>({ azul: 0, vermelho: 0 });
+  const [scores, SetScores] = useState<Score>({
+    azul: { total: 0, idade_media: 0, pre: 0 },
+    vermelho: { total: 0, idade_media: 0, pre: 0 },
+  });
   const socketRef = useRef<Socket | null>(null);
 
   async function GetMatchInfo() {
@@ -44,7 +52,7 @@ export default function Partida() {
 
   useEffect(() => {
     // Cria a conexão apenas uma vez
-    socketRef.current = io("http://192.168.0.100:3001", {
+    socketRef.current = io("http://192.168.0.104:3001", {
       transports: ["websocket", "polling"],
     });
 
@@ -72,16 +80,16 @@ export default function Partida() {
       <Header title={`Partida ${matchNum ?? ""}`} />
 
       <div className={styles.equipesRed}>
-        <PointsBox colorClass="red" pointsText="0/4" />
-        <PointsBox colorClass="red1" pointsText="2/4" />
+        <PointsBox colorClass="red" pointsText={scores.vermelho.pre} />
+        <PointsBox colorClass="red1" pointsText={scores.vermelho.idade_media} />
       </div>
 
       <TeamMatchs leftTeams={ver!} rightTeams={azul!} />
 
       <Placar
         className={styles.placar}
-        scoreLeft={scores.vermelho}
-        scoreRight={scores.azul}
+        scoreLeft={scores.vermelho.total}
+        scoreRight={scores.azul.total}
         variant="partida"
         time="1:35"
       />
@@ -89,12 +97,12 @@ export default function Partida() {
       <div className={styles.equipesBlue}>
         <PointsBox
           colorClass="blue"
-          pointsText="1/4"
+          pointsText={scores.azul.pre}
           transform="translate(-45px, -10.5px)"
         />
         <PointsBox
           colorClass="blue1"
-          pointsText="3/4"
+          pointsText={scores.azul.idade_media}
           transform="translate(-45px, -10.5px)"
         />
       </div>

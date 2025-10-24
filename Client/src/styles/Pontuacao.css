@@ -4,14 +4,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* border: black solid 2px !important; */
+  border: black solid 2px !important;
+}
+
+#main-score2 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 20px;
+  overflow-y: scroll;
 }
 
 .alianca-container {
   scale: 1.4;
   position: absolute;
-  top: 20%;
-  left: 29%;
+  top: 22%;
+  left: 20%;
   transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
@@ -64,35 +76,70 @@
   cursor: pointer;
 }
 
-#box-score{
-    position: absolute;
-    top: 20%;
-    width: 1400px;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    scale: 0.9;
-    align-items: center;
-    gap: 1rem;
+#box-score {
+  position: absolute;
+  top: 25%;
+  width: 1400px;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  scale: 0.9;
+  align-items: center;
+  gap: 1rem;
 }
 
-#times{
-    display: flex;
-    gap: 1rem;
-    color: white;
+.box-score {
+  margin-top: 200px;
+  flex: 1 1 45%;
+  max-width: 900px;
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease-in-out;
+}
+#times {
+  display: flex;
+  gap: 1rem;
+  color: white;
 }
 
-#times p{
+#times p {
   padding: 10px;
   font-size: 20px;
   /* background-color: re; */
 }
 
-#box-cards{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
+#box-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+@media (min-width: 1000px) and (max-width: 1400px) {
+  .alianca-container {
+    top: 10%;
+    left: 30%;
+  }
+
+  #box-score {
+    top: 7%;
+    scale: 0.8;
+  }
+}
+
+@media (min-width: 1400px) {
+  .alianca-container {
+    top: 10%;
+  }
+  #box-score {
+    scale: 1.1;
+  }
 }
