@@ -167,3 +167,8 @@
   position: relative;
   top: 20px;
 }
+
+header{
+  max-width: 100% !important;
+  width: 155vh !important;
+}

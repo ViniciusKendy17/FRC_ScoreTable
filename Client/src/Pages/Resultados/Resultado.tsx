@@ -25,7 +25,7 @@ interface TeamInfo {
 
 export default function Resultado() {
   const { id } = useParams<{ id: string }>();
-  const endpoint = "http://192.168.0.101:3000/frc/";
+  const endpoint = "http://192.168.0.104:3000/frc/";
   const [data, setData] = useState<Alianca[]>([]);
   const [loading, setLoading] = useState(true);
   const [nome, setNome] = useState<any[]>([]);
@@ -147,17 +147,16 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
       id={id}
       alt={`Imagem ${color} ${index + 1}`}
       style={{
-        width: "100%",
+        width: "50vw",
         height: "100%",
-        maxWidth: "500px",
+        maxWidth: "100%",
+        maxHeight: "100%",
         aspectRatio: index === 0 ? "2037 / 1011" : "2037 / 319",
       }}
       pasta="winner"
     />
   ));
 };
-
-
 
   return (
     <div className={styles.container}>
@@ -169,12 +168,13 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
           style={{
             display: "flex",
             justifyContent: "center",
-            gap: "5px",
+            gap: "10px",
+            transform: "translate(0px, 8px)",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-        {renderWinnerImages("vermelho")}
+        {renderWinnerImages("azul")}
         </div>
 
         {data
@@ -191,7 +191,7 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
                 color="red"
                 numbers={[numero, 0]}
                 teamName={nomeEncontrado || `Time ${numero}`}
-                variant="qualificatoria"
+                variant="resultado"
               />
             );
           })}
@@ -212,8 +212,8 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
               id={id}
               alt="Ranking Points"
               style={{
-                width: "90px",
-                height: "90px",
+                width: "80px",
+                height: "80px",
                 aspectRatio: "260 / 260",
               }}
               pasta="rankingpoints"
@@ -267,7 +267,7 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
           style={{
             display: "flex",
             justifyContent: "center",
-            gap: "5px",
+            gap: "10px",
             flexDirection: "column",
             alignItems: "center",
           }}
@@ -289,7 +289,7 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
                 color="blue"
                 numbers={[numero, 0]}
                 teamName={nomeEncontrado || `Time ${numero}`}
-                variant="qualificatoria"
+                variant="resultado"
               />
             );
           })}
@@ -310,8 +310,8 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
               id={id}
               alt="Ranking Points"
               style={{
-                width: "90px",
-                height: "90px",
+                width: "80px",
+                height: "80px",
                 aspectRatio: "260 / 260",
               }}
               pasta="rankingpoints"

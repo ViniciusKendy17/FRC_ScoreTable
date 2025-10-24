@@ -38,7 +38,7 @@ export default function Partida() {
   const seconds = timeLeft % 60;
   const formattedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
-  function playSound(file: string, volume = 0.5) {
+  function playSound(file: string, volume: number) {
     const audio = new Audio(`/songs/${file}`);
     audio.volume = volume;
     audio.play().catch(() => console.log(`⚠️ Som ${file} bloqueado até interação`));
@@ -64,7 +64,7 @@ export default function Partida() {
 
   useEffect(() => {
     // Cria a conexão apenas uma vez
-    socketRef.current = io("http://192.168.0.101:3001", {
+    socketRef.current = io("http://192.168.0.104:3001", {
       transports: ["websocket", "polling"],
     });
 
@@ -99,7 +99,7 @@ export default function Partida() {
     }
 
       if (phase === "auto" && timeLeft === 0 && !buzzerPlayed) {
-        playSound("end.wav", 0.5);
+        playSound("end.wav", 1.0);
         setBuzzerPlayed(true);
         setIsActive(false);
 
@@ -109,19 +109,19 @@ export default function Partida() {
           setTimeLeft(135); // 2m15s
           setIsActive(true);
           setBuzzerPlayed(false);
-          playSound("resume.wav"); 
-        }, 3000);
+          playSound("resume.wav", 1.0); 
+        }, 2000);
       }
 
       if (phase === "teleop" && timeLeft === 20 && !warningPlayed) {
-        playSound("warning_sonar.wav", 0.5);
+        playSound("warning_sonar.wav", 1.0);
         setWarningPlayed(true);
       }
 
 
       // Quando o TELEOP termina
       if (phase === "teleop" && timeLeft === 0 && !buzzerPlayed) {
-        playSound("end.wav", 0.6);
+        playSound("end.wav", 1.0);
         setPhase("done");
         setIsActive(false);
         setBuzzerPlayed(true);
@@ -138,7 +138,7 @@ export default function Partida() {
         event.preventDefault(); // evita scroll da página
 
       if (phase === "auto" && !isActive) {
-        playSound("start.wav");
+        playSound("start.wav",1.0);
         setIsActive(true);
         setStartSoundPlayed(true);
       }
