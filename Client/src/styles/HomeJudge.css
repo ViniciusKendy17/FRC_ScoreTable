@@ -24,7 +24,7 @@
   align-items: center;
   gap: 1.6rem;
   width: 65%;
-  height: 75vh;
+  height: 70vh;
   overflow-y: scroll;
   padding: 0 0 20px 0;
 }
@@ -91,16 +91,32 @@
   right: 4%;
 }
 
-@media (min-width: 1000px) {
+#add:hover{
+  cursor: pointer;
+}
+
+@media (min-width: 1000px) and (max-width: 1400px) {
   #back {
     width: 100%;
     height: 100vh;
   }
+  #out-partidas {
+    margin-top: 40px;
+    padding: 0 0 40px 0;
+  }
+  #finish{
+    scale: 1.2;
+    width: 70%;
+  }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1400px) {
   #back {
     width: 100%;
     height: 100%;
+  }
+  #out-partidas {
+    margin-top: 150px;
+    padding: 0 0 20px 0;
   }
 }

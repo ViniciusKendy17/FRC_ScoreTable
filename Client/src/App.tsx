@@ -11,6 +11,7 @@ import FormPartida from "./Pages/FormPartida";
 import TesteJuiz from "./Pages/TesteJuiz";
 import Classificacao from "./Pages/Classificacao/Classificacao";
 import Login from "./Pages/Login/Login";
+import Resumo from "./Pages/ResumoPartida/Resumo";
 function App() {
   return (
     <>
@@ -28,6 +29,7 @@ function App() {
           <Route path="/qualificatoria" element={<Qualificatoria />} />
           <Route path="/resultado/:id" element={<Resultado />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/overall/:id" element={<Resumo />} />
         </Routes>
       </BrowserRouter>
     </>

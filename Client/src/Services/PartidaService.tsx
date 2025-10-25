@@ -74,9 +74,12 @@ export const PartidaService = {
   },
   DeleteMatch: (id: number) => {
     return HandleTry(async () => {
-      const res = await fetch(`http://192.168.0.104:3000/frc/match/delete/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `http://192.168.0.104:3000/frc/match/delete/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!res.ok) {
         throw new Error(res.statusText);
@@ -106,7 +109,9 @@ export const PartidaService = {
 
   GetMatchInfo: (id: number) => {
     return HandleTry(async () => {
-      const res = await fetch(`http://192.168.0.104:3000/frc/match/${id}/score`);
+      const res = await fetch(
+        `http://192.168.0.104:3000/frc/match/${id}/score`
+      );
 
       const { match_info, alliances } = await res.json();
 
@@ -117,6 +122,24 @@ export const PartidaService = {
       return { match_info, alliances } as {
         match_info: any;
         alliances: AliancaParcial[];
+      };
+    });
+  },
+  GetResult: (id: number) => {
+    return HandleTry(async () => {
+      const res = await fetch(
+        `http://192.168.0.104:3000/frc/match/${id}/result`
+      );
+
+      const { match_info, alliances } = await res.json();
+
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+
+      return { match_info, alliances } as {
+        match_info: Partida;
+        alliances: Aliança[];
       };
     });
   },

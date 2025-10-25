@@ -12,6 +12,7 @@ import {
   FaTrash,
   FaBullseye,
   FaList,
+  FaTrophy,
 } from "react-icons/fa";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
@@ -40,6 +41,10 @@ export default function PartidaCard({
           <h3>
             Partida {partida.tipo_partida} #{partida.numero_partida}
           </h3>
+          <h4>
+            Status:{" "}
+            {partida.status == "em_progresso" ? "Em analise" : partida.status}
+          </h4>
 
           {user == "fta" && (
             <div className="button-group">
@@ -57,6 +62,17 @@ export default function PartidaCard({
         </div>
 
         <section>
+          {user == "fta" && (
+            <button
+              type="button"
+              onClick={() => nav(`/overall/${partida.id}`)}
+              className="overall-btn"
+            >
+              <FaTrophy className="btn-icon" />
+              OVERALL PARTIDA
+            </button>
+          )}
+
           <button
             id="placar-btn"
             className="btnss"
@@ -72,6 +88,13 @@ export default function PartidaCard({
 
           <button
             id="pont"
+            disabled={
+              (partida.status == "em_progresso" ||
+                partida.status == "finalizada") &&
+              user != "fta"
+                ? true
+                : false
+            }
             className="btnss"
             onClick={() => {
               if (partida.status == "finalizada") {
@@ -90,18 +113,20 @@ export default function PartidaCard({
           </button>
 
           {user == "fta" && (
-            <button
-              id="apagar-btn"
-              className="btnss"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                SetModal(true);
-              }}
-            >
-              <FaTrash className="btn-icon" />
-              <span>APAGAR</span>
-            </button>
+            <>
+              <button
+                id="apagar-btn"
+                className="btnss"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  SetModal(true);
+                }}
+              >
+                <FaTrash className="btn-icon" />
+                <span>APAGAR</span>
+              </button>
+            </>
           )}
         </section>
       </div>
