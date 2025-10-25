@@ -3,8 +3,9 @@ import Header from "../../Components/HeaderPages";
 import TeamBox from "../../Components/TeamBox";
 import styles from "../../Styles/Qualificacao.module.css";
 import Placar from "../../Components/Placar";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Alianca {
   id: number;
@@ -28,6 +29,7 @@ export default function Qualificacao() {
   const [loading, setLoading] = useState(true);
   const [nome, setNome] = useState<any[]>([]);
   const [numero_partida, setNumeroPartida] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const getNomes = async () => {
     try {
@@ -81,6 +83,18 @@ export default function Qualificacao() {
 
     if (id) getMatch();
   }, [id]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") {
+        navigate(`/partida/${Number(id)}/placar`);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [navigate]);
 
   if (loading) return <p>Carregando...</p>;
   if (!Array.isArray(data) || data.length === 0)

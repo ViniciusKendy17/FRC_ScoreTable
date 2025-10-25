@@ -26,7 +26,8 @@ function App() {
           <Route path="/partida/:id/placar" element={<Partida />} />
           <Route path="/partida/:id/aliancas" element={<Pontuacao />} />
           <Route path="/partida/nova" element={<FormPartida />} />
-          <Route path="/resultado" element={<Resultado />} />
+          <Route path="/qualificatoria" element={<Qualificatoria />} />
+          <Route path="/resultado/:id" element={<Resultado />} />
           <Route path="/login" element={<Login />} />
           <Route path="/overall/:id" element={<Resumo />} />
         </Routes>

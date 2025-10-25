@@ -6,8 +6,9 @@ import Header from "../../Components/HeaderPages";
 import TeamMatchs from "../../Components/TeamMatchs";
 import { useParams } from "react-router-dom";
 import { PartidaService } from "../../Services/PartidaService";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 // type Score = {
 //   azul: number;
@@ -21,6 +22,7 @@ type Score = {
 
 export default function Partida() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [matchNum, setMatchNum] = useState<number>();
   const [azul, SetAzul] = useState<number[]>();
@@ -31,6 +33,24 @@ export default function Partida() {
     vermelho: { total: 0, idade_media: 0, pre: 0 },
   });
   const socketRef = useRef<Socket | null>(null);
+
+  const [timeLeft, setTimeLeft] = useState(15);
+  const [isActive, setIsActive] = useState(false);
+  const [phase, setPhase] = useState<"auto" | "teleop" | "done">("auto"); // fases
+  const intervalRef = useRef<number | null>(null);
+  const [startSoundPlayed, setStartSoundPlayed] = useState(false);
+  const [buzzerPlayed, setBuzzerPlayed] = useState(false);
+  const [warningPlayed, setWarningPlayed] = useState(false);
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  const formattedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+  function playSound(file: string, volume: number) {
+    const audio = new Audio(`/songs/${file}`);
+    audio.volume = volume;
+    audio.play().catch(() => console.log(`⚠️ Som ${file} bloqueado até interação`));
+  }
 
   async function GetMatchInfo() {
     const data = await PartidaService.GetMatchInfo(Number(id));
@@ -62,8 +82,12 @@ export default function Partida() {
       console.log("Conectado ao WebSocket!", socket.id);
     });
 
-    socket.on("score_update", (data: Score) => {
-      SetScores(data);
+    socket.on("score_update", (data: any) => {
+      console.log("Dados de pontuação recebidos:", data);
+      SetScores({
+        azul: data.azul.total ?? 0,
+        vermelho: data.vermelho.total ?? 0
+      });
     });
 
     return () => {
@@ -71,9 +95,83 @@ export default function Partida() {
     };
   }, []);
 
-  if (!azul || !ver) {
-    return <p>Carregando placar</p>;
-  }
+  const isLoading = !azul || !ver;
+
+  useEffect(() => {
+    let interval: number | null = null;
+
+    if (isActive && timeLeft > 0) {
+      interval = window.setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    }
+
+      if (phase === "auto" && timeLeft === 0 && !buzzerPlayed) {
+        playSound("end.wav", 1.0);
+        setBuzzerPlayed(true);
+        setIsActive(false);
+
+        // Aguarda ~3 segundos e inicia TELEOP automaticamente
+        setTimeout(() => {
+          setPhase("teleop");
+          setTimeLeft(135); // 2m15s
+          setIsActive(true);
+          setBuzzerPlayed(false);
+          playSound("resume.wav", 1.0); 
+        }, 2000);
+      }
+
+      if (phase === "teleop" && timeLeft === 20 && !warningPlayed) {
+        playSound("warning_sonar.wav", 1.0);
+        setWarningPlayed(true);
+      }
+
+
+      // Quando o TELEOP termina
+      if (phase === "teleop" && timeLeft === 0 && !buzzerPlayed) {
+        playSound("end.wav", 1.0);
+        setPhase("done");
+        setIsActive(false);
+        setBuzzerPlayed(true);
+      }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isActive, timeLeft, phase, warningPlayed, buzzerPlayed]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        event.preventDefault(); // evita scroll da página
+
+      if (phase === "auto" && !isActive) {
+        playSound("start.wav",1.0);
+        setIsActive(true);
+        setStartSoundPlayed(true);
+      }
+
+      }
+
+      if (event.key.toLowerCase() === "r") {
+        setIsActive(false);
+        setPhase("auto");
+        setTimeLeft(15);
+        setStartSoundPlayed(false);
+        setBuzzerPlayed(false);
+        setWarningPlayed(false);
+      }
+
+      if (event.key === "ArrowRight") {
+        navigate(`/resultado/${Number(id)}`);
+      }
+    };
+
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigate, phase, isActive, id]);
+
 
   return (
     <div className={styles.container}>
