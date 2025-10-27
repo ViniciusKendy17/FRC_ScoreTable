@@ -1,6 +1,6 @@
 .card_partida {
-  width: 80%;
-  padding: 0 0 20px 0;
+  /* width: 80%; */
+  padding: 0 40px 20px 40px;
   border-radius: 20px;
   background-color: aliceblue;
   display: flex;
@@ -32,8 +32,25 @@
 #pont {
   border: none;
   border-radius: 8px;
-  background-color: #1c4db7;
+  background-color: #1c4db7; /* azul ativo */
   color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+/* Hover para botão ativo */
+#pont:not(:disabled):hover {
+  background-color: #163c8f; /* azul mais escuro */
+}
+
+/* Botão desativado */
+#pont:disabled {
+  background-color: #999999; /* cinza */
+  color: #dddddd; /* texto mais claro */
+  cursor: not-allowed;
+  opacity: 0.7; /* efeito de “apagado” */
 }
 
 .edit-btn {
@@ -55,7 +72,6 @@
   top: 10%;
   right: 2%;
 }
-
 
 .edit-btn1 {
   display: flex;
@@ -98,7 +114,6 @@
   border-radius: 6px;
   padding: 10px;
   font-weight: bold;
-  font-size: 18px;
   cursor: pointer;
   transition: transform 0.15s, filter 0.2s;
 }
@@ -111,7 +126,6 @@ button:hover {
 .btn-icon {
   font-size: 24px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
-
 }
 
 /* Botão PLACAR (vermelho) */
@@ -134,14 +148,44 @@ button:hover {
 
 .button-group {
   display: flex;
-  gap: 8px; /* espaço entre os botões */
+  gap: 4px;
 }
 
-span{
+.btnss span {
   font-size: 18px;
   font-family: "NeoSansProBold", sans-serif;
   color: #fff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  transform: translateY(4px);
 }
 
+.overall-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(90deg, #0040a0, #b30000);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.4rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.overall-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+}
+
+@media (min-width: 1000px) and (max-width: 1400px) {
+  .card_partida {
+    width: 70%;
+  }
+}

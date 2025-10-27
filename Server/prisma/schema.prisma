@@ -24,6 +24,15 @@ model alianca {
   pre_historico                       Int
   estacionar                          Int
   sair                                Int
+  falta_estacionar                    Int
+  falta_transp                        Int
+  falta_prh                           Int
+  falta_branca                        Int
+  pre_historico_au                    Int
+  idade_media_au                      Int
+  poco_au                             Int
+  poco_endgame                        Int
+  sitio                               Int
   partida_alianca_partida_idTopartida partida?       @relation("alianca_partida_idTopartida", fields: [partida_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "partida_id")
   equipe_alianca_time1Toequipe        equipe         @relation("alianca_time1Toequipe", fields: [time1], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time1")
   equipe_alianca_time2Toequipe        equipe         @relation("alianca_time2Toequipe", fields: [time2], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time2")

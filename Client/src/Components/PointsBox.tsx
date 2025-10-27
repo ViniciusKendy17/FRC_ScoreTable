@@ -2,7 +2,7 @@ import styles from "../styles/Partida.module.css";
 
 interface PointsBoxProps {
   colorClass: "red" | "red1" | "blue" | "blue1"; // agora inclui blue1
-  pointsText: string;
+  pointsText: number;
   transform?: string;
 }
 

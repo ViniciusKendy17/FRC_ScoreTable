@@ -7,6 +7,7 @@ import {
 import { Partida, PartidaParcial, Vencedor } from "../Models/Partida";
 import { Alianca, ALiancaParcial } from "../Models/Alianca";
 import {
+  CalcularFaltasTotal,
   CalcularRP,
   CalcularTotal,
   NewAliance,
@@ -49,6 +50,25 @@ export async function GetMatchInfo(req: Request, res: Response) {
         time2: true,
         idade_media: true,
         pre_historico: true,
+      },
+    }),
+  ]);
+
+  return res.status(200).json({ match_info: match, alliances: result });
+}
+
+export async function GetResult(req: Request, res: Response) {
+  const match_id = req.params.match_id;
+
+  const [match, result] = await Promise.all([
+    await prisma.partida.findUnique({
+      where: {
+        id: Number(match_id),
+      },
+    }),
+    await prisma.alianca.findMany({
+      where: {
+        partida_id: Number(match_id),
       },
     }),
   ]);
@@ -143,6 +163,12 @@ export async function DeleteMatch(req: Request, res: Response) {
   return res.status(200).json({ msg: "Partida deletada com sucesso" });
 }
 
+/**
+ * @description Fecha a partida de maneira parcial, sem somar pontos de falta
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 export async function EndJudgeScores(req: Request, res: Response) {
   const alianca: Alianca = req.body.alianca;
   const match_id = req.params.match_id;
@@ -159,7 +185,7 @@ export async function EndJudgeScores(req: Request, res: Response) {
       .json({ msg: "Partidas já completadas nãp podem ser alteradas" });
   }
 
-  const total = CalcularTotal(alianca);
+  const total = CalcularTotal(alianca, false);
 
   await prisma.alianca.updateMany({
     where: {
@@ -169,13 +195,31 @@ export async function EndJudgeScores(req: Request, res: Response) {
     data: {
       teleop_pontos: alianca.teleop_pontos,
       auto_pontos: alianca.auto_pontos,
-      faltas_pontos: alianca.faltas_pontos,
+      faltas_pontos: CalcularFaltasTotal(alianca),
+      falta_branca: alianca.falta_branca,
+      falta_estacionar: alianca.falta_estacionar,
+      falta_prh: alianca.falta_prh,
+      falta_transp: alianca.falta_transp,
       idade_media: alianca.idade_media,
       pre_historico: alianca.pre_historico,
+      idade_media_au: alianca.idade_media_au,
+      pre_historico_au: alianca.pre_historico_au,
+      poco_au: alianca.poco_au,
+      poco_endgame: alianca.poco_endgame,
+      sitio: alianca.sitio,
       estacionar: alianca.estacionar,
       sair: alianca.sair,
       total_rp: CalcularRP(alianca, "no"),
       total_pontos: total,
+    },
+  });
+
+  await prisma.partida.update({
+    where: {
+      id: match_db?.id,
+    },
+    data: {
+      status: "em_progresso",
     },
   });
 
@@ -193,8 +237,8 @@ export async function EndMatch(req: Request, res: Response) {
   const alianca_azul = aliancas.find((f) => f.color == "azul")!;
   const alianca_vermelho = aliancas.find((f) => f.color == "vermelho")!;
 
-  const total_azul = CalcularTotal(alianca_azul);
-  const total_vermelho = CalcularTotal(alianca_vermelho);
+  const total_azul = CalcularTotal(alianca_azul, true);
+  const total_vermelho = CalcularTotal(alianca_vermelho, true);
 
   if (total_azul > total_vermelho) {
     vencedor = "azul";
@@ -217,7 +261,10 @@ export async function EndMatch(req: Request, res: Response) {
         data: {
           teleop_pontos: ali.teleop_pontos,
           auto_pontos: ali.auto_pontos,
-          faltas_pontos: ali.color == "azul" ? alianca_vermelho.faltas_pontos : alianca_azul.faltas_pontos,
+          faltas_pontos:
+            ali.color == "azul"
+              ? alianca_vermelho.faltas_pontos
+              : alianca_azul.faltas_pontos,
           idade_media: ali.idade_media,
           pre_historico: ali.pre_historico,
           estacionar: ali.estacionar,

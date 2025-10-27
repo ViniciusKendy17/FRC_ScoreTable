@@ -10,9 +10,14 @@ import { use, useEffect, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 
+// type Score = {
+//   azul: number;
+//   vermelho: number;
+// };
+
 type Score = {
-  azul: number;
-  vermelho: number;
+  azul: { total: number; idade_media: number; pre: number };
+  vermelho: { total: number; idade_media: number; pre: number };
 };
 
 export default function Partida() {
@@ -23,7 +28,10 @@ export default function Partida() {
   const [azul, SetAzul] = useState<number[]>();
   const [ver, SetVermelho] = useState<number[]>();
 
-  const [scores, SetScores] = useState<Score>({ azul: 0, vermelho: 0 });
+  const [scores, SetScores] = useState<Score>({
+    azul: { total: 0, idade_media: 0, pre: 0 },
+    vermelho: { total: 0, idade_media: 0, pre: 0 },
+  });
   const socketRef = useRef<Socket | null>(null);
 
   const [timeLeft, setTimeLeft] = useState(15);
@@ -167,43 +175,37 @@ export default function Partida() {
 
   return (
     <div className={styles.container}>
-      {isLoading ? (
-        <p>Carregando placar...</p>
-      ) : (
-        <>
-          <Header title={`Partida ${matchNum ?? ""}`} />
+      <Header title={`Partida ${matchNum ?? ""}`} />
 
-          <div className={styles.equipesRed}>
-            <PointsBox colorClass="red" pointsText="0/4" />
-            <PointsBox colorClass="red1" pointsText="2/4" />
-          </div>
+      <div className={styles.equipesRed}>
+        <PointsBox colorClass="red" pointsText={scores.vermelho.pre} />
+        <PointsBox colorClass="red1" pointsText={scores.vermelho.idade_media} />
+      </div>
 
-          <TeamMatchs leftTeams={ver!} rightTeams={azul!} />
+      <TeamMatchs leftTeams={ver!} rightTeams={azul!} />
 
-          <Placar
-            className={styles.placar}
-            scoreLeft={scores.vermelho}
-            scoreRight={scores.azul}
-            variant="partida"
-            time={formattedTime}
-          />
+      <Placar
+        className={styles.placar}
+        scoreLeft={scores.vermelho.total}
+        scoreRight={scores.azul.total}
+        variant="partida"
+        time="1:35"
+      />
 
-          <div className={styles.equipesBlue}>
-            <PointsBox
-              colorClass="blue"
-              pointsText="1/4"
-              transform="translate(-45px, -10.5px)"
-            />
-            <PointsBox
-              colorClass="blue1"
-              pointsText="3/4"
-              transform="translate(-45px, -10.5px)"
-            />
-          </div>
+      <div className={styles.equipesBlue}>
+        <PointsBox
+          colorClass="blue"
+          pointsText={scores.azul.pre}
+          transform="translate(-45px, -10.5px)"
+        />
+        <PointsBox
+          colorClass="blue1"
+          pointsText={scores.azul.idade_media}
+          transform="translate(-45px, -10.5px)"
+        />
+      </div>
 
-          <Footer text="FRC Score Table" />
-        </>
-      )}
+      <Footer text="FRC Score Table" />
     </div>
   );
 }

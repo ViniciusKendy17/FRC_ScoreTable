@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { Aliança, Cor } from "../../utils/Types";
 import { PartidaService } from "../../Services/PartidaService";
+import "../../styles/PontuacaoCard.css";
 import "../../styles/Pontuacao.css";
 import Header from "../../Components/Header";
 import "../../styles/HomeJudge.css";
@@ -9,16 +10,12 @@ import { elements, type Pontos, type Score } from "../../utils/ScoreTable";
 import ScoreCard from "../../Components/ScoreSection";
 import { toast, ToastContainer } from "react-toastify";
 import { toast_pro } from "../../utils/Util";
-import { io } from "socket.io-client";
+import { inflateScoresFromFinal } from "../../Services/ResumoService";
 
 export default function Pontuacao() {
   const { id } = useParams();
   const [sc, SetSc] = useState<any>(null);
-
-  const nav = useNavigate();
-
   const [aliancas, SetAliancas] = useState<Aliança[] | null>([]);
-  const [alianca, setAlianca] = useState<"vermelho" | "azul">("vermelho");
   const [publicScores, setPublicScores] = useState({ vermelho: 0, azul: 0 });
 
   const [scores, setScores] = useState<{
@@ -55,35 +52,6 @@ export default function Pontuacao() {
     })),
   });
 
-  useEffect(() => {
-    const socket = io("http://192.168.0.100:3001", {
-      transports: ["websocket", "polling"],
-    });
-    SetSc(socket);
-
-    socket.on("connect", () => {
-      console.log("Conectado ao WebSocket!", socket.id);
-    });
-
-    return () => {
-      if (socket) {
-        // Zera os scores no WebSocket antes de desconectar
-        socket.emit("update_alliance_score", {
-          alliance: "azul",
-          total: 0,
-          score: { idade_media: 0, pre: 0 },
-        });
-        socket.emit("update_alliance_score", {
-          alliance: "vermelho",
-          total: 0,
-          score: { idade_media: 0, pre: 0 },
-        });
-
-        socket.disconnect();
-      }
-    };
-  }, []);
-
   // Calcula o total de uma aliança
   function calcTotal(aliancaScores: Score[]) {
     return aliancaScores.reduce((acc, s) => {
@@ -112,7 +80,12 @@ export default function Pontuacao() {
   }
 
   // Atualiza a pontuação de um elemento
-  const updateScore = (id: number, field: keyof Score, value: number) => {
+  const updateScore = (
+    alianca: "vermelho" | "azul",
+    id: number,
+    field: keyof Score,
+    value: number
+  ) => {
     setScores((prev) => {
       const updated = {
         ...prev,
@@ -121,98 +94,20 @@ export default function Pontuacao() {
         ),
       };
 
-      // recalcula os totais
       const totalVermelho = calcTotal(updated.vermelho);
       const totalAzul = calcTotal(updated.azul);
 
-      // atualiza localmente
       setPublicScores({ vermelho: totalVermelho, azul: totalAzul });
-
-      const quantidade_idade_media = updated[alianca].reduce((acc, s) => {
-        const el = elements.find((e) => Number(e.id) === s.id);
-        if (!el) return acc;
-
-        // conta quantos "idade_media" foram pontuados
-        const qtd_auto = s.auto > 0 && el.pontos?.au_idade_media ? s.auto : 0;
-        const qtd_teleop =
-          s.teleop > 0 && el.pontos?.op_idade_media ? s.teleop : 0;
-        return acc + qtd_auto + qtd_teleop;
-      }, 0);
-
-      const quantidade_pre_historico = updated[alianca].reduce((acc, s) => {
-        const el = elements.find((e) => Number(e.id) === s.id);
-        if (!el) return acc;
-
-        const qtd_auto = s.auto > 0 && el.pontos?.au_pre_historico ? s.auto : 0;
-        const qtd_teleop =
-          s.teleop > 0 && el.pontos?.op_pre_historico ? s.teleop : 0;
-        return acc + qtd_auto + qtd_teleop;
-      }, 0);
-
-      sc.emit("update_alliance_score", {
-        alliance: alianca,
-        total: alianca == "azul" ? totalAzul : totalVermelho,
-        score: {
-          idade_media: quantidade_idade_media,
-          pre: quantidade_pre_historico,
-        },
-      });
 
       return updated;
     });
   };
 
-  async function EndJudgeMatch() {
-    const data = await PartidaService.EndJudgeMatch(Number(id), jsonAPI);
-
-    if (!data) {
-      toast.error("Erro no servidor, tente novamente", toast_pro);
-      return;
-    }
-
-    toast.success("Partida foi parcialmente finalizada com sucesso");
-
-    setScores({
-      vermelho: elements.map((el) => ({
-        id: Number(el.id),
-        auto: 0,
-        teleop: 0,
-        endgame: 0,
-        idade_media: 0,
-        pre_historico: 0,
-        saida: 0,
-        estacionar_poco: 0,
-        falta_branca: 0,
-        falta_estacionar: 0,
-        falta_prh: 0,
-        falta_transp: 0,
-      })),
-      azul: elements.map((el) => ({
-        id: Number(el.id),
-        auto: 0,
-        teleop: 0,
-        endgame: 0,
-        idade_media: 0,
-        pre_historico: 0,
-        saida: 0,
-        estacionar_poco: 0,
-        falta_branca: 0,
-        falta_estacionar: 0,
-        falta_prh: 0,
-        falta_transp: 0,
-      })),
-    });
-
-    setPublicScores({ vermelho: 0, azul: 0 });
-  }
-
-  const selected_alianca = aliancas?.find((ali) => ali.color == alianca);
-
-  function GetFinalScore(
+  const GetFinalScore = (
     cor: Cor,
     pontos: typeof scores,
     elementos: typeof elements
-  ) {
+  ): Pontos => {
     const final_score: Pontos = {
       color: cor,
       teleop_pontos: 0,
@@ -238,7 +133,6 @@ export default function Pontuacao() {
     pontos[cor].forEach((sc) => {
       const el = elementos.find((e) => Number(e.id) === sc.id);
       if (!el || !el.pontos) return;
-
       const idade_media_au = sc.auto * (el.pontos.au_idade_media ?? 0);
       const idade_media_teleop = sc.teleop * (el.pontos.op_idade_media ?? 0);
 
@@ -309,22 +203,78 @@ export default function Pontuacao() {
     });
 
     return final_score;
+  };
+
+  async function EndJudgeMatch() {
+    const data = await PartidaService.EndJudgeMatch(Number(id), {
+      vermelho: GetFinalScore("vermelho", scores, elements),
+      azul: GetFinalScore("azul", scores, elements),
+    });
+
+    if (!data) {
+      toast.error("Erro no servidor, tente novamente", toast_pro);
+      return;
+    }
+
+    toast.success("Pontuação final enviada com sucesso!");
   }
-
-  const jsonAPI = useMemo(() => {
-    return { alianca: GetFinalScore(alianca, scores, elements) };
-  }, [alianca, scores, elements]);
-
-  console.log(jsonAPI);
 
   async function DefineAlliences() {
     const data = await PartidaService.GetAlliencesByMatch(Number(id));
+
+    if (!data) return;
     SetAliancas(data);
+
+    // para cada aliança retornada, converte os pontos finais para score[] com inflateScoresFromFinal
+    const azulFinal = data.find((a: any) => a.color === "azul");
+    const verFinal = data.find((a: any) => a.color === "vermelho");
+
+    const inicialAzul = azulFinal
+      ? inflateScoresFromFinal(azulFinal, elements)
+      : elements.map((el) => ({
+          id: Number(el.id),
+          auto: 0,
+          teleop: 0,
+          endgame: 0,
+          idade_media: 0,
+          pre_historico: 0,
+          saida: 0,
+          estacionar_poco: 0,
+          falta_branca: 0,
+          falta_estacionar: 0,
+          falta_prh: 0,
+          falta_transp: 0,
+        }));
+    const inicialVermelho = verFinal
+      ? inflateScoresFromFinal(verFinal, elements)
+      : elements.map((el) => ({
+          id: Number(el.id),
+          auto: 0,
+          teleop: 0,
+          endgame: 0,
+          idade_media: 0,
+          pre_historico: 0,
+          saida: 0,
+          estacionar_poco: 0,
+          falta_branca: 0,
+          falta_estacionar: 0,
+          falta_prh: 0,
+          falta_transp: 0,
+        }));
+
+    setScores({ azul: inicialAzul, vermelho: inicialVermelho });
+
+    // recalcula totais (segura)
+    const totalAz = calcTotal(inicialAzul);
+    const totalVerm = calcTotal(inicialVermelho);
+    setPublicScores({ azul: totalAz, vermelho: totalVerm });
   }
 
   useEffect(() => {
     DefineAlliences();
   }, []);
+
+  console.log(aliancas);
 
   return (
     <>
@@ -338,82 +288,61 @@ export default function Pontuacao() {
           title={""}
         />
 
-        <main id="main-score">
-          <div className="alianca-container">
-            <div className="alianca-content">
-              <label className="titulo">ALIANÇA</label>
-              <div className="linha" />
-              <div className="opcoes">
-                {["vermelho", "azul"].map((cor) => (
-                  <label key={cor}>
-                    <input
-                      type="radio"
-                      name="alianca"
-                      value={cor}
-                      checked={alianca === cor}
-                      onChange={(e) =>
-                        setAlianca(e.target.value as "vermelho" | "azul")
-                      }
-                    />
-                    Aliança {cor.charAt(0).toUpperCase() + cor.slice(1)}
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
+        <main id="main-score2">
+          {(["vermelho", "azul"] as Cor[]).map((cor) => {
+            const selected_alianca = aliancas?.find((a) => a.color === cor);
+            return (
+              <div
+                key={cor}
+                className="box-score"
+                style={{
+                  backgroundColor: cor === "azul" ? "#0b90d3" : "#ff002b",
+                }}
+              >
+                <div id="out-times">
+                  <div id="times">
+                    <p>Equipes:</p>
+                    <p>{selected_alianca?.time1}</p>
+                    <p>{selected_alianca?.time2}</p>
+                  </div>
 
-          <div
-            id="box-score"
+                  <div style={{ fontWeight: "bold", color: "#fff" }}>
+                    Total da aliança {cor}: {publicScores[cor]} pts
+                  </div>
+                </div>
+
+                <section id="box-cards">
+                  {elements.map((el) => {
+                    const score = scores[cor].find((s) => s.id === el.id);
+                    if (!score) return null;
+                    return (
+                      <ScoreCard
+                        key={el.id}
+                        element={el}
+                        score={score}
+                        onChange={(field, value) =>
+                          updateScore(cor, Number(el.id), field, value)
+                        }
+                      />
+                    );
+                  })}
+                </section>
+              </div>
+            );
+          })}
+
+          <button
+            id="finish"
+            type="button"
+            onClick={() => EndJudgeMatch()}
             style={{
-              backgroundColor: alianca === "azul" ? "#0b90d3" : "#ff002b",
+              backgroundColor: "#2e2e2e",
+              color: "#fff",
+              marginTop: "20px",
             }}
           >
-            <div id="out-times">
-              <div id="times">
-                <p>Equipes:</p>
-                <p>{selected_alianca?.time1}</p>
-                <p>{selected_alianca?.time2}</p>
-              </div>
-
-              <div style={{ fontWeight: "bold", color: "#fff" }}>
-                Total da aliança {alianca}: {publicScores[alianca]} pts
-              </div>
-            </div>
-
-            <section id="box-cards">
-              {elements.map((el) => {
-                const score = scores[alianca].find((s) => s.id === el.id);
-                if (!score) return null;
-                return (
-                  <ScoreCard
-                    key={el.id}
-                    element={el}
-                    score={score}
-                    onChange={(field, value) =>
-                      updateScore(Number(el.id), field, value)
-                    }
-                  />
-                );
-              })}
-            </section>
-
-            <button
-              style={{
-                backgroundColor:
-                  alianca == "vermelho"
-                    ? "rgba(175, 4, 38, 1)"
-                    : "rgb(0, 85, 137)",
-              }}
-              id="finish"
-              type="button"
-              onClick={() => {
-                EndJudgeMatch();
-                nav("/");
-              }}
-            >
-              Finalizar Pontuação de aliança
-            </button>
-          </div>
+            Finalizar Pontuação da Partida
+          </button>
         </main>
       </div>
     </>

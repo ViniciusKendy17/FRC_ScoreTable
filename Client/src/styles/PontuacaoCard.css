@@ -5,15 +5,11 @@
   /* margin: 8px 0; */
   background: #fff;
   font-family: "Segoe UI", sans-serif;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   width: 100%;
   max-width: 400px;
   transition: transform 0.2s;
 }
-
-/* .score-card:hover {
-  transform: scale(1.02);
-} */
 
 .score-header {
   display: flex;
@@ -26,6 +22,7 @@
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
+  color: #333;
 }
 
 .total {
@@ -45,7 +42,6 @@
   justify-content: space-between;
   align-items: center;
   background: #fff8f0;
-  /* border: 1px solid #ffe6cc; */
   padding: 6px 8px;
   border-radius: 8px;
 }
@@ -53,6 +49,7 @@
 .phase span {
   font-size: 0.9rem;
   font-weight: 500;
+  color: black;
 }
 
 .buttons {
@@ -62,8 +59,8 @@
 }
 
 .buttons button {
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   border-radius: 6px;
   border: none;
   background: #ffb347;

@@ -2,11 +2,9 @@ import { Alianca } from "../Models/Alianca";
 import { getWS } from "./ws";
 
 type Score = {
-  azul: number;
-  vermelho: number;
+  azul: { total: number; idade_media: number; pre: number };
+  vermelho: { total: number; idade_media: number; pre: number };
 };
-
-const matches: Record<number, Score> = {};
 
 let scoreSetup = false;
 
@@ -18,8 +16,16 @@ export function SetScores() {
   const io = getWS();
 
   let scores: Score = {
-    azul: 0,
-    vermelho: 0,
+    azul: {
+      total: 0,
+      idade_media: 0,
+      pre: 0,
+    },
+    vermelho: {
+      total: 0,
+      idade_media: 0,
+      pre: 0,
+    },
   };
 
   io.on("connection", (socket) => {
@@ -32,9 +38,13 @@ export function SetScores() {
       (payload: {
         alliance: "vermelho" | "azul";
         total: number;
-        score: Alianca;
+        score: { idade_media: number; pre: number };
       }) => {
-        scores[payload.alliance] = payload.total;
+        scores[payload.alliance] = {
+          total: payload.total,
+          idade_media: payload.score.idade_media,
+          pre: payload.score.pre,
+        };
 
         console.log(payload);
 

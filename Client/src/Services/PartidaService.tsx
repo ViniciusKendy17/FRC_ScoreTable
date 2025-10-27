@@ -120,4 +120,22 @@ export const PartidaService = {
       };
     });
   },
+  GetResult: (id: number) => {
+    return HandleTry(async () => {
+      const res = await fetch(
+        `http://192.168.0.104:3000/frc/match/${id}/result`
+      );
+
+      const { match_info, alliances } = await res.json();
+
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+
+      return { match_info, alliances } as {
+        match_info: Partida;
+        alliances: Aliança[];
+      };
+    });
+  },
 };

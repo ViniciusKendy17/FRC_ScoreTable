@@ -16,10 +16,18 @@ export type Aliança = {
   idade_media: number;
   estacionar: number;
   pre_historico: number;
+  pre_historico_au: number;
+  idade_media_au: number;
+  poco_au: number;
+  poco_endgame: number;
+  sitio: number;
   sair: number;
   auto_pontos: number;
   teleop_pontos: number;
-  
+  falta_branca: number;
+  falta_prh: number;
+  falta_transp: number;
+  falta_estacionar: number;
   faltas_pontos: number;
   rp_auto: number;
   rp_estacionar: number;
@@ -55,4 +63,22 @@ type Status = "agendada" | "em_progresso" | "finalizada";
 
 type Vencedor = "azul" | "vermelho" | "empate" | "no";
 
-//Game Score
+export type FinalPontos = {
+  color: "azul" | "vermelho";
+  teleop_pontos?: number;
+  auto_pontos?: number;
+  faltas_pontos?: number;
+  idade_media?: number;
+  pre_historico?: number;
+  estacionar?: number; // pode ser usado como pontos de estacionar/endgame
+  sair?: number;
+  falta_estacionar?: number;
+  falta_transp?: number;
+  falta_prh?: number;
+  falta_branca?: number;
+  pre_historico_au?: number;
+  idade_media_au?: number;
+  poco_au?: number;
+  poco_endgame?: number;
+  sitio?: number; // ADICIONADO
+};

@@ -63,6 +63,31 @@ export default function Classificacao() {
             ]}
           />
         </div>
+      <Header title={`Qualificatória #${id}`} />
+
+      <div className={` ${styles.equipesRed} ${styles.equipesRedBox}`}>
+        {rankingData
+          .filter((t) => t.color === "vermelho")
+          .flatMap((t) => [t.time1, t.time2])
+          .map((numero, i) => {
+            const nomeEncontrado = nome.find(
+              (team) => team.id === numero
+            )?.nome;
+
+            return (
+              <TeamBox
+                key={`red-${i}`}
+                color="red"
+                numbers={[numero, 0]}
+                teamName={nomeEncontrado || `Time ${numero}`}
+                variant="qualificatoria"
+              />
+            );
+          })}
+      </div>
+
+      <div className={styles.containerPlacar}>
+        <Placar className={styles.placar} />
       </div>
       <Footer text="FRC Score Table" />
     </div>

@@ -8,6 +8,7 @@ import {
   GetalliancesByMatchId,
   GetAllMatches,
   GetMatchInfo,
+  GetResult,
   NewMatch,
 } from "../Controllers/PartidaController";
 
@@ -19,6 +20,7 @@ router.post("/match/new", NewMatch);
 //All gets
 router.get("/teams", GetTeams);
 router.get("/match/:match_id/score", GetMatchInfo);
+router.get("/match/:match_id/result", GetResult);
 router.get("/matches", GetAllMatches);
 router.get("/ranking", GetRanking);
 router.get("/match/:match_id/alliances", GetalliancesByMatchId);

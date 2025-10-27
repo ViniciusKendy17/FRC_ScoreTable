@@ -9,8 +9,13 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  z-index: 2;
+  z-index: 10;
+
+  /* efeito blur */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* para Safari */
 }
+
 
 #modal {
   padding: 24px;
@@ -22,6 +27,7 @@
   justify-content: center;
   border-radius: 10px;
   flex-direction: column;
+  z-index: 9999;
 }
 
 #trashh {
