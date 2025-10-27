@@ -36,26 +36,28 @@
 
 .equipesRed,
 .equipesBlue {
+  position: absolute;
+  top: 50%; 
+  transform: translateY(-55%) scale(0.55); 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: clamp(16px, 5vw, 20px);
-  min-height: 60vh;
+  z-index: 10; /* mantém acima do fundo */
+  gap: 40px
 }
 
 .equipesRed {
-  grid-column: 1 / 2;
+  left: 3%;
   transform-origin: center left;
-  justify-self: start;
 }
 
 .equipesBlue {
-  grid-column: 3 / 4;
+  right: 3%; /* distância da borda direita */
   transform-origin: center right;
-  justify-self: end;
-  padding-right: clamp(8px, 2vw, 16px);
 }
+
 
 /* ============================================= */
 /* 🧱 BOXES                                      */
@@ -122,7 +124,7 @@
   grid-row: 2 / 3;
 
   position: absolute;
-  top: 49%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -197,15 +199,15 @@ header{
 /* ============================================= */
 @media (max-width: 1300px) {
   .equipesRed {
-    transform: scale(0.6) translateX(10%) translateY(-15%);
+    /* transform: scale(0.6) translateX(-2%) translateY(-87%); */
   }
 
   .equipesBlue {
-    transform: scale(0.6) translateX(-102%) translateY(-15%);
+    /* transform: scale(0.6) translateX(1%) translateY(-88%); */
   }
 
   .placarContainer {
-    transform: translateY(-70%) translateX(-90%);
+    transform: translateY(-70%) translateX(-50%);
     gap: 1.5vh;
   }
 

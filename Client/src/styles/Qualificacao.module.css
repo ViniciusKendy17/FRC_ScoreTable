@@ -46,7 +46,6 @@ footer {
   justify-content: center; 
   height: 100%;                  
   gap: 50px;
-  padding-top: 10%; 
   transform: translateY(-100px);
 }
 

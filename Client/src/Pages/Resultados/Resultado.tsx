@@ -1,4 +1,4 @@
-import styles from "../../styles/Resultado.module.css"; // ← Importa o CSS global
+import styles from "../../styles/Resultado.module.css";
 import ImageById from "../../Components/ImageById";
 import Header from "../../Components/HeaderPages";
 import Footer from "../../Components/Footer";
@@ -6,7 +6,7 @@ import TeamBox from "../../Components/TeamBox";
 import Placar from "../../Components/Placar";
 import GridTable from "../../Components/GridTable";
 import { useParams } from "react-router-dom";
-import { use, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Alianca {
   id: number;
@@ -28,93 +28,109 @@ export default function Resultado() {
   const endpoint = "http://192.168.0.100:3000/frc/";
   const [data, setData] = useState<Alianca[]>([]);
   const [loading, setLoading] = useState(true);
-  const [nome, setNome] = useState<any[]>([]);
-  const [numero_partida, setNumeroPartida] = useState<number | null>(null);
+  const [nome, setNome] = useState<TeamInfo[]>([]);
+  const [showWinnerGif, setShowWinnerGif] = useState(false);
+  const [aliancaGif, setAliancaGif] = useState<string | undefined>(undefined);
+  const [fadeOut, setFadeOut] = useState(false);
 
-  const getNomes = async () => {
-    try {
-      const response = await fetch(`${endpoint}teams`);
-      if (!response.ok) throw new Error(`Erro ${response.status}`);
-      const json = await response.json();
-      const teamNames: TeamInfo[] = json.equipes.map((team: any) => ({
-        id: team.numero_equipe,
-        nome: team.nome,
-      }));
-      setNome(teamNames);
-      console.log("Nomes dos times:", teamNames);
-    } catch (error) {
-      console.error("Erro ao buscar nomes dos times:", error);
-    }
-  };
+  // 🎵 Função para tocar som
+  function playSound(file: string, volume = 1.0) {
+    const audio = new Audio(`/songs/${file}`);
+    audio.volume = volume;
+    audio
+      .play()
+      .catch(() =>
+        console.log(`⚠️ Som bloqueado até interação do usuário (${file})`)
+      );
+  }
 
+  // 📋 Busca nomes de equipes
   useEffect(() => {
-    const getMatch = async () => {
+    async function getNomes() {
+      try {
+        const response = await fetch(`${endpoint}teams`);
+        if (!response.ok) throw new Error(`Erro ${response.status}`);
+        const json = await response.json();
+        const teamNames: TeamInfo[] = json.equipes.map((team: any) => ({
+          id: team.numero_equipe,
+          nome: team.nome,
+        }));
+        setNome(teamNames);
+      } catch (error) {
+        console.error("Erro ao buscar nomes dos times:", error);
+      }
+    }
+    getNomes();
+  }, []);
+
+  // ⚙️ Busca resultado da partida
+  useEffect(() => {
+    async function getMatch() {
       try {
         const response = await fetch(`${endpoint}match/${id}/result`);
         if (!response.ok) throw new Error(`Erro ${response.status}`);
-
         const json = await response.json();
         setData(json.alliances || []);
-        console.log("Dados da partida:", json);
+        console.log("APi", json)
       } catch (error) {
         console.error("Erro ao buscar partida:", error);
       } finally {
         setLoading(false);
       }
-    };
-
-    getNomes();
+    }
     if (id) getMatch();
   }, [id]);
 
+  // 🧮 Monta objetos de pontuação
   const { pontosAlianca_Vermelha, pontosAlianca_Azul } = useMemo(() => {
-    if (!data.length) {
+    if (!data.length)
       return { pontosAlianca_Vermelha: null, pontosAlianca_Azul: null };
-    }
+
+    const get = (color: "vermelho" | "azul") =>
+      data.find((a) => a.color === color);
 
     return {
       pontosAlianca_Vermelha: {
-        sair: data.find((a) => a.color === "vermelho")?.sair ?? 0,
-        idade_media: data.find((a) => a.color === "vermelho")?.idade_media ?? 0,
-        pre_historico: data.find((a) => a.color === "vermelho")?.pre_historico ?? 0,
-        estacionar: data.find((a) => a.color === "vermelho")?.estacionar ?? 0,
-        faltas: data.find((a) => a.color === "azul")?.faltas_pontos ?? 0,
-        total_pontos: data.find((a) => a.color === "vermelho")?.total_pontos ?? 0,
-        total_rp: data.find((a) => a.color === "vermelho")?.total_rp ?? 0,
-        auto_pontos: data.find((a) => a.color === "vermelho")?.auto_pontos ?? 0,
-        color : "vermelho",
+        sair: get("vermelho")?.sair ?? 0,
+        idade_media: get("vermelho")?.idade_media ?? 0,
+        pre_historico: get("vermelho")?.pre_historico ?? 0,
+        estacionar: get("vermelho")?.estacionar ?? 0,
+        faltas: get("azul")?.faltas_pontos ?? 0,
+        total_pontos: get("vermelho")?.total_pontos ?? 0,
+        total_rp: get("vermelho")?.total_rp ?? 0,
+        auto_pontos: get("vermelho")?.auto_pontos ?? 0,
+        color: "vermelho",
       },
       pontosAlianca_Azul: {
-        sair: data.find((a) => a.color === "azul")?.sair ?? 0,
-        idade_media: data.find((a) => a.color === "azul")?.idade_media ?? 0,
-        pre_historico: data.find((a) => a.color === "azul")?.pre_historico ?? 0,
-        estacionar: data.find((a) => a.color === "azul")?.estacionar ?? 0,
-        faltas: data.find((a) => a.color === "vermelho")?.faltas_pontos ?? 0,
-        total_pontos: data.find((a) => a.color === "azul")?.total_pontos ?? 0,
-        total_rp: data.find((a) => a.color === "azul")?.total_rp ?? 0,
-        auto_pontos: data.find((a) => a.color === "azul")?.auto_pontos ?? 0,
-        color : "azul",
+        sair: get("azul")?.sair ?? 0,
+        idade_media: get("azul")?.idade_media ?? 0,
+        pre_historico: get("azul")?.pre_historico ?? 0,
+        estacionar: get("azul")?.estacionar ?? 0,
+        faltas: get("vermelho")?.faltas_pontos ?? 0,
+        total_pontos: get("azul")?.total_pontos ?? 0,
+        total_rp: get("azul")?.total_rp ?? 0,
+        auto_pontos: get("azul")?.auto_pontos ?? 0,
+        color: "azul",
       },
     };
   }, [data]);
 
-  const getRankingPointImages = (alianca: any) => {
+  // 🧩 Função pura (sem setState) para calcular RP
+  function getRankingPointImagesPure(alianca: any) {
     if (!alianca) return [];
-
     const imagens: number[] = [];
-
     const total_rp = Number(alianca.total_rp);
     const auto_pontos = Number(alianca.auto_pontos);
-    const estacionar = Number(alianca.estacionar);
+    const estacionar = Number(alianca.poco_endgame);
 
     const ids =
       alianca.color === "vermelho"
-        ? { base: 3, auto: 4, estac: 1 } // 🔴 vermelho
-        : { base: 13, auto: 14, estac: 11 }; // 🔵 azul
+        ? { base: 3, auto: 4, estac: 1 }
+        : { base: 13, auto: 14, estac: 11 };
 
     if (total_rp === 1 && auto_pontos > 5) imagens.push(ids.auto);
     if (total_rp === 1 && estacionar === 3) imagens.push(ids.estac);
-    if (total_rp === 2 && estacionar > 3 && estacionar > 5)
+    if (total_rp === 2 && estacionar > 3 && auto_pontos > 5)
       imagens.push(ids.estac, ids.auto);
     if (total_rp === 3) imagens.push(ids.base, ids.base, ids.base);
     if (total_rp === 4 && estacionar > 3)
@@ -125,41 +141,99 @@ export default function Resultado() {
       imagens.push(ids.estac, ids.auto, ids.base, ids.base, ids.base);
 
     return imagens;
-  };
+  }
 
-const renderWinnerImages = (color: "vermelho" | "azul") => {
-  if (!pontosAlianca_Vermelha || !pontosAlianca_Azul) return null;
 
-  const vencedor =
-    pontosAlianca_Vermelha.total_pontos > pontosAlianca_Azul.total_pontos
+  const rpVermelho = useMemo(
+    () => getRankingPointImagesPure(pontosAlianca_Vermelha),
+    [pontosAlianca_Vermelha]
+  );
+  const rpAzul = useMemo(
+    () => getRankingPointImagesPure(pontosAlianca_Azul),
+    [pontosAlianca_Azul]
+  );
+  const showRP = rpVermelho.length > 0 || rpAzul.length > 0;
+
+  const vencedorCalc = useMemo(() => {
+    if (!pontosAlianca_Vermelha || !pontosAlianca_Azul) return null;
+    return pontosAlianca_Vermelha.total_pontos > pontosAlianca_Azul.total_pontos
       ? "vermelho"
-      : pontosAlianca_Vermelha.total_pontos < pontosAlianca_Azul.total_pontos
+      : pontosAlianca_Vermelha.total_pontos <
+        pontosAlianca_Azul.total_pontos
       ? "azul"
       : null;
+  }, [pontosAlianca_Vermelha, pontosAlianca_Azul]);
 
-  if (vencedor !== color) return null; // só renderiza na coluna do vencedor
 
-  const imageIds = color === "vermelho" ? [22, 23] : [22, 23];
+useEffect(() => {
+  if (!vencedorCalc) return;
 
-  return imageIds.map((id, index) => (
-    <ImageById
-      key={id}
-      id={id}
-      alt={`Imagem ${color} ${index + 1}`}
-      style={{
-        width: "50vw",
-        height: "100%",
-        maxWidth: "100%",
-        maxHeight: "100%",
-        aspectRatio: index === 0 ? "2037 / 1011" : "2037 / 319",
-      }}
-      pasta="winner"
-    />
-  ));
-};
+  setShowWinnerGif(true);
+  playSound("match_result.wav");
+
+  if (vencedorCalc === "azul") {
+    setAliancaGif("/videos/blueWinner.mp4");
+  } else {
+    setAliancaGif("https://community.firstinspires.org/hubfs/2025%20Animation.gif");
+  }
+
+
+  const fadeTimer = setTimeout(() => setFadeOut(true), 4500);
+
+  const hideTimer = setTimeout(() => {
+    setShowWinnerGif(false);
+    setFadeOut(false);
+  }, 5000);
+
+  return () => {
+    clearTimeout(fadeTimer);
+    clearTimeout(hideTimer);
+  };
+}, [vencedorCalc]);
+
+
+  if (showWinnerGif && vencedorCalc) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          width: "100vw",
+          background: "black",
+          overflow: "hidden",
+         opacity: fadeOut ? 0 : 1,
+          transition: "opacity 1s ease-in-out",
+        }}
+      >
+        {aliancaGif?.endsWith(".mp4") ? (
+          <video
+            src={aliancaGif}
+            autoPlay
+            muted
+            playsInline
+            style={{ width: "100vw", maxWidth: "100%", height: "100vh", maxHeight: "100%", objectFit: "cover"}}
+          />
+        ) : (
+          <img
+            src={aliancaGif!}
+            alt="Winner Animation"
+            style={{ width: "100vw", maxWidth: "100%", height: "100vh", maxHeight: "100%", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat"  }}
+          />
+        )}
+      </div>
+    );
+  }
+
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container}
+      style={{
+        opacity: showWinnerGif ? 0 : 1,
+        transition: "opacity 1s ease-in-out" 
+      }}
+    >
       <Header title={`Resultado`} />
 
       {/* Equipes Vermelhas */}
@@ -169,12 +243,54 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
             display: "flex",
             justifyContent: "center",
             gap: "10px",
-            transform: "translate(0px, 8px)",
+            transform: "translate(0px, -15px)",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-        {renderWinnerImages("vermelho")}
+          {vencedorCalc === "vermelho" ? (
+            <>
+              <ImageById
+                id={22}
+                alt="Vermelho Winner"
+                style={{
+                  width: "80vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 1011",
+                }}
+                pasta="winner"
+              />
+              <ImageById
+                id={23}
+                alt="Vermelho Winner"
+                style={{
+                  width: "80vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 319",
+                }}
+                pasta="winner"
+              />
+            </>
+          ) : (
+            <>
+              <div
+                style={{
+                  width: "80vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 1011",
+                  visibility: "hidden",
+                }}
+              />
+              <div
+                style={{
+                  width: "80vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 319",
+                  visibility: "hidden",
+                }}
+              />
+            </>
+          )}
         </div>
 
         {data
@@ -184,7 +300,6 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
             const nomeEncontrado = nome.find(
               (team) => team.id === numero
             )?.nome;
-
             return (
               <TeamBox
                 key={`red-${i}`}
@@ -196,33 +311,57 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
             );
           })}
 
-        <div className={styles.rankingPoints}></div>
-
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            gap: "10px",
-          }}
-        >
-          {getRankingPointImages(pontosAlianca_Vermelha).map((id, index) => (
-            <ImageById
-              key={`rp-vermelho-${index}`}
-              id={id}
-              alt="Ranking Points"
+        {rpVermelho.length > 0 ? (
+          <>
+            <div className={styles.rankingPoints}></div>
+            <div
               style={{
-                width: "100px",
-                height: "100px",
-                aspectRatio: "260 / 260",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                gap: "10px",
+                minHeight: "10px",
               }}
-              pasta="rankingpoints"
-            />
-          ))}
-        </div>
+            >
+              {rpVermelho.map((id, index) => (
+                <ImageById
+                  key={`rp-vermelho-${index}`}
+                  id={id}
+                  alt="Ranking Points"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    aspectRatio: "260 / 260",
+                  }}
+                  pasta="rankingpoints"
+                />
+              ))}
+            </div>
+          </>
+        ):(
+            <>
+              <div
+                style={{
+                  height: "8vh",
+                  width: "100w",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 1011",
+                  visibility: "hidden",
+                }}
+              />
+              <div
+                style={{
+                  width: "100vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 319",
+                  visibility: "hidden",
+                }}
+              />
+            </>
+          )
+      }
       </div>
 
-      {/* Placar e Tabela */}
       <div className={styles.placarContainer}>
         <Placar
           className={styles.placar}
@@ -272,7 +411,49 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
             alignItems: "center",
           }}
         >
-        {renderWinnerImages("azul")}
+          {vencedorCalc === "azul" ?  (
+            <>
+              <ImageById
+                id={22}
+                alt="Azul Winner"
+                style={{
+                  width: "80vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 1011",
+                }}
+                pasta="winner"
+              />
+              <ImageById
+                id={23}
+                alt="Azul Winner"
+                style={{
+                  width: "80vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 319",
+                }}
+                pasta="winner"
+              />
+            </>
+          ):(
+            <>
+              <div
+                style={{
+                  width: "80vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 1011",
+                  visibility: "hidden",
+                }}
+              />
+              <div
+                style={{
+                  width: "80vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 319",
+                  visibility: "hidden",
+                }}
+              />
+            </>
+          )}
         </div>
 
         {data
@@ -282,7 +463,6 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
             const nomeEncontrado = nome.find(
               (team) => team.id === numero
             )?.nome;
-
             return (
               <TeamBox
                 key={`blue-${i}`}
@@ -294,30 +474,54 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
             );
           })}
 
-        <div className={styles.rankingPoints}></div>
-
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            gap: "10px",
-          }}
-        >
-          {getRankingPointImages(pontosAlianca_Azul).map((id, index) => (
-            <ImageById
-              key={`rp-vermelho-${index}`}
-              id={id}
-              alt="Ranking Points"
+        {rpAzul.length > 0 ? (
+          <>
+            <div className={styles.rankingPoints}></div>
+            <div
               style={{
-                width: "100px",
-                height: "100px",
-                aspectRatio: "260 / 260",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                gap: "10px",
+                minHeight: "10px",
               }}
-              pasta="rankingpoints"
-            />
-          ))}
-        </div>
+            >
+              {rpAzul.map((id, index) => (
+                <ImageById
+                  key={`rp-vermelho-${index}`}
+                  id={id}
+                  alt="Ranking Points"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    aspectRatio: "260 / 260",
+                  }}
+                  pasta="rankingpoints"
+                />
+              ))}
+            </div>
+          </>
+        ):(
+            <>
+              <div
+                style={{
+                  height: "8vh",
+                  width: "100w",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 1011",
+                  visibility: "hidden",
+                }}
+              />
+              <div
+                style={{
+                  width: "100vw",
+                  maxWidth: "600px",
+                  aspectRatio: "2037 / 319",
+                  visibility: "hidden",
+                }}
+              />
+            </>
+          )}
       </div>
 
       <Footer />
