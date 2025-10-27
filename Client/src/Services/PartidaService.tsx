@@ -104,12 +104,9 @@ export const PartidaService = {
   },
   DeleteMatch: (id: number) => {
     return HandleTry(async () => {
-      const res = await fetch(
-        `http://192.168.0.100:3000/frc/match/delete/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`http://192.168.0.100:3000/frc/match/delete/${id}`, {
+        method: "DELETE",
+      });
 
       if (!res.ok) {
         throw new Error(res.statusText);
@@ -158,9 +155,7 @@ export const PartidaService = {
 
   GetMatchInfo: (id: number) => {
     return HandleTry(async () => {
-      const res = await fetch(
-        `http://192.168.0.100:3000/frc/match/${id}/score`
-      );
+      const res = await fetch(`http://192.168.0.100:3000/frc/match/${id}/score`);
 
       const { match_info, alliances } = await res.json();
 

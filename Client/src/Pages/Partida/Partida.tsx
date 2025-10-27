@@ -192,13 +192,13 @@ export default function Partida() {
 
           <TeamMatchs leftTeams={ver!} rightTeams={azul!} />
 
-          <Placar
-            className={styles.placar}
-            scoreLeft={scores.vermelho.total}
-            scoreRight={scores.azul.total}
-            variant="partida"
-            time={formattedTime}
-          />
+      <Placar
+        className={styles.placar}
+        scoreLeft={scores.vermelho.total}
+        scoreRight={scores.azul.total}
+        variant="partida"
+        time={formattedTime}
+      />
 
           <div className={styles.equipesBlue}>
             <PointsBox
