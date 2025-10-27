@@ -44,7 +44,9 @@ export default function Partida() {
   function playSound(file: string, volume: number) {
     const audio = new Audio(`/songs/${file}`);
     audio.volume = volume;
-    audio.play().catch(() => console.log(`⚠️ Som ${file} bloqueado até interação`));
+    audio
+      .play()
+      .catch(() => console.log(`⚠️ Som ${file} bloqueado até interação`));
   }
 
   async function GetMatchInfo() {
@@ -61,13 +63,14 @@ export default function Partida() {
     SetVermelho([vermelho.time1, vermelho.time2]);
   }
 
+
   useEffect(() => {
     GetMatchInfo();
   }, []);
 
   useEffect(() => {
     // Cria a conexão apenas uma vez
-    socketRef.current = io("http://192.168.1.4:3001", {
+    socketRef.current = io("http://192.168.0.100:3001", {
       transports: ["websocket", "polling"],
     });
 
@@ -80,11 +83,18 @@ export default function Partida() {
     socket.on("score_update", (data: any) => {
       console.log("Dados de pontuação recebidos:", data);
       SetScores({
-        azul: data.azul.total ?? 0,
-        vermelho: data.vermelho.total ?? 0
+        azul: {
+          total: data.azul.total ?? 0,
+          idade_media: data.azul.idade_media ?? 0,
+          pre: data.azul.pre ?? 0,
+        },
+        vermelho: {
+          total: data.vermelho.total ?? 0,
+          idade_media: data.vermelho.idade_media ?? 0,
+          pre: data.vermelho.pre ?? 0,
+        },
       });
     });
-
     return () => {
       socket.disconnect();
     };
@@ -101,34 +111,33 @@ export default function Partida() {
       }, 1000);
     }
 
-      if (phase === "auto" && timeLeft === 0 && !buzzerPlayed) {
-        playSound("end.wav", 1.0);
-        setBuzzerPlayed(true);
-        setIsActive(false);
+    if (phase === "auto" && timeLeft === 0 && !buzzerPlayed) {
+      playSound("end.wav", 1.0);
+      setBuzzerPlayed(true);
+      setIsActive(false);
 
-        // Aguarda ~3 segundos e inicia TELEOP automaticamente
-        setTimeout(() => {
-          setPhase("teleop");
-          setTimeLeft(135); // 2m15s
-          setIsActive(true);
-          setBuzzerPlayed(false);
-          playSound("resume.wav", 1.0); 
-        }, 2000);
-      }
+      // Aguarda ~3 segundos e inicia TELEOP automaticamente
+      setTimeout(() => {
+        setPhase("teleop");
+        setTimeLeft(135); // 2m15s
+        setIsActive(true);
+        setBuzzerPlayed(false);
+        playSound("resume.wav", 1.0);
+      }, 2000);
+    }
 
-      if (phase === "teleop" && timeLeft === 20 && !warningPlayed) {
-        playSound("warning_sonar.wav", 1.0);
-        setWarningPlayed(true);
-      }
+    if (phase === "teleop" && timeLeft === 20 && !warningPlayed) {
+      playSound("warning_sonar.wav", 1.0);
+      setWarningPlayed(true);
+    }
 
-
-      // Quando o TELEOP termina
-      if (phase === "teleop" && timeLeft === 0 && !buzzerPlayed) {
-        playSound("end.wav", 1.0);
-        setPhase("done");
-        setIsActive(false);
-        setBuzzerPlayed(true);
-      }
+    // Quando o TELEOP termina
+    if (phase === "teleop" && timeLeft === 0 && !buzzerPlayed) {
+      playSound("end.wav", 1.0);
+      setPhase("done");
+      setIsActive(false);
+      setBuzzerPlayed(true);
+    }
 
     return () => {
       if (interval) clearInterval(interval);
@@ -140,12 +149,11 @@ export default function Partida() {
       if (event.code === "Space") {
         event.preventDefault(); // evita scroll da página
 
-      if (phase === "auto" && !isActive) {
-        playSound("start.wav",1.0);
-        setIsActive(true);
-        setStartSoundPlayed(true);
-      }
-
+        if (phase === "auto" && !isActive) {
+          playSound("start.wav", 1.0);
+          setIsActive(true);
+          setStartSoundPlayed(true);
+        }
       }
 
       if (event.key.toLowerCase() === "r") {
@@ -162,45 +170,52 @@ export default function Partida() {
       }
     };
 
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigate, phase, isActive, id]);
 
-
   return (
     <div className={styles.container}>
-      <Header title={`Partida ${matchNum ?? ""}`} />
+      {isLoading ? (
+        <p>Carregando placar...</p>
+      ) : (
+        <>
+          <Header title={`Partida ${matchNum ?? ""}`} />
 
-      <div className={styles.equipesRed}>
-        <PointsBox colorClass="red" pointsText={scores.vermelho.pre} />
-        <PointsBox colorClass="red1" pointsText={scores.vermelho.idade_media} />
-      </div>
+          <div className={styles.equipesRed}>
+            <PointsBox colorClass="red" pointsText={scores.vermelho.pre} />
+            <PointsBox
+              colorClass="red1"
+              pointsText={scores.vermelho.idade_media}
+            />
+          </div>
 
-      <TeamMatchs leftTeams={ver!} rightTeams={azul!} />
+          <TeamMatchs leftTeams={ver!} rightTeams={azul!} />
 
-      <Placar
-        className={styles.placar}
-        scoreLeft={scores.vermelho.total}
-        scoreRight={scores.azul.total}
-        variant="partida"
-        time="1:35"
-      />
+          <Placar
+            className={styles.placar}
+            scoreLeft={scores.vermelho.total}
+            scoreRight={scores.azul.total}
+            variant="partida"
+            time={formattedTime}
+          />
 
-      <div className={styles.equipesBlue}>
-        <PointsBox
-          colorClass="blue"
-          pointsText={scores.azul.pre}
-          transform="translate(-45px, -10.5px)"
-        />
-        <PointsBox
-          colorClass="blue1"
-          pointsText={scores.azul.idade_media}
-          transform="translate(-45px, -10.5px)"
-        />
-      </div>
+          <div className={styles.equipesBlue}>
+            <PointsBox
+              colorClass="blue"
+              pointsText={scores.azul.pre}
+              transform="translate(-45px, -10.5px)"
+            />
+            <PointsBox
+              colorClass="blue1"
+              pointsText={scores.azul.idade_media}
+              transform="translate(-45px, -10.5px)"
+            />
+          </div>
 
-      <Footer text="FRC Score Table" />
+          <Footer text="FRC Score Table" />
+        </>
+      )}
     </div>
   );
 }

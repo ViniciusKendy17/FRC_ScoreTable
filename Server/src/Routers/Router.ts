@@ -1,5 +1,9 @@
 import express, { Request, Response } from "express";
-import { GetRanking, GetTeams } from "../Controllers/EquipeController";
+import {
+  GetRanking,
+  GetTeams,
+  GetTeamsFromMatch,
+} from "../Controllers/EquipeController";
 import {
   DeleteMatch,
   EditMatch,
@@ -24,6 +28,7 @@ router.get("/match/:match_id/result", GetResult);
 router.get("/matches", GetAllMatches);
 router.get("/ranking", GetRanking);
 router.get("/match/:match_id/alliances", GetalliancesByMatchId);
+router.get("/match/:match_id/teams", GetTeamsFromMatch);
 
 //All updates
 router.patch("/match/edit/:match_id", EditMatch);

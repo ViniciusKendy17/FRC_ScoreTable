@@ -12,7 +12,7 @@ export default function ScoreCard({ element, score, onChange }: Props) {
   if (!pontos) return null;
 
   // calcula total baseado nos campos existentes
- const total_card =
+  const total_card =
     (score.au_idade_media ?? 0) * (pontos.au_idade_media ?? 0) +
     (score.au_pre_historico ?? 0) * (pontos.au_pre_historico ?? 0) +
     (score.estacionar_poco_au ?? 0) * (pontos.au_estacionar ?? 0) +
@@ -21,7 +21,6 @@ export default function ScoreCard({ element, score, onChange }: Props) {
     (score.estacionar_poco ?? 0) * (pontos.estacionar_poco ?? 0) +
     (score.estacionar_poco_au ?? 0) * (pontos.au_estacionar ?? 0) +
     (score.sitio ?? 0) * (pontos.estacionar ?? 0) +
-    (score.endgame ?? 0) * (pontos.estacionar ?? 0) +
     (score.saida ?? 0) * (pontos.sair ?? 0) +
     (score.falta_branca ?? 0) * (pontos.falta_branca ?? 0) +
     (score.falta_estacionar ?? 0) * (pontos.falta_estacionar ?? 0) +
@@ -36,67 +35,6 @@ export default function ScoreCard({ element, score, onChange }: Props) {
       </div>
 
       <div className="score-body">
-        {/* AUTÔNOMO */}
-        {/* {(pontos.au_idade_media !== undefined ||
-          pontos.au_pre_historico !== undefined ||
-          pontos.au_estacionar !== undefined) && (
-          <div className="phase">
-            <span>Autônomo</span>
-            <div className="buttons">
-              <button
-                onClick={() => onChange("auto", Math.max(0, score.auto - 1))}
-              >
-                −
-              </button>
-              <span>{score.auto}</span>
-              <button onClick={() => onChange("auto", score.auto + 1)}>
-                +
-              </button>
-            </div>
-          </div>
-        )} */}
-
-        {/* TELEOPERADO */}
-        {/* {(pontos.op_idade_media !== undefined ||
-          pontos.op_pre_historico !== undefined) && (
-          <div className="phase">
-            <span>Teleoperado</span>
-            <div className="buttons">
-              <button
-                onClick={() =>
-                  onChange("teleop", Math.max(0, score.teleop - 1))
-                }
-              >
-                −
-              </button>
-              <span>{score.teleop}</span>
-              <button onClick={() => onChange("teleop", score.teleop + 1)}>
-                +
-              </button>
-            </div>
-          </div>
-        )} */}
-
-        {/* ENDGAME */}
-        {/* {pontos.estacionar !== undefined && (
-          <div className="phase">
-            <span>End Game</span>
-            <div className="buttons">
-              <button
-                onClick={() =>
-                  onChange("endgame", Math.max(0, score.endgame - 1))
-                }
-              >
-                −
-              </button>
-              <span>{score.endgame}</span>
-              <button onClick={() => onChange("endgame", score.endgame + 1)}>
-                +
-              </button>
-            </div>
-          </div>
-        )} */}
-
         {/* Autonomo Idade Média */}
         {pontos.au_idade_media !== undefined && (
           <div className="phase">
@@ -259,27 +197,18 @@ export default function ScoreCard({ element, score, onChange }: Props) {
           </div>
         )}
 
-         {/* Estacionar SITIO */}
+        {/* Estacionar SITIO */}
         {pontos.estacionar !== undefined && (
           <div className="phase">
             <span>Sitio ({pontos.estacionar} pts/unidade)</span>
             <div className="buttons">
               <button
-                onClick={() =>
-                  onChange(
-                    "sitio",
-                    Math.max(0, score.sitio - 1)
-                  )
-                }
+                onClick={() => onChange("sitio", Math.max(0, score.sitio - 1))}
               >
                 −
               </button>
               <span>{score.sitio}</span>
-              <button
-                onClick={() =>
-                  onChange("sitio", score.sitio + 1)
-                }
-              >
+              <button onClick={() => onChange("sitio", score.sitio + 1)}>
                 +
               </button>
             </div>

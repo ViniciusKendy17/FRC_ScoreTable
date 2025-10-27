@@ -4,7 +4,7 @@ import {
   Prisma,
   PrismaClient,
 } from "../generated/prisma";
-import { Partida, PartidaParcial, Vencedor } from "../Models/Partida";
+import { Partida, PartidaParcial, Status, Vencedor } from "../Models/Partida";
 import { Alianca, ALiancaParcial } from "../Models/Alianca";
 import {
   CalcularFaltasTotal,
@@ -104,6 +104,7 @@ export async function NewMatch(req: Request, res: Response) {
 
 export async function EditMatch(req: Request, res: Response) {
   const aliancas: ALiancaParcial[] = req.body.aliancas;
+  const status: Status = req.body.status;
   const match_id = req.params.match_id;
 
   const id_db = await prisma.partida.findUnique({
@@ -116,6 +117,17 @@ export async function EditMatch(req: Request, res: Response) {
     return res.status(404).json({ msg: "Id de partida não existe" });
   }
 
+  if (status) {
+    await prisma.partida.update({
+      where: {
+        id: Number(match_id),
+      },
+      data: {
+        status: status,
+      },
+    });
+  }
+
   await Promise.all(
     aliancas.map((ali) => {
       return prisma.alianca.updateMany({
@@ -123,10 +135,7 @@ export async function EditMatch(req: Request, res: Response) {
           partida_id: Number(match_id),
           AND: { color: ali.color },
         },
-        data: {
-          time1: ali.time1,
-          time2: ali.time2,
-        },
+        data: ali,
       });
     })
   );
@@ -165,9 +174,9 @@ export async function DeleteMatch(req: Request, res: Response) {
 
 /**
  * @description Fecha a partida de maneira parcial, sem somar pontos de falta
- * @param req 
- * @param res 
- * @returns 
+ * @param req
+ * @param res
+ * @returns
  */
 export async function EndJudgeScores(req: Request, res: Response) {
   const alianca: Alianca = req.body.alianca;
@@ -185,7 +194,7 @@ export async function EndJudgeScores(req: Request, res: Response) {
       .json({ msg: "Partidas já completadas nãp podem ser alteradas" });
   }
 
-  const total = CalcularTotal(alianca, false);
+  const total = CalcularTotal(alianca, alianca, false);
 
   await prisma.alianca.updateMany({
     where: {
@@ -237,8 +246,8 @@ export async function EndMatch(req: Request, res: Response) {
   const alianca_azul = aliancas.find((f) => f.color == "azul")!;
   const alianca_vermelho = aliancas.find((f) => f.color == "vermelho")!;
 
-  const total_azul = CalcularTotal(alianca_azul, true);
-  const total_vermelho = CalcularTotal(alianca_vermelho, true);
+  const total_azul = CalcularTotal(alianca_azul, alianca_vermelho, true);
+  const total_vermelho = CalcularTotal(alianca_vermelho, alianca_azul, true);
 
   if (total_azul > total_vermelho) {
     vencedor = "azul";
@@ -261,10 +270,14 @@ export async function EndMatch(req: Request, res: Response) {
         data: {
           teleop_pontos: ali.teleop_pontos,
           auto_pontos: ali.auto_pontos,
-          faltas_pontos:
-            ali.color == "azul"
-              ? alianca_vermelho.faltas_pontos
-              : alianca_azul.faltas_pontos,
+          faltas_pontos: CalcularFaltasTotal(ali),
+          falta_branca: ali.falta_branca,
+          falta_estacionar: ali.falta_estacionar,
+          falta_prh: ali.falta_prh,
+          falta_transp: ali.falta_transp,
+          sitio: ali.sitio,
+          poco_au: ali.poco_au,
+          poco_endgame: ali.poco_endgame,
           idade_media: ali.idade_media,
           pre_historico: ali.pre_historico,
           estacionar: ali.estacionar,

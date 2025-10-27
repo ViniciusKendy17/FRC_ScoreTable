@@ -34,6 +34,6 @@ type PartidaRecord = Record<string, PartidaParcial>;
 
 export type Tipo_partida = "treino" | "qualificatorias" | "eliminatorias";
 
-export type Status = "agendada" | "em_progresso" | "finalizada";
+export type Status = "agendada" | "em_progresso" | "completada";
 
 export type Vencedor = "azul" | "vermelho" | "empate" | "no";

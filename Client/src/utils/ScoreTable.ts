@@ -111,7 +111,7 @@ export const elements: GameElement[] = [
   },
   {
     id: 9,
-    nome: "FALTA - ESTACIONAR NO POÇO ",
+    nome: "FALTA - ESTACIONAR METADE DO  POÇO ",
     pontos: { falta_estacionar: 6 },
   },
 ];

@@ -46,13 +46,21 @@ export async function NewAliance(alianca: Alianca, match_id: number) {
   });
 }
 
-export function CalcularTotal(ali: Alianca, falta: boolean) {
-  const faltas_total = CalcularFaltasTotal(ali);
+/**
+ * @description Calcula o total de pontos de uma aliança, podendo ter ou não pontos de falta
+ * @param ali 
+ * @param falta 
+ * @returns 
+ */
+export function CalcularTotal(ali: Alianca, ali_adv: Alianca, falta: boolean) {
+  const faltas_total = falta ?  CalcularFaltasTotal(ali_adv) : 0;
+
+  console.log(ali)
 
   return (
     ali.sair +
     ali.estacionar +
-    (falta ? faltas_total : 0) +
+    faltas_total +
     ali.auto_pontos +
     ali.teleop_pontos
   );
