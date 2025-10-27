@@ -1,48 +1,54 @@
 import { useEffect, useState } from "react";
-import Header from "../Components/Header";
-import "../styles/Form.css";
-import type { Cor, Equipe } from "../utils/Types";
-import { PartidaService } from "../Services/PartidaService";
+import "../../styles/Form.css";
 import { toast, ToastContainer } from "react-toastify";
-import { preconnect } from "react-dom";
-import { toast_pro } from "../utils/Util";
+import Header from "../../Components/Header";
+import type { Cor, Equipe, PartialAlianca, Status } from "../../utils/Types";
+import { PartidaService } from "../../Services/PartidaService";
+import { toast_pro } from "../../utils/Util";
+import { useParams } from "react-router-dom";
 
-export default function FormPartida() {
-  const [numero, setNumero] = useState<number>(0);
-  const [tipo, setTipo] = useState("treino");
-  const [horario, setHorario] = useState<string>("");
+export default function Edicao() {
   const [opcoesTimes, SetTimes] = useState<Equipe[] | null>([]);
+  const [status, SetStatus] = useState<Status>("agendada");
+
+  const { id } = useParams();
 
   const [azul, setAzul] = useState<(number | "")[]>([]);
   const [vermelho, setVermelho] = useState<(number | "")[]>([]);
-
-  const handleChange = (
-    cor: Cor,
-    index: number,
-    value: number | ""
-  ) => {
+  const handleChange = (cor: Cor, index: number, value: number | "") => {
     const nova = [...(cor === "azul" ? azul : vermelho)];
     nova[index] = value;
     cor === "azul" ? setAzul(nova) : setVermelho(nova);
   };
 
+  async function GetTeamFromMatch() {
+    const teams = await PartidaService.GetTeamsFromMatch(Number(id));
+
+    const azuis = teams?.teams.find((t) => t.color == "azul");
+    const vermelhos = teams?.teams.find((t) => t.color == "vermelho");
+
+    if (azuis) {
+      setAzul([azuis.time1 ?? "", azuis.time2 ?? ""]);
+    }
+
+    if (vermelhos) {
+      setVermelho([vermelhos.time1 ?? "", vermelhos.time2 ?? ""]);
+    }
+  }
+
   async function DefinirEquipes() {
     const equipes = await PartidaService.GetTeams();
-    console.log(equipes);
     if (equipes) SetTimes(equipes);
   }
 
   useEffect(() => {
     DefinirEquipes();
+    GetTeamFromMatch();
   }, []);
 
-  async function AddMatch() {
+  async function EditMatch() {
     const payload = {
-      match: {
-        numero_partida: numero,
-        tipo_partida: tipo,
-        horario,
-      },
+      status: status,
       aliancas: [
         {
           color: "azul",
@@ -57,12 +63,10 @@ export default function FormPartida() {
       ],
     };
 
-    const data = await PartidaService.AddMatch(payload);
+    const data = await PartidaService.EditMatch(Number(id), payload);
 
     if (data) {
-      toast.success("Partida criada com sucesso", toast_pro);
-      setNumero(0);
-      setTipo("treino");
+      toast.success("Partida atualizada com sucesso", toast_pro);
       setAzul(["", "", ""]);
       setVermelho(["", "", ""]);
     } else {
@@ -83,39 +87,20 @@ export default function FormPartida() {
 
       <main id="main-judge">
         <form id="form_match">
-          <h3>Criar Partida</h3>
+          <h3>Editar Partida</h3>
 
-          <div className="campo">
-            <label>Número da Partida</label>
-            <input
-              type="number"
-              value={numero}
-              onChange={(e) => setNumero(Number(e.target.value))}
-              required
-            />
-          </div>
+          <h3>Partida ID: {id}</h3>
 
-          <div className="campo">
-            <label>Tipo de Partida</label>
-            <select
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
-              required
-            >
-              <option value="treino">Treino</option>
-              <option value="qualificatorias">Qualificatórias</option>
-              <option value="eliminatorias">Eliminatórias</option>
-            </select>
-          </div>
-
-          <div className="campo">
-            <label htmlFor="">Horário</label>
-            <input
-              type="time"
-              onChange={(e) => setHorario(e.target.value)}
-              value={horario}
-            />
-          </div>
+          <select
+            className="alianca"
+            name=""
+            onChange={(e) => SetStatus(e.target.value as Status)}
+            id=""
+          >
+            <option value="agendada">Agendada</option>
+            <option value="em_progresso">Em progresso</option>
+            <option value="completada">Finalizada</option>
+          </select>
 
           <div className="aliancas">
             <div className="alianca vermelho">
@@ -163,10 +148,10 @@ export default function FormPartida() {
 
           <button
             type="button"
-            onClick={() => AddMatch()}
+            onClick={() => EditMatch()}
             className="btn-salvar"
           >
-            Salvar Partida
+            Salvar Alterações
           </button>
         </form>
       </main>

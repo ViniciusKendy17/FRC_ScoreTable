@@ -1,5 +1,4 @@
 .card_partida {
-  /* width: 80%; */
   padding: 0 40px 20px 40px;
   border-radius: 20px;
   background-color: aliceblue;
@@ -141,9 +140,10 @@ button:hover {
 .partida-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   text-align: center;
   width: 100%;
+  gap: 1.5rem;
 }
 
 .button-group {
@@ -183,6 +183,78 @@ button:hover {
 .btn-icon {
   font-size: 1.1rem;
 }
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 6px 12px;
+  border-radius: 12px;
+  width: fit-content;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* pontinho colorido */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* cores baseadas no status */
+.agendada {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.status-dot.neutral {
+  background-color: #ccc;
+}
+
+.em_progresso {
+  background: #fff4e6;
+  color: #d97706;
+  border: 1px solid #facc15;
+  animation: pulse 1.5s infinite;
+}
+
+.status-dot.progress {
+  background-color: #facc15;
+  animation: blink 1s infinite;
+}
+
+.completada {
+  background: #e6ffed;
+  color: #047857;
+  border: 1px solid #34d399;
+}
+
+.status-dot.done {
+  background-color: #34d399;
+}
+
+/* animações */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
 
 @media (min-width: 1000px) and (max-width: 1400px) {
   .card_partida {

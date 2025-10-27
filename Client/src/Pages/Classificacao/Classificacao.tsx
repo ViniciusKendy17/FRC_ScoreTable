@@ -1,4 +1,4 @@
-import Footer from '../../Components/Footer';
+ import Footer from '../../Components/Footer';
 import GridTable from '../../Components/GridTable';
 import Header from '../../Components/HeaderPages';
 import styles from '../../styles/Classificacao.module.css';

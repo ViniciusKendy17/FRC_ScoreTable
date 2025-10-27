@@ -41,14 +41,33 @@ export default function PartidaCard({
           <h3>
             Partida {partida.tipo_partida} #{partida.numero_partida}
           </h3>
-          <h4>
-            Status:{" "}
-            {partida.status == "em_progresso" ? "Em analise" : partida.status}
+          <h4 className={`status ${partida.status}`}>
+            {partida.status === "agendada" && (
+              <>
+                <span className="status-dot neutral"></span>
+                <span>Agendada</span>
+              </>
+            )}
+            {partida.status === "em_progresso" && (
+              <>
+                <span className="status-dot progress"></span>
+                <span>Em Progresso</span>
+              </>
+            )}
+            {partida.status === "completada" && (
+              <>
+                <span className="status-dot done"></span>
+                <span>Completada</span>
+              </>
+            )}
           </h4>
 
           {user == "fta" && (
             <div className="button-group">
-              <button className="edit-btn" onClick={() => nav("")}>
+              <button
+                className="edit-btn"
+                onClick={() => nav(`/partida/edit/${partida.id}`)}
+              >
                 <FaPen className="edit-icon" />
               </button>
               <button
@@ -73,37 +92,32 @@ export default function PartidaCard({
             </button>
           )}
 
-          <button
-            id="placar-btn"
-            className="btnss"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              nav(`/partida/${partida.id}/placar`);
-            }}
-          >
-            <FaCalendarAlt className="btn-icon" />
-            <span>PLACAR</span>
-          </button>
+          {user == "fta" && (
+            <button
+              id="placar-btn"
+              className="btnss"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                nav(`/partida/${partida.id}/placar`);
+              }}
+            >
+              <FaCalendarAlt className="btn-icon" />
+              <span>PLACAR</span>
+            </button>
+          )}
 
           <button
             id="pont"
             disabled={
-              (partida.status == "em_progresso" ||
-                partida.status == "finalizada") &&
+              (partida.status == "agendada" ||
+                partida.status == "completada") &&
               user != "fta"
                 ? true
                 : false
             }
             className="btnss"
             onClick={() => {
-              if (partida.status == "finalizada") {
-                toast.warn(
-                  "Partidas finalizadas não podem ser mais acessadas",
-                  toast_pro
-                );
-                return;
-              }
               nav(`/partida/${partida.id}/aliancas`);
             }}
             type="button"

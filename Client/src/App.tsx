@@ -8,17 +8,16 @@ import Home from "./Pages/Juiz/Home";
 import Pontuacao from "./Pages/Juiz/Pontuacao";
 import { ToastContainer } from "react-toastify";
 import FormPartida from "./Pages/FormPartida";
-import TesteJuiz from "./Pages/TesteJuiz";
 import Classificacao from "./Pages/Classificacao/Classificacao";
 import Login from "./Pages/Login/Login";
 import Resumo from "./Pages/ResumoPartida/Resumo";
+import Edicao from "./Pages/Edicao/Edicao";
 function App() {
   return (
     <>
       <ToastContainer />
       <BrowserRouter>
         <Routes>
-          <Route path="/game" element={<TesteJuiz />} />
           <Route path="/" element={<Home />} />
           <Route path="/classificacao" element={<Classificacao />} />
           <Route path="/qualificatoria/:id" element={<Qualificatoria />} />
@@ -26,6 +25,7 @@ function App() {
           <Route path="/partida/:id/placar" element={<Partida />} />
           <Route path="/partida/:id/aliancas" element={<Pontuacao />} />
           <Route path="/partida/nova" element={<FormPartida />} />
+          <Route path="/partida/edit/:id" element={<Edicao />} />
           <Route path="/qualificatoria" element={<Qualificatoria />} />
           <Route path="/resultado/:id" element={<Resultado />} />
           <Route path="/login" element={<Login />} />

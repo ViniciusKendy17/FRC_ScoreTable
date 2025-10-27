@@ -16,6 +16,7 @@ export default function Pontuacao() {
   const [sc, SetSc] = useState<any>(null);
 
   const nav = useNavigate();
+  const [numero_partida, SetPartida] = useState();
 
   const [aliancas, SetAliancas] = useState<Aliança[] | null>([]);
   const [alianca, setAlianca] = useState<"vermelho" | "azul">("vermelho");
@@ -34,10 +35,16 @@ export default function Pontuacao() {
       pre_historico: 0,
       saida: 0,
       estacionar_poco: 0,
+      estacionar_poco_au: 0,
+      sitio: 0,
       falta_branca: 0,
       falta_estacionar: 0,
       falta_prh: 0,
       falta_transp: 0,
+      au_idade_media: 0,
+      op_idade_media: 0,
+      op_pre_historico: 0,
+      au_pre_historico: 0,
     })),
     azul: elements.map((el) => ({
       id: Number(el.id),
@@ -48,12 +55,29 @@ export default function Pontuacao() {
       pre_historico: 0,
       saida: 0,
       estacionar_poco: 0,
+      estacionar_poco_au: 0,
+      sitio: 0,
       falta_branca: 0,
       falta_estacionar: 0,
       falta_prh: 0,
       falta_transp: 0,
+      au_idade_media: 0,
+      op_idade_media: 0,
+      op_pre_historico: 0,
+      au_pre_historico: 0,
     })),
   });
+
+  async function GetMatchInfo() {
+    const data = await PartidaService.GetMatchInfo(Number(id));
+
+    SetPartida(data?.match_info.numero_partida);
+
+  }
+
+  useEffect(() => {
+    GetMatchInfo()
+  }, []);
 
   useEffect(() => {
     const socket = io("http://192.168.0.100:3001", {
@@ -90,21 +114,25 @@ export default function Pontuacao() {
       const el = elements.find((e) => Number(e.id) === s.id);
       if (!el || !el.pontos) return acc;
 
-      const autoPoints =
-        s.auto *
-        ((el.pontos.au_idade_media ?? 0) +
-          (el.pontos.au_pre_historico ?? 0) +
-          (el.pontos.au_estacionar ?? 0));
+      const idade_media_au = s.au_idade_media * (el.pontos.au_idade_media ?? 0);
+      const pre_historico_au =
+        s.au_pre_historico * (el.pontos.au_pre_historico ?? 0);
 
-      const teleopPoints =
-        s.teleop *
-        ((el.pontos.op_idade_media ?? 0) + (el.pontos.op_pre_historico ?? 0));
+      const idade_media = s.op_idade_media * (el.pontos.op_idade_media ?? 0);
+      const pre_historico =
+        s.op_pre_historico * (el.pontos.op_pre_historico ?? 0);
+
+      const autoPoints = idade_media_au + pre_historico_au;
+      const teleopPoints = idade_media + pre_historico;
 
       const estacionar_poco =
         s.estacionar_poco * (el.pontos.estacionar_poco ?? 0);
+      const sitio = s.sitio * (el.pontos.estacionar ?? 0);
+      const estacionar_poco_au =
+        s.estacionar_poco_au * (el.pontos.au_estacionar ?? 0);
 
-      const endgamePoints =
-        s.endgame * (el.pontos.estacionar ?? 0) + estacionar_poco;
+      const endgamePoints = estacionar_poco_au + sitio + estacionar_poco;
+
       const saidaPoints = s.saida * (el.pontos.sair ?? 0);
 
       return acc + autoPoints + teleopPoints + endgamePoints + saidaPoints;
@@ -133,21 +161,23 @@ export default function Pontuacao() {
         if (!el) return acc;
 
         // conta quantos "idade_media" foram pontuados
-        const qtd_auto = s.auto > 0 && el.pontos?.au_idade_media ? s.auto : 0;
-        const qtd_teleop =
-          s.teleop > 0 && el.pontos?.op_idade_media ? s.teleop : 0;
+        const qtd_auto = s.au_idade_media ? s.au_idade_media : 0;
+        const qtd_teleop = s.op_idade_media ? s.op_idade_media : 0;
         return acc + qtd_auto + qtd_teleop;
       }, 0);
 
       const quantidade_pre_historico = updated[alianca].reduce((acc, s) => {
         const el = elements.find((e) => Number(e.id) === s.id);
+
         if (!el) return acc;
 
-        const qtd_auto = s.auto > 0 && el.pontos?.au_pre_historico ? s.auto : 0;
-        const qtd_teleop =
-          s.teleop > 0 && el.pontos?.op_pre_historico ? s.teleop : 0;
-        return acc + qtd_auto + qtd_teleop;
+        const qtd_auto = s.au_pre_historico ? s.au_pre_historico : 0;
+        const qtd_tele = s.op_pre_historico ? s.op_pre_historico : 0;
+
+        return acc + qtd_auto + qtd_tele;
       }, 0);
+
+      console.log(quantidade_pre_historico);
 
       sc.emit("update_alliance_score", {
         alliance: alianca,
@@ -182,10 +212,16 @@ export default function Pontuacao() {
         pre_historico: 0,
         saida: 0,
         estacionar_poco: 0,
+        estacionar_poco_au: 0,
+        sitio: 0,
         falta_branca: 0,
         falta_estacionar: 0,
         falta_prh: 0,
         falta_transp: 0,
+        au_idade_media: 0,
+        op_idade_media: 0,
+        op_pre_historico: 0,
+        au_pre_historico: 0,
       })),
       azul: elements.map((el) => ({
         id: Number(el.id),
@@ -196,10 +232,16 @@ export default function Pontuacao() {
         pre_historico: 0,
         saida: 0,
         estacionar_poco: 0,
+        estacionar_poco_au: 0,
+        sitio: 0,
         falta_branca: 0,
         falta_estacionar: 0,
         falta_prh: 0,
         falta_transp: 0,
+        au_idade_media: 0,
+        op_idade_media: 0,
+        op_pre_historico: 0,
+        au_pre_historico: 0,
       })),
     });
 
@@ -239,23 +281,23 @@ export default function Pontuacao() {
       const el = elementos.find((e) => Number(e.id) === sc.id);
       if (!el || !el.pontos) return;
 
-      const idade_media_au = sc.auto * (el.pontos.au_idade_media ?? 0);
-      const idade_media_teleop = sc.teleop * (el.pontos.op_idade_media ?? 0);
+      const idade_media_au =
+        sc.au_idade_media * (el.pontos.au_idade_media ?? 0);
+      const idade_media_teleop =
+        sc.op_idade_media * (el.pontos.op_idade_media ?? 0);
 
-      const pre_au = sc.auto * (el.pontos.au_pre_historico ?? 0);
-      const pre_teleop = sc.teleop * (el.pontos.op_pre_historico ?? 0);
+      const pre_au = sc.au_pre_historico * (el.pontos.au_pre_historico ?? 0);
+      const pre_teleop =
+        sc.op_pre_historico * (el.pontos.op_pre_historico ?? 0);
 
-      const au_estacionar = sc.auto * (el.pontos.au_estacionar ?? 0);
+      const au_estacionar =
+        sc.estacionar_poco_au * (el.pontos.au_estacionar ?? 0);
 
       //Autonomo
-      final_score.auto_pontos +=
-        sc.auto *
-        ((el.pontos.au_idade_media ?? 0) + (el.pontos.au_pre_historico ?? 0));
+      final_score.auto_pontos += idade_media_au + pre_au;
 
       //Teleoperado
-      final_score.teleop_pontos +=
-        sc.teleop *
-        ((el.pontos.op_idade_media ?? 0) + (el.pontos.op_pre_historico ?? 0));
+      final_score.teleop_pontos += idade_media_teleop + pre_teleop;
 
       //Estacionar poco + calculo de RP
       const estacionar_poco =
@@ -265,7 +307,7 @@ export default function Pontuacao() {
       }
 
       final_score.estacionar +=
-        sc.endgame * (el.pontos.estacionar ?? 0) +
+        sc.sitio * (el.pontos.estacionar ?? 0) +
         estacionar_poco +
         au_estacionar;
 
@@ -273,7 +315,7 @@ export default function Pontuacao() {
       final_score.sair += sc.saida * (el.pontos.sair ?? 0);
 
       //Sitio
-      final_score.sitio += sc.endgame * (el.pontos.estacionar ?? 0);
+      final_score.sitio += sc.sitio * (el.pontos.estacionar ?? 0);
 
       //Poco estacionar autonomo
       final_score.poco_au += au_estacionar;
@@ -332,7 +374,7 @@ export default function Pontuacao() {
         <ToastContainer />
         <Header
           showpesquisa={false}
-          id_partida={Number(id)}
+          id_partida={Number(numero_partida)}
           pesquisa=""
           SetPesquisa=""
           title={""}

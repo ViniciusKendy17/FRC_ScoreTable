@@ -51,6 +51,8 @@ export type Equipe = {
   nome: string;
 };
 
+export type PartialAlianca = Pick<Aliança, "color" | "time1" | "time2">
+
 export type Toast = {
   message: string;
 };
@@ -59,7 +61,7 @@ export type Cor = "azul" | "vermelho";
 
 type Tipo_Partida = "qualificatorias" | "eliminatorias" | "treino";
 
-type Status = "agendada" | "em_progresso" | "finalizada";
+export type Status = "agendada" | "em_progresso" | "completada";
 
 type Vencedor = "azul" | "vermelho" | "empate" | "no";
 
