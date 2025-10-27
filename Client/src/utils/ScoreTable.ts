@@ -10,10 +10,16 @@ export type elements =
   | "pre_historico"
   | "saida"
   | "estacionar_poco"
+  | "estacionar_poco_au"
   | "falta_branca"
   | "falta_prh"
   | "falta_transp"
-  | "falta_estacionar";
+  | "falta_estacionar"
+  | "au_idade_media"
+  | "op_idade_media"
+  | "op_pre_historico"
+  | "au_pre_historico"
+  | "sitio";
 
 export type ValoresPontos = {
   au_idade_media: number;
@@ -43,10 +49,16 @@ export type Score = {
   pre_historico: number;
   saida: number;
   estacionar_poco: number;
+  estacionar_poco_au: number;
+  sitio: number;
   falta_branca: number;
+  falta_estacionar: number;
   falta_prh: number;
   falta_transp: number;
-  falta_estacionar: number;
+  au_idade_media: number;
+  op_idade_media: number;
+  op_pre_historico: number;
+  au_pre_historico: number;
 };
 
 export type GameElement = {

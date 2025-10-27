@@ -12,19 +12,21 @@ export default function ScoreCard({ element, score, onChange }: Props) {
   if (!pontos) return null;
 
   // calcula total baseado nos campos existentes
-  const total_card =
-    score.auto *
-      ((pontos.au_idade_media ?? 0) +
-        (pontos.au_pre_historico ?? 0) +
-        (pontos.au_estacionar ?? 0)) +
-    score.teleop *((pontos.op_idade_media ?? 0) + (pontos.op_pre_historico ?? 0)) +
-    score.endgame * (pontos.estacionar ?? 0) +
-    score.saida * (pontos.sair ?? 0) +
-    score.estacionar_poco * (pontos.estacionar_poco ?? 0) +
-    score.falta_branca * (pontos.falta_branca ?? 0) +
-    score.falta_estacionar * (pontos.falta_estacionar ?? 0) +
-    score.falta_prh * (pontos.falta_prh ?? 0) +
-    score.falta_transp * (pontos.falta_transp ?? 0);
+ const total_card =
+    (score.au_idade_media ?? 0) * (pontos.au_idade_media ?? 0) +
+    (score.au_pre_historico ?? 0) * (pontos.au_pre_historico ?? 0) +
+    (score.estacionar_poco_au ?? 0) * (pontos.au_estacionar ?? 0) +
+    (score.op_idade_media ?? 0) * (pontos.op_idade_media ?? 0) +
+    (score.op_pre_historico ?? 0) * (pontos.op_pre_historico ?? 0) +
+    (score.estacionar_poco ?? 0) * (pontos.estacionar_poco ?? 0) +
+    (score.estacionar_poco_au ?? 0) * (pontos.au_estacionar ?? 0) +
+    (score.sitio ?? 0) * (pontos.estacionar ?? 0) +
+    (score.endgame ?? 0) * (pontos.estacionar ?? 0) +
+    (score.saida ?? 0) * (pontos.sair ?? 0) +
+    (score.falta_branca ?? 0) * (pontos.falta_branca ?? 0) +
+    (score.falta_estacionar ?? 0) * (pontos.falta_estacionar ?? 0) +
+    (score.falta_prh ?? 0) * (pontos.falta_prh ?? 0) +
+    (score.falta_transp ?? 0) * (pontos.falta_transp ?? 0);
 
   return (
     <div className="score-card" style={{ borderColor: cor }}>
@@ -35,7 +37,7 @@ export default function ScoreCard({ element, score, onChange }: Props) {
 
       <div className="score-body">
         {/* AUTÔNOMO */}
-        {(pontos.au_idade_media !== undefined ||
+        {/* {(pontos.au_idade_media !== undefined ||
           pontos.au_pre_historico !== undefined ||
           pontos.au_estacionar !== undefined) && (
           <div className="phase">
@@ -52,10 +54,10 @@ export default function ScoreCard({ element, score, onChange }: Props) {
               </button>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* TELEOPERADO */}
-        {(pontos.op_idade_media !== undefined ||
+        {/* {(pontos.op_idade_media !== undefined ||
           pontos.op_pre_historico !== undefined) && (
           <div className="phase">
             <span>Teleoperado</span>
@@ -73,10 +75,10 @@ export default function ScoreCard({ element, score, onChange }: Props) {
               </button>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* ENDGAME */}
-        {pontos.estacionar !== undefined && (
+        {/* {pontos.estacionar !== undefined && (
           <div className="phase">
             <span>End Game</span>
             <div className="buttons">
@@ -93,8 +95,144 @@ export default function ScoreCard({ element, score, onChange }: Props) {
               </button>
             </div>
           </div>
+        )} */}
+
+        {/* Autonomo Idade Média */}
+        {pontos.au_idade_media !== undefined && (
+          <div className="phase">
+            <span>Autonomo</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange(
+                    "au_idade_media",
+                    Math.max(0, score.au_idade_media - 1)
+                  )
+                }
+              >
+                −
+              </button>
+              <span>{score.au_idade_media}</span>
+              <button
+                onClick={() =>
+                  onChange("au_idade_media", score.au_idade_media + 1)
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
         )}
 
+        {/* Teleop Idade Média */}
+        {pontos.op_idade_media !== undefined && (
+          <div className="phase">
+            <span>Teleop</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange(
+                    "op_idade_media",
+                    Math.max(0, score.op_idade_media - 1)
+                  )
+                }
+              >
+                −
+              </button>
+              <span>{score.op_idade_media}</span>
+              <button
+                onClick={() =>
+                  onChange("op_idade_media", score.op_idade_media + 1)
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Autonomo Pre historico */}
+        {pontos.au_pre_historico !== undefined && (
+          <div className="phase">
+            <span>Autonomo</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange(
+                    "au_pre_historico",
+                    Math.max(0, score.au_pre_historico - 1)
+                  )
+                }
+              >
+                −
+              </button>
+              <span>{score.au_pre_historico}</span>
+              <button
+                onClick={() =>
+                  onChange("au_pre_historico", score.au_pre_historico + 1)
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Teleop Pre Historico */}
+        {pontos.op_pre_historico !== undefined && (
+          <div className="phase">
+            <span>Teleop</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange(
+                    "op_pre_historico",
+                    Math.max(0, score.op_pre_historico - 1)
+                  )
+                }
+              >
+                −
+              </button>
+              <span>{score.op_pre_historico}</span>
+              <button
+                onClick={() =>
+                  onChange("op_pre_historico", score.op_pre_historico + 1)
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Estacionar POÇO auto */}
+        {pontos.au_estacionar !== undefined && (
+          <div className="phase">
+            <span>Estacionar Poço ({pontos.au_estacionar} pts/unidade)</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange(
+                    "estacionar_poco_au",
+                    Math.max(0, score.estacionar_poco_au - 1)
+                  )
+                }
+              >
+                −
+              </button>
+              <span>{score.estacionar_poco_au}</span>
+              <button
+                onClick={() =>
+                  onChange("estacionar_poco_au", score.estacionar_poco_au + 1)
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Estacionar POÇO teleop */}
         {pontos.estacionar_poco !== undefined && (
           <div className="phase">
             <span>Estacionar Poço ({pontos.estacionar_poco} pts/unidade)</span>
@@ -121,7 +259,34 @@ export default function ScoreCard({ element, score, onChange }: Props) {
           </div>
         )}
 
-        {/*  */}
+         {/* Estacionar SITIO */}
+        {pontos.estacionar !== undefined && (
+          <div className="phase">
+            <span>Sitio ({pontos.estacionar} pts/unidade)</span>
+            <div className="buttons">
+              <button
+                onClick={() =>
+                  onChange(
+                    "sitio",
+                    Math.max(0, score.sitio - 1)
+                  )
+                }
+              >
+                −
+              </button>
+              <span>{score.sitio}</span>
+              <button
+                onClick={() =>
+                  onChange("sitio", score.sitio + 1)
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* FALTA BRANCA */}
         {pontos.falta_branca !== undefined && (
           <div className="phase">
             <span>Falta</span>

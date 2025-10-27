@@ -10,11 +10,6 @@ import { use, useEffect, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 
-// type Score = {
-//   azul: number;
-//   vermelho: number;
-// };
-
 type Score = {
   azul: { total: number; idade_media: number; pre: number };
   vermelho: { total: number; idade_media: number; pre: number };
@@ -72,7 +67,7 @@ export default function Partida() {
 
   useEffect(() => {
     // Cria a conexão apenas uma vez
-    socketRef.current = io("http://192.168.0.104:3001", {
+    socketRef.current = io("http://192.168.1.4:3001", {
       transports: ["websocket", "polling"],
     });
 
