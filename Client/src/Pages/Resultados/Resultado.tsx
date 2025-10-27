@@ -174,7 +174,7 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
             alignItems: "center",
           }}
         >
-        {renderWinnerImages("azul")}
+        {renderWinnerImages("vermelho")}
         </div>
 
         {data
@@ -212,8 +212,8 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
               id={id}
               alt="Ranking Points"
               style={{
-                width: "80px",
-                height: "80px",
+                width: "100px",
+                height: "100px",
                 aspectRatio: "260 / 260",
               }}
               pasta="rankingpoints"
@@ -310,8 +310,8 @@ const renderWinnerImages = (color: "vermelho" | "azul") => {
               id={id}
               alt="Ranking Points"
               style={{
-                width: "80px",
-                height: "80px",
+                width: "100px",
+                height: "100px",
                 aspectRatio: "260 / 260",
               }}
               pasta="rankingpoints"

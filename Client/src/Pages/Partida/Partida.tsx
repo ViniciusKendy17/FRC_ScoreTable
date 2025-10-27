@@ -189,7 +189,7 @@ export default function Partida() {
         scoreLeft={scores.vermelho.total}
         scoreRight={scores.azul.total}
         variant="partida"
-        time="1:35"
+        time={formattedTime}
       />
 
       <div className={styles.equipesBlue}>

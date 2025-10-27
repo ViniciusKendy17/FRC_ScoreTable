@@ -197,11 +197,11 @@ header{
 /* ============================================= */
 @media (max-width: 1300px) {
   .equipesRed {
-    transform: scale(0.6) translateX(10%) translateY(-20%);
+    transform: scale(0.6) translateX(10%) translateY(-15%);
   }
 
   .equipesBlue {
-    transform: scale(0.6) translateX(-102%) translateY(-20%);
+    transform: scale(0.6) translateX(-102%) translateY(-15%);
   }
 
   .placarContainer {
@@ -220,6 +220,13 @@ header{
   .box {
     width: 440px;
   }
+
+.rankingPoints {
+  width: 35rem;
+  max-width: 100%;
+  aspect-ratio: 1223 / 166;
+}
+
 }
 
 /* ============================================= */
