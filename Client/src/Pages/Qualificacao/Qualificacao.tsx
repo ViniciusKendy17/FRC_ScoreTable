@@ -34,7 +34,7 @@ interface RankingInfo {
 
 export default function Qualificacao() {
   const { id } = useParams<{ id: string }>();
-  const endpoint = "http://192.168.0.100:3000/frc/";
+  const endpoint = "http://192.168.0.104:3000/frc/";
   const [data, setData] = useState<Alianca[]>([]);
   const [loading, setLoading] = useState(true);
   const [nome, setNome] = useState<TeamInfo[]>([]);

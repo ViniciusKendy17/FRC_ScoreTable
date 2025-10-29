@@ -18,10 +18,9 @@ type Equipe = {
 type EquipeComPosicao = Equipe & { posicao: number };
 
 export default function Classificacao() {
-  const endpoint = 'http://192.168.0.100:3000/frc/';
+  const endpoint = 'http://192.168.0.104:3000/frc/';
   const [rankingData, setRankingData] = useState<EquipeComPosicao[]>([]);
 
-  // 🔹 Função principal de ordenação com critérios múltiplos
   const calcularRanking = (equipes: Equipe[]) => {
     const ordenado = [...equipes].sort((a, b) => {
       const rpA = Number(a.total_rp);

@@ -174,7 +174,10 @@ export default function Pontuacao() {
         final_score.rp_estacionar = 1;
       }
 
-      final_score.estacionar += sc.sitio * (el.pontos.estacionar ?? 0) + estacionar_poco + au_estacionar;
+      final_score.estacionar +=
+        sc.sitio * (el.pontos.estacionar ?? 0) +
+        estacionar_poco +
+        au_estacionar;
 
       //Sair no autonomo
       final_score.sair += sc.saida * (el.pontos.sair ?? 0);
@@ -230,24 +233,6 @@ export default function Pontuacao() {
   async function EndJudgeMatch() {
     const vermelho = GetFinalScore("vermelho", scores, elements);
     const azul = GetFinalScore("azul", scores, elements);
-
-    // const vermelhoFinal = {
-    //   ...vermelho,
-    //   falta_branca: azul.falta_branca,
-    //   falta_prh: azul.falta_prh,
-    //   falta_transp: azul.falta_transp,
-    //   falta_estacionar: azul.falta_estacionar,
-    //   faltas_pontos: azul.faltas_pontos,
-    // };
-
-    // const azulFinal = {
-    //   ...azul,
-    //   falta_branca: vermelho.falta_branca,
-    //   falta_prh: vermelho.falta_prh,
-    //   falta_transp: vermelho.falta_transp,
-    //   falta_estacionar: vermelho.falta_estacionar,
-    //   faltas_pontos: vermelho.faltas_pontos,
-    // };
 
     const data = await PartidaService.EndMatch(Number(id), {
       aliancas: [vermelho, azul],
