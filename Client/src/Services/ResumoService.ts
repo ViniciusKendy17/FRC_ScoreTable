@@ -20,6 +20,8 @@ export function inflateScoresFromFinal(
       sitio: Math.floor((finalPontos.sitio ?? 0) / (pts.estacionar ?? 1)),
       falta_branca: Math.floor((finalPontos.falta_branca ?? 0) / (pts.falta_branca ?? 1)),
       falta_estacionar: Math.floor((finalPontos.falta_estacionar ?? 0) / (pts.falta_estacionar ?? 1)),
+      falta_grave: Math.floor((finalPontos.falta_grave ?? 0) / (pts.falta_grave ?? 1)),
+      falta_leve: Math.floor((finalPontos.falta_leve ?? 0) / (pts.falta_leve ?? 1)),
       falta_prh: Math.floor((finalPontos.falta_prh ?? 0) / (pts.falta_prh ?? 1)),
       falta_transp: Math.floor((finalPontos.falta_transp ?? 0) / (pts.falta_transp ?? 1)),
       au_idade_media: Math.floor((finalPontos.idade_media_au ?? 0) / (pts.au_idade_media ?? 1)),

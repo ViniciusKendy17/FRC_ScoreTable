@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 export default function Edicao() {
   const [opcoesTimes, SetTimes] = useState<Equipe[] | null>([]);
   const [status, SetStatus] = useState<Status>("agendada");
+  
 
   const { id } = useParams();
 

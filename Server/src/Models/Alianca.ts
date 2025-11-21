@@ -23,6 +23,8 @@ export type Alianca = {
   falta_prh: number;
   falta_transp: number;
   falta_estacionar: number;
+  falta_grave:number,
+  falta_leve: number
 };
 
 export type ALiancaParcial = Pick<Alianca, "color" | "time1" | "time2">;

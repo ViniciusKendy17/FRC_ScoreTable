@@ -28,6 +28,8 @@ export type Aliança = {
   falta_prh: number;
   falta_transp: number;
   falta_estacionar: number;
+  falta_grave: number,
+  falta_leve: number,
   faltas_pontos: number;
   rp_auto: number;
   rp_estacionar: number;
@@ -78,6 +80,8 @@ export type FinalPontos = {
   falta_transp?: number;
   falta_prh?: number;
   falta_branca?: number;
+  falta_leve?: number,
+  falta_grave?: number,
   pre_historico_au?: number;
   idade_media_au?: number;
   poco_au?: number;

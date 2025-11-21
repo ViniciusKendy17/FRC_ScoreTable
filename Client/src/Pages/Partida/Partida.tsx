@@ -36,6 +36,10 @@ export default function Partida() {
   const [startSoundPlayed, setStartSoundPlayed] = useState(false);
   const [buzzerPlayed, setBuzzerPlayed] = useState(false);
   const [warningPlayed, setWarningPlayed] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [tipo_partida,SetTipo] = useState()
+
+
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
@@ -70,7 +74,7 @@ export default function Partida() {
 
   useEffect(() => {
     // Cria a conexão apenas uma vez
-    socketRef.current = io("http://192.168.0.104:3001", {
+    socketRef.current = io("http://10.100.10.58:3001", {
       transports: ["websocket", "polling"],
     });
 
@@ -134,9 +138,11 @@ export default function Partida() {
     // Quando o TELEOP termina
     if (phase === "teleop" && timeLeft === 0 && !buzzerPlayed) {
       playSound("end.wav", 1.0);
-      setPhase("done");
       setIsActive(false);
       setBuzzerPlayed(true);
+      setPhase("done");
+
+      
     }
 
     return () => {
@@ -174,13 +180,23 @@ export default function Partida() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigate, phase, isActive, id]);
 
+  useEffect(() => {
+    if (phase === "done") {
+      setTimeout(() => {
+        setShowOverlay(true)
+        console.log(phase)
+      },2500)
+    }
+  }, [phase]);
+
+
   return (
     <div className={styles.container}>
       {isLoading ? (
         <p>Carregando placar...</p>
       ) : (
         <>
-          <Header title={`Partida ${matchNum ?? ""}`} />
+          <Header title={`Partida eliminatórias  ${matchNum ?? ""}`} />
 
           <div className={styles.equipesRed}>
             <PointsBox colorClass="red" pointsText={scores.vermelho.pre} />
@@ -216,6 +232,7 @@ export default function Partida() {
           <Footer text="FRC Score Table" />
         </>
       )}
+      {showOverlay && <div className={styles.overlay}></div>}
     </div>
   );
 }

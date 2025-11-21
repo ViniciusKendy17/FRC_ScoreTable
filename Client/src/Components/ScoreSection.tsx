@@ -25,7 +25,9 @@ export default function ScoreCard({ element, score, onChange }: Props) {
     (score.falta_branca ?? 0) * (pontos.falta_branca ?? 0) +
     (score.falta_estacionar ?? 0) * (pontos.falta_estacionar ?? 0) +
     (score.falta_prh ?? 0) * (pontos.falta_prh ?? 0) +
-    (score.falta_transp ?? 0) * (pontos.falta_transp ?? 0);
+    (score.falta_transp ?? 0) * (pontos.falta_transp ?? 0) + 
+    (score.falta_grave ?? 0) * (pontos.falta_grave ?? 0) + 
+    (score.falta_leve ?? 0) * (pontos.falta_leve ?? 0);
 
   return (
     <div className="score-card" style={{ borderColor: cor }}>
@@ -146,7 +148,7 @@ export default function ScoreCard({ element, score, onChange }: Props) {
         {/* Estacionar POÇO auto */}
         {pontos.au_estacionar !== undefined && (
           <div className="phase">
-            <span>Estacionar Poço ({pontos.au_estacionar} pts/unidade)</span>
+            <span>Autonomo</span>
             <div className="buttons">
               <button
                 onClick={() =>
@@ -173,7 +175,7 @@ export default function ScoreCard({ element, score, onChange }: Props) {
         {/* Estacionar POÇO teleop */}
         {pontos.estacionar_poco !== undefined && (
           <div className="phase">
-            <span>Estacionar Poço ({pontos.estacionar_poco} pts/unidade)</span>
+            <span>Teleop</span>
             <div className="buttons">
               <button
                 onClick={() =>
@@ -320,6 +322,42 @@ export default function ScoreCard({ element, score, onChange }: Props) {
               </button>
               <span>{score.saida}</span>
               <button onClick={() => onChange("saida", score.saida + 1)}>
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+          {/* FALTA GRAVE */}
+        {pontos.falta_grave !== undefined && (
+          <div className="phase">
+            <span>Falta grave </span>
+            <div className="buttons">
+              <button
+                onClick={() => onChange("falta_grave", Math.max(0, score.falta_grave - 1))}
+              >
+                −
+              </button>
+              <span>{score.falta_grave}</span>
+              <button onClick={() => onChange("falta_grave", score.falta_grave + 1)}>
+                +
+              </button>
+            </div>
+          </div>
+        )}
+
+          {/* FALTA LEVE */}
+        {pontos.falta_leve !== undefined && (
+          <div className="phase">
+            <span>Falta leve </span>
+            <div className="buttons">
+              <button
+                onClick={() => onChange("falta_leve", Math.max(0, score.falta_leve - 1))}
+              >
+                −
+              </button>
+              <span>{score.falta_leve}</span>
+              <button onClick={() => onChange("falta_leve", score.falta_leve + 1)}>
                 +
               </button>
             </div>

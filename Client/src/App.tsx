@@ -12,6 +12,7 @@ import Classificacao from "./Pages/Classificacao/Classificacao";
 import Login from "./Pages/Login/Login";
 import Resumo from "./Pages/ResumoPartida/Resumo";
 import Edicao from "./Pages/Edicao/Edicao";
+import Evento from "./Pages/Evento";
 function App() {
   return (
     <>
@@ -19,6 +20,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/evento" element={<Evento />} />
           <Route path="/classificacao" element={<Classificacao />} />
           <Route path="/qualificatoria/:id" element={<Qualificatoria />} />
           <Route path="/resultado" element={<Resultado />} />

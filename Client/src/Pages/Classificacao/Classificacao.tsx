@@ -1,4 +1,5 @@
- import Footer from '../../Components/Footer';
+ import { useNavigate } from 'react-router-dom';
+import Footer from '../../Components/Footer';
 import GridTable from '../../Components/GridTable';
 import Header from '../../Components/HeaderPages';
 import styles from '../../styles/Classificacao.module.css';
@@ -18,8 +19,9 @@ type Equipe = {
 type EquipeComPosicao = Equipe & { posicao: number };
 
 export default function Classificacao() {
-  const endpoint = 'http://192.168.0.104:3000/frc/';
+  const endpoint = 'http://10.100.10.58:3000/frc/';
   const [rankingData, setRankingData] = useState<EquipeComPosicao[]>([]);
+  const navigate = useNavigate()
 
   const calcularRanking = (equipes: Equipe[]) => {
     const ordenado = [...equipes].sort((a, b) => {
@@ -69,6 +71,25 @@ export default function Classificacao() {
   useEffect(() => {
     getRanking();
   }, []);
+
+    useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() === "h") {
+        event.preventDefault(); // evita scroll da página
+        console.log(event.key);
+        navigate("/");
+      }
+
+      // if(event.key.toLowerCase() == "r"){
+      //   event.preventDefault()
+      //   navigate(`/classificacao`)
+      // }
+
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigate]);
 
   return (
     <div className={styles.container}>

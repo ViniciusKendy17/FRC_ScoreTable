@@ -38,6 +38,7 @@ export async function GetMatchInfo(req: Request, res: Response) {
       },
       select: {
         numero_partida: true,
+        tipo_partida: true,
       },
     }),
     await prisma.alianca.findMany({
@@ -209,6 +210,8 @@ export async function EndJudgeScores(req: Request, res: Response) {
       falta_estacionar: alianca.falta_estacionar,
       falta_prh: alianca.falta_prh,
       falta_transp: alianca.falta_transp,
+      falta_grave: alianca.falta_grave,
+      falta_leve: alianca.falta_leve,
       idade_media: alianca.idade_media,
       pre_historico: alianca.pre_historico,
       idade_media_au: alianca.idade_media_au,
@@ -275,6 +278,8 @@ export async function EndMatch(req: Request, res: Response) {
           falta_estacionar: ali.falta_estacionar,
           falta_prh: ali.falta_prh,
           falta_transp: ali.falta_transp,
+          falta_grave: ali.falta_grave,
+          falta_leve: ali.falta_leve,
           sitio: ali.sitio,
           poco_au: ali.poco_au,
           poco_endgame: ali.poco_endgame,

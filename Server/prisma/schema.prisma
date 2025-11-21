@@ -33,9 +33,11 @@ model alianca {
   poco_au                             Int
   poco_endgame                        Int
   sitio                               Int
-  partida_alianca_partida_idTopartida partida?       @relation("alianca_partida_idTopartida", fields: [partida_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "partida_id")
-  equipe_alianca_time1Toequipe        equipe         @relation("alianca_time1Toequipe", fields: [time1], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time1")
-  equipe_alianca_time2Toequipe        equipe         @relation("alianca_time2Toequipe", fields: [time2], references: [numero_equipe], onDelete: NoAction, onUpdate: NoAction, map: "time2")
+  falta_grave                         Int
+  falta_leve                          Int
+  partida_alianca_partida_idTopartida partida?       @relation("alianca_partida_idTopartida", fields: [partida_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "partida_id")
+  equipe_alianca_time1Toequipe        equipe         @relation("alianca_time1Toequipe", fields: [time1], references: [numero_equipe], onUpdate: Restrict, map: "time1")
+  equipe_alianca_time2Toequipe        equipe         @relation("alianca_time2Toequipe", fields: [time2], references: [numero_equipe], onUpdate: Restrict, map: "time2")
 
   @@index([time1], map: "time1_idx")
   @@index([time2], map: "time2_idx")
@@ -70,9 +72,9 @@ view ranking_view {
   partidas_jogadas BigInt   @default(0)
   ranking_score    Decimal? @db.Decimal(35, 2)
   match_score      Decimal? @db.Decimal(13, 2)
-  vitorias         Decimal? @db.Decimal(23, 0)
-  derrotas         Decimal? @db.Decimal(23, 0)
-  empates          Decimal? @db.Decimal(23, 0)
+  vitorias         Decimal? @db.Decimal(22, 0)
+  derrotas         Decimal? @db.Decimal(22, 0)
+  empates          Decimal? @db.Decimal(22, 0)
 }
 
 enum partida_status {

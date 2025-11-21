@@ -41,6 +41,8 @@ export default function Pontuacao() {
       falta_estacionar: 0,
       falta_prh: 0,
       falta_transp: 0,
+      falta_grave: 0,
+      falta_leve: 0,
       au_idade_media: 0,
       op_idade_media: 0,
       op_pre_historico: 0,
@@ -60,6 +62,8 @@ export default function Pontuacao() {
       falta_branca: 0,
       falta_estacionar: 0,
       falta_prh: 0,
+      falta_grave: 0,
+      falta_leve: 0,
       falta_transp: 0,
       au_idade_media: 0,
       op_idade_media: 0,
@@ -72,15 +76,14 @@ export default function Pontuacao() {
     const data = await PartidaService.GetMatchInfo(Number(id));
 
     SetPartida(data?.match_info.numero_partida);
-
   }
 
   useEffect(() => {
-    GetMatchInfo()
+    GetMatchInfo();
   }, []);
 
   useEffect(() => {
-    const socket = io("http://192.168.0.104:3001", {
+    const socket = io("http://10.100.10.58:3001", {
       transports: ["websocket", "polling"],
     });
     SetSc(socket);
@@ -179,6 +182,18 @@ export default function Pontuacao() {
 
       console.log(quantidade_pre_historico);
 
+      const isFoul =
+        field === "falta_branca" ||
+        field === "falta_estacionar" ||
+        field === "falta_prh" ||
+        field === "falta_transp" ||
+        field === "falta_leve" ||
+        field === "falta_grave";
+
+      if (isFoul) {
+        return updated;
+      }
+
       sc.emit("update_alliance_score", {
         alliance: alianca,
         total: alianca == "azul" ? totalAzul : totalVermelho,
@@ -222,6 +237,8 @@ export default function Pontuacao() {
         op_idade_media: 0,
         op_pre_historico: 0,
         au_pre_historico: 0,
+        falta_grave: 0,
+        falta_leve: 0,
       })),
       azul: elements.map((el) => ({
         id: Number(el.id),
@@ -242,6 +259,8 @@ export default function Pontuacao() {
         op_idade_media: 0,
         op_pre_historico: 0,
         au_pre_historico: 0,
+        falta_grave: 0,
+        falta_leve: 0,
       })),
     });
 
@@ -275,6 +294,8 @@ export default function Pontuacao() {
       falta_prh: 0,
       falta_transp: 0,
       falta_estacionar: 0,
+      falta_grave: 0,
+      falta_leve: 0,
     };
 
     pontos[cor].forEach((sc) => {
@@ -302,12 +323,11 @@ export default function Pontuacao() {
       //Estacionar poco + calculo de RP
       const estacionar_poco =
         sc.estacionar_poco * (el.pontos.estacionar_poco ?? 0);
-      if (estacionar_poco >= 6) {
+      if (estacionar_poco == 4) {
         final_score.rp_estacionar = 1;
       }
 
-      final_score.estacionar +=
-        sc.sitio * (el.pontos.estacionar ?? 0) +
+      final_score.estacionar +=sc.sitio * (el.pontos.estacionar ?? 0) +
         estacionar_poco +
         au_estacionar;
 
@@ -333,11 +353,16 @@ export default function Pontuacao() {
       final_score.falta_transp +=
         sc.falta_transp * (el.pontos.falta_transp ?? 0);
 
+      final_score.falta_leve += sc.falta_leve * (el.pontos.falta_leve ?? 0);
+      final_score.falta_grave += sc.falta_grave * (el.pontos.falta_grave ?? 0);
+
       final_score.faltas_pontos +=
         sc.falta_branca * (el.pontos.falta_branca ?? 0) +
         sc.falta_estacionar * (el.pontos.falta_estacionar ?? 0) +
         sc.falta_prh * (el.pontos.falta_prh ?? 0) +
-        sc.falta_transp * (el.pontos.falta_transp ?? 0);
+        sc.falta_transp * (el.pontos.falta_transp ?? 0) +
+        sc.falta_leve * (el.pontos.falta_leve ?? 0) +
+        sc.falta_grave * (el.pontos.falta_grave ?? 0);
 
       // Total idade media teleop e autonomo
       final_score.idade_media += idade_media_teleop;

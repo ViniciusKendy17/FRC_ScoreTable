@@ -32,7 +32,10 @@
 }
 
 .containerTable table {
-  width: 100%; /* 👈 faz a tabela ocupar toda a área disponível */
+  margin-top: -80px;
+  font-size: 30px;
+  width: 100%;
+  height: 500px; /* 👈 faz a tabela ocupar toda a área disponível */
   border-collapse: collapse;
   text-align: center;
 }

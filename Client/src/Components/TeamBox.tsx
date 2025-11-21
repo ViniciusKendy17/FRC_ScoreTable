@@ -2,7 +2,7 @@ import "../Styles/TeamBox.css";
 
 interface TeamBoxProps {
   color: "red" | "blue";
-  numbers: [number,  number];
+  numbers: [number,  number?];
   teamName: string;
   justifyNumbers?: "space-between" | "center";
   widthNumbers?: string;
@@ -16,15 +16,15 @@ export default function TeamBox({
   justifyNumbers = "space-between",
   variant = "qualificatoria",
   widthNumbers = variant === "resultado"
-    ? "clamp(550px, 25%, 450px)"
-    : "clamp(445px, 25%, 450px)",
+    ? "clamp(730px, 25%, 450px)"
+    : "clamp(570px, 25%, 450px)",
 }: TeamBoxProps) {
   // mapeia a variant para a classe correta
   const variantClass =
     variant === "resultado" ? "box-resultado" : "box-qualificatoria";
 
   return (
-    <div className={`box ${color} ${variantClass}`}>
+    <div className={`box ${color} ${variantClass}`} style={{marginTop:"1px"}}>
       {/* Linha dos números */}
       <div
         className="teamBox-numbers"
@@ -35,12 +35,12 @@ export default function TeamBox({
           {numbers[0]}
         </p>
 
-        <p className={`teamBoxTipografia teamBoxPosition-${variant}`}>
+        {/* <p className={`teamBoxTipografia teamBoxPosition-${variant}`}>
           {numbers[1]}
-        </p>
+        </p> */}
 
         {/* Número direito */}
-        {/* <p className="teamBoxTipografia">{numbers[1]}</p> */}
+        <p className="teamBoxTipografia">{numbers[1]}</p>
       </div>
 
       {/* Nome do time */}

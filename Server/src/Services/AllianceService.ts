@@ -41,6 +41,8 @@ export async function NewAliance(alianca: Alianca, match_id: number) {
       falta_estacionar: 0,
       falta_prh: 0,
       falta_transp: 0,
+      falta_grave: 0,
+      falta_leve: 0,
       partida_id: match_id,
     },
   });
@@ -48,14 +50,14 @@ export async function NewAliance(alianca: Alianca, match_id: number) {
 
 /**
  * @description Calcula o total de pontos de uma aliança, podendo ter ou não pontos de falta
- * @param ali 
- * @param falta 
- * @returns 
+ * @param ali
+ * @param falta
+ * @returns
  */
 export function CalcularTotal(ali: Alianca, ali_adv: Alianca, falta: boolean) {
-  const faltas_total = falta ?  CalcularFaltasTotal(ali_adv) : 0;
+  const faltas_total = falta ? CalcularFaltasTotal(ali_adv) : 0;
 
-  console.log(ali)
+  console.log(ali);
 
   return (
     ali.sair +
@@ -68,7 +70,12 @@ export function CalcularTotal(ali: Alianca, ali_adv: Alianca, falta: boolean) {
 
 export function CalcularFaltasTotal(ali: Alianca) {
   return (
-    ali.falta_branca + ali.falta_estacionar + ali.falta_prh + ali.falta_transp
+    ali.falta_branca +
+    ali.falta_estacionar +
+    ali.falta_prh +
+    ali.falta_transp +
+    ali.falta_leve +
+    ali.falta_grave
   );
 }
 

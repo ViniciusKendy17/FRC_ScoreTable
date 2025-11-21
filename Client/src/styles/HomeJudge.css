@@ -16,6 +16,12 @@
   justify-content: center;
 }
 
+#tipo{
+  position: absolute;
+  top: 23%;
+  left: 2%;
+}
+
 #out-partidas {
   margin-top: 150px;
   height: 80%;

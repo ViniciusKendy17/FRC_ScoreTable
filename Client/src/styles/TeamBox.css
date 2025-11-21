@@ -23,7 +23,7 @@
 }
 
 .box-resultado {
-  width: clamp(600px, 25vw, 450px);
+  width: clamp(800px, 25vw, 450px);
   max-width: 100%;
   aspect-ratio: 2961 / 548;
   background-size: cover;
@@ -35,8 +35,12 @@
 /* ================================ */
 /* 🔹 CORES DO FUNDO */
 /* ================================ */
-.red  { background-image: url("../assets/telaQualificacao/Ativo 1.png"); }
-.blue { background-image: url("../assets/telaQualificacao/Ativo 3.png"); }
+.red {
+  background-image: url("../assets/telaQualificacao/Ativo 1.png");
+}
+.blue {
+  background-image: url("../assets/telaQualificacao/Ativo 3.png");
+}
 
 /* ================================ */
 /* 🔹 TIPOGRAFIA E CONTEÚDO */
@@ -47,12 +51,14 @@
   font-style: italic;
   font-weight: 700;
   text-transform: uppercase;
+  font-size: 30px;
+  margin-top: 5px !important;
   margin: 0;
 }
 
 .teamBoxName {
   font-family: "NeoSansProBold", sans-serif;
-  font-size: 30px;
+  font-size: 45px;
   font-weight: 700;
   font-style: italic;
   text-transform: uppercase;
@@ -65,7 +71,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  
+  font-size: 50px;
 }
 
 .teamBox-nameContainer {
@@ -75,10 +81,27 @@
   margin-left: 25px;
 }
 
+.teamBoxPosition-qualificatoria {
+  font-size: 30px !important;
+}
+
+.tipografia-qualificatoria {
+  font-size: 30px;
+}
+
+.tipografia-resultado {
+  font-size: 50px;
+}
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ================================ */
@@ -97,7 +120,7 @@
   .teamBoxTipografia {
     transform: translateY(-6px);
     font-size: 35px;
-    margin-top: 20px
+    margin-top: 20px;
   }
 
   .teamBoxPosition-qualificatoria {
@@ -115,7 +138,6 @@
   .tipografia-resultado {
     transform: translateX(-10px) translateY(-11px);
   }
-
 }
 
 /* ================================ */
@@ -131,4 +153,3 @@
     transform: translateY(-15px);
   }
 }
-

@@ -111,7 +111,7 @@
 
 .tipografiaResultado {
   font-family: "NeoSansProBold", sans-serif;
-  font-size: clamp(20px, 3vw, 48px);
+  font-size: clamp(40px, 5%, 30px);
   color: black;
   text-align: center;
   text-transform: uppercase;
@@ -124,7 +124,7 @@
   grid-row: 2 / 3;
 
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -189,7 +189,7 @@ header{
   background-image: url("../assets/TelaResultados/Ativo 34.png");
   background-size: cover;
   background-position: center;
-  width: 25rem;
+  width: 35rem;
   max-width: 100%;
   aspect-ratio: 1223 / 166;
 }
@@ -265,17 +265,17 @@ header{
 /* ============================================= */
 @media (min-width: 1920px) {
   .container {
-    padding: 5vh 6vw;
+    /* padding: 5vh 6vw; */
   }
 
   .equipesRed,
   .equipesBlue {
-    transform: none;
+    transform: scale(0.6) translateY(-100%);
     gap: 3vh;
   }
 
   .placarContainer {
-    margin: 5vh 5vw;
+    /* margin: 5vh 5vw; */
   }
 
   .tipografiaPlacar {
@@ -291,6 +291,6 @@ header{
   }
 
   header{
-    max-width: 100%;
+    /* max-width: 100%; */
   }
 }

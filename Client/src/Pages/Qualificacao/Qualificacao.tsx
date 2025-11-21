@@ -5,6 +5,8 @@ import styles from "../../Styles/Qualificacao.module.css";
 import Placar from "../../Components/Placar";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import PartidaCard from "../../Components/PartidaCard";
+import { PartidaService } from "../../Services/PartidaService";
 
 interface Alianca {
   id: number;
@@ -34,13 +36,14 @@ interface RankingInfo {
 
 export default function Qualificacao() {
   const { id } = useParams<{ id: string }>();
-  const endpoint = "http://192.168.0.104:3000/frc/";
+  const endpoint = "http://10.100.10.58:3000/frc/";
   const [data, setData] = useState<Alianca[]>([]);
   const [loading, setLoading] = useState(true);
   const [nome, setNome] = useState<TeamInfo[]>([]);
   const [numero_partida, setNumeroPartida] = useState<number | null>(null);
   const [ranking, setRanking] = useState<RankingInfo[]>([]);
   const navigate = useNavigate();
+  const [tipo_partida, SetTipo] = useState();
 
   // 🔹 Função para ordenar o ranking com critérios múltiplos
   const calcularRanking = (equipes: RankingInfo[]) => {
@@ -109,6 +112,18 @@ export default function Qualificacao() {
     }
   };
 
+  async function GetMatchInfo() {
+    const match_info = await PartidaService.GetMatchInfo(Number(id));
+
+    console.log(match_info)
+
+    SetTipo(match_info?.match_info.tipo_partida);
+  }
+
+  useEffect(() => {
+    GetMatchInfo()
+  }, []);
+
   useEffect(() => {
     const getMatch = async () => {
       try {
@@ -150,7 +165,7 @@ export default function Qualificacao() {
 
   return (
     <div className={styles.container}>
-      <Header title={`Qualificatória #${numero_partida}`} />
+      <Header title={`${tipo_partida} #${numero_partida}`} />
 
       {/* 🟥 Equipes Vermelhas */}
       <div className={`${styles.equipesRed} ${styles.equipesRedBox}`}>

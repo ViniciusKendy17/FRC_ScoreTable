@@ -13,6 +13,12 @@
   overflow: hidden;
 }
 
+.blackBackground {
+  background-color: black !important;
+  transition: background-color 0.5s ease;
+}
+
+
 .equipesRed {
   grid-column: 1 / 2;
   display: flex;
@@ -171,4 +177,15 @@
 header{
   max-width: 100% !important;
   width: 155vh !important;
+}
+
+.overlay {
+  position: fixed; /* cobre tudo */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 1; /* pode ajustar para semitransparente tipo 0.8 */
+  z-index: 9999; /* garante que fique por cima */
 }

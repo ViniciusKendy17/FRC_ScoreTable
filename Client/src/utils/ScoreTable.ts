@@ -15,6 +15,8 @@ export type elements =
   | "falta_prh"
   | "falta_transp"
   | "falta_estacionar"
+  | "falta_grave"
+  | "falta_leve"
   | "au_idade_media"
   | "op_idade_media"
   | "op_pre_historico"
@@ -34,6 +36,8 @@ export type ValoresPontos = {
   falta_prh: number;
   falta_transp: number;
   falta_estacionar: number;
+  falta_grave: number;
+  falta_leve: number;
 };
 
 type PartialPontos = Partial<ValoresPontos>;
@@ -54,6 +58,8 @@ export type Score = {
   falta_branca: number;
   falta_estacionar: number;
   falta_prh: number;
+  falta_leve: number;
+  falta_grave: number;
   falta_transp: number;
   au_idade_media: number;
   op_idade_media: number;
@@ -91,17 +97,17 @@ export const elements: GameElement[] = [
   },
   {
     id: 5,
-    nome: "SAÍDA",
+    nome: "SAÍDA AUTÔNOMO",
     pontos: { sair: 1 },
   },
   {
     id: 6,
-    nome: "FALTA - IMPEDIR PONTUAÇÃO",
+    nome: "FALTA - LINHA BRANCA",
     pontos: { falta_branca: 2 },
   },
   {
     id: 7,
-    nome: "FALTA - JOGAR ARTEFATO",
+    nome: "FALTA - JOGAR ARTEFATO (Pré Histórico)",
     pontos: { falta_prh: 6 },
   },
   {
@@ -111,7 +117,17 @@ export const elements: GameElement[] = [
   },
   {
     id: 9,
-    nome: "FALTA - ESTACIONAR METADE DO  POÇO ",
+    nome: "FALTA - ESTACIONAR METADE DO POÇO ",
     pontos: { falta_estacionar: 6 },
+  },
+  {
+    id: 10,
+    nome: "FALTA GRAVE",
+    pontos: { falta_grave: 6 },
+  },
+  {
+    id: 11,
+    nome: "FALTA LEVE",
+    pontos: { falta_leve: 2 },
   },
 ];

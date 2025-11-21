@@ -10,7 +10,6 @@ type PlacarProps = {
   time?: string | number;
 };
 
-
 export default function Placar({
   className,
   variant = "qualificatoria",
@@ -18,8 +17,6 @@ export default function Placar({
   scoreRight = 0,
   time = "0:00",
 }: PlacarProps) {
- 
-
   return (
     <div>
       {variant === "qualificatoria" && (
@@ -27,21 +24,16 @@ export default function Placar({
       )}
 
       {variant === "partida" && (
-        <div
-          className={`${className ?? ""} ${stylesPartida.placar}`}
-        >
+        <div className={`${className ?? ""} ${stylesPartida.placar}`}>
           <div className={stylesPartida.containerPlacar}>
-            <p className={stylesPartida.tipografiaPlacar} style={{ textAlign: 'left' }}>
+            <p
+              className={stylesPartida.tipografiaPlacar}
+              style={{ textAlign: "left" }}
+            >
               {scoreLeft}
             </p>
-            <p
-              className={stylesPartida.tipografiaResultado}
-            >
-              {time}
-            </p>
-            <p className={stylesPartida.tipografiaPlacar}>
-              {scoreRight}
-            </p>
+            <p className={stylesPartida.tipografiaResultado}>{time}</p>
+            <p className={stylesPartida.tipografiaPlacar}>{scoreRight}</p>
           </div>
         </div>
       )}
@@ -50,27 +42,29 @@ export default function Placar({
         <div
           className={`${className ?? ""} ${stylesWiner.placar}`} // usar estilo do Resultado
           style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "80px",
-            width: "400px",
-            maxWidth: "100%",
+            // display: "flex",
+            // flexDirection: "row",
+            // justifyContent: "center",
+            // alignItems: "center",
+            // gap: "100px",
+            // width: "400px",
+            // maxWidth: "100%",
           }}
         >
-          <p
-            style={{ paddingTop: "20px" }}
-            className={stylesWiner.tipografiaPlacar}
-          >
-            {scoreLeft}
-          </p>
-          <p
-            style={{ paddingTop: "20px" }}
-            className={stylesWiner.tipografiaPlacar}
-          >
-            {scoreRight}
-          </p>
+          <div style={{display: "flex", alignItems: "center", justifyContent: "space-around", width:"100%"}} >
+            <p
+              style={{ paddingTop: "20px" }}
+              className={stylesWiner.tipografiaPlacar}
+            >
+              {scoreLeft}
+            </p>
+            <p
+              style={{ paddingTop: "20px" }}
+              className={stylesWiner.tipografiaPlacar}
+            >
+              {scoreRight}
+            </p>
+          </div>
         </div>
       )}
     </div>

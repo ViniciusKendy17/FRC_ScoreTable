@@ -5,7 +5,7 @@ import Footer from "../../Components/Footer";
 import TeamBox from "../../Components/TeamBox";
 import Placar from "../../Components/Placar";
 import GridTable from "../../Components/GridTable";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
 interface Alianca {
@@ -25,13 +25,15 @@ interface TeamInfo {
 
 export default function Resultado() {
   const { id } = useParams<{ id: string }>();
-  const endpoint = "http://192.168.0.104:3000/frc/";
+  const endpoint = "http://10.100.10.58:3000/frc/";
   const [data, setData] = useState<Alianca[]>([]);
   const [loading, setLoading] = useState(true);
   const [nome, setNome] = useState<TeamInfo[]>([]);
   const [showWinnerGif, setShowWinnerGif] = useState(false);
   const [aliancaGif, setAliancaGif] = useState<string | undefined>(undefined);
   const [fadeOut, setFadeOut] = useState(false);
+
+  const nav = useNavigate();
 
   // 🎵 Função para tocar som
   function playSound(file: string, volume = 1.0) {
@@ -71,7 +73,7 @@ export default function Resultado() {
         if (!response.ok) throw new Error(`Erro ${response.status}`);
         const json = await response.json();
         setData(json.alliances || []);
-        console.log("APi", json)
+        console.log("APi", json);
       } catch (error) {
         console.error("Erro ao buscar partida:", error);
       } finally {
@@ -94,26 +96,40 @@ export default function Resultado() {
         sair: get("vermelho")?.sair ?? 0,
         idade_media: get("vermelho")?.idade_media ?? 0,
         pre_historico: get("vermelho")?.pre_historico ?? 0,
-        estacionar: get("vermelho")?.estacionar ?? 0,
+        estacionar: get("vermelho")?.poco_endgame ?? 0,
         faltas: get("azul")?.faltas_pontos ?? 0,
         total_pontos: get("vermelho")?.total_pontos ?? 0,
         total_rp: get("vermelho")?.total_rp ?? 0,
         auto_pontos: get("vermelho")?.auto_pontos ?? 0,
+        au_idade_media: get("vermelho")?.idade_media_au ?? 0,
         color: "vermelho",
       },
       pontosAlianca_Azul: {
         sair: get("azul")?.sair ?? 0,
         idade_media: get("azul")?.idade_media ?? 0,
         pre_historico: get("azul")?.pre_historico ?? 0,
-        estacionar: get("azul")?.estacionar ?? 0,
+        estacionar: get("azul")?.poco_endgame ?? 0,
         faltas: get("vermelho")?.faltas_pontos ?? 0,
         total_pontos: get("azul")?.total_pontos ?? 0,
         total_rp: get("azul")?.total_rp ?? 0,
         auto_pontos: get("azul")?.auto_pontos ?? 0,
+        au_idade_media: get("azul")?.idade_media_au ?? 0 ,
         color: "azul",
       },
     };
   }, [data]);
+
+  
+
+  const idadeVermelha = Number(pontosAlianca_Vermelha?.idade_media ?? 0); 
+  const au_idade_vermelha = Number(pontosAlianca_Vermelha?.au_idade_media ?? 0);
+
+  const soma_v = idadeVermelha + au_idade_vermelha;
+
+    const idadeAzul = Number(pontosAlianca_Azul?.idade_media ?? 0); 
+  const au_idade_azul = Number(pontosAlianca_Azul?.au_idade_media ?? 0);
+
+  const soma_a = idadeAzul + au_idade_azul;
 
   // 🧩 Função pura (sem setState) para calcular RP
   function getRankingPointImagesPure(alianca: any) {
@@ -123,13 +139,15 @@ export default function Resultado() {
     const auto_pontos = Number(alianca.auto_pontos);
     const estacionar = Number(alianca.poco_endgame);
 
+
     const ids =
-      alianca.color === "vermelho"
-        ? { base: 3, auto: 4, estac: 1 }
-        : { base: 13, auto: 14, estac: 11 };
+      alianca.color === "vermelho" ? { base: 3, auto: 4, estac: 1 }: { base: 13, auto: 14, estac: 11 };
+
+    console.log(`id`,pontosAlianca_Vermelha)
+
 
     if (total_rp === 1 && auto_pontos > 5) imagens.push(ids.auto);
-    if (total_rp === 1 && estacionar === 3) imagens.push(ids.estac);
+    if (total_rp === 1 && estacionar > 3) imagens.push(ids.estac);
     if (total_rp === 2 && estacionar > 3 && auto_pontos > 5)
       imagens.push(ids.estac, ids.auto);
     if (total_rp === 3) imagens.push(ids.base, ids.base, ids.base);
@@ -140,9 +158,9 @@ export default function Resultado() {
     if (total_rp === 5)
       imagens.push(ids.estac, ids.auto, ids.base, ids.base, ids.base);
 
+
     return imagens;
   }
-
 
   const rpVermelho = useMemo(
     () => getRankingPointImagesPure(pontosAlianca_Vermelha),
@@ -158,39 +176,56 @@ export default function Resultado() {
     if (!pontosAlianca_Vermelha || !pontosAlianca_Azul) return null;
     return pontosAlianca_Vermelha.total_pontos > pontosAlianca_Azul.total_pontos
       ? "vermelho"
-      : pontosAlianca_Vermelha.total_pontos <
-        pontosAlianca_Azul.total_pontos
+      : pontosAlianca_Vermelha.total_pontos < pontosAlianca_Azul.total_pontos
       ? "azul"
       : null;
   }, [pontosAlianca_Vermelha, pontosAlianca_Azul]);
 
+  useEffect(() => {
+    if (!vencedorCalc) return;
 
-useEffect(() => {
-  if (!vencedorCalc) return;
+    setShowWinnerGif(true);
+    playSound("match_result.wav");
 
-  setShowWinnerGif(true);
-  playSound("match_result.wav");
+    if (vencedorCalc === "azul") {
+      setAliancaGif("/Gif/blueWinner.mp4");
+    } else {
+      setAliancaGif(
+        "https://community.firstinspires.org/hubfs/2025%20Animation.gif"
+      );
+    }
 
-  if (vencedorCalc === "azul") {
-    setAliancaGif("/videos/blueWinner.mp4");
-  } else {
-    setAliancaGif("https://community.firstinspires.org/hubfs/2025%20Animation.gif");
-  }
 
+    const fadeTimer = setTimeout(() => setFadeOut(true), 4500);
 
-  const fadeTimer = setTimeout(() => setFadeOut(true), 4500);
+    const hideTimer = setTimeout(() => {
+      setShowWinnerGif(false);
+      setFadeOut(false);
+    }, 7000);
 
-  const hideTimer = setTimeout(() => {
-    setShowWinnerGif(false);
-    setFadeOut(false);
-  }, 5000);
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(hideTimer);
+    };
+  }, [vencedorCalc]);
 
-  return () => {
-    clearTimeout(fadeTimer);
-    clearTimeout(hideTimer);
-  };
-}, [vencedorCalc]);
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() === "h") {
+        event.preventDefault(); // evita scroll da página
+        console.log(event.key);
+        nav("/");
+      }
 
+      if (event.key.toLowerCase() == "r") {
+        event.preventDefault();
+        nav(`/classificacao`);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [nav]);
 
   if (showWinnerGif && vencedorCalc) {
     return (
@@ -203,7 +238,7 @@ useEffect(() => {
           width: "100vw",
           background: "black",
           overflow: "hidden",
-         opacity: fadeOut ? 0 : 1,
+          opacity: fadeOut ? 0 : 1,
           transition: "opacity 1s ease-in-out",
         }}
       >
@@ -213,25 +248,40 @@ useEffect(() => {
             autoPlay
             muted
             playsInline
-            style={{ width: "100vw", maxWidth: "100%", height: "100vh", maxHeight: "100%", objectFit: "cover"}}
+            preload="auto"
+            style={{
+              width: "100vw",
+              maxWidth: "100%",
+              height: "100vh",
+              maxHeight: "100%",
+              objectFit: "cover",
+            }}
           />
         ) : (
           <img
             src={aliancaGif!}
             alt="Winner Animation"
-            style={{ width: "100vw", maxWidth: "100%", height: "100vh", maxHeight: "100%", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat"  }}
+            style={{
+              width: "100vw",
+              maxWidth: "100%",
+              height: "100vh",
+              maxHeight: "100%",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
           />
         )}
       </div>
     );
   }
 
-
   return (
-    <div className={styles.container}
+    <div
+      className={styles.container}
       style={{
         opacity: showWinnerGif ? 0 : 1,
-        transition: "opacity 1s ease-in-out" 
+        transition: "opacity 1s ease-in-out",
       }}
     >
       <Header title={`Resultado`} />
@@ -260,7 +310,7 @@ useEffect(() => {
                 }}
                 pasta="winner"
               />
-              <ImageById
+              {/* <ImageById
                 id={23}
                 alt="Vermelho Winner"
                 style={{
@@ -269,7 +319,7 @@ useEffect(() => {
                   aspectRatio: "2037 / 319",
                 }}
                 pasta="winner"
-              />
+              /> */}
             </>
           ) : (
             <>
@@ -304,7 +354,7 @@ useEffect(() => {
               <TeamBox
                 key={`red-${i}`}
                 color="red"
-                numbers={[numero, 0]}
+                numbers={[numero]}
                 teamName={nomeEncontrado || `Time ${numero}`}
                 variant="resultado"
               />
@@ -338,28 +388,27 @@ useEffect(() => {
               ))}
             </div>
           </>
-        ):(
-            <>
-              <div
-                style={{
-                  height: "8vh",
-                  width: "100w",
-                  maxWidth: "600px",
-                  aspectRatio: "2037 / 1011",
-                  visibility: "hidden",
-                }}
-              />
-              <div
-                style={{
-                  width: "100vw",
-                  maxWidth: "600px",
-                  aspectRatio: "2037 / 319",
-                  visibility: "hidden",
-                }}
-              />
-            </>
-          )
-      }
+        ) : (
+          <>
+            <div
+              style={{
+                height: "8vh",
+                width: "100w",
+                maxWidth: "600px",
+                aspectRatio: "2037 / 1011",
+                visibility: "hidden",
+              }}
+            />
+            <div
+              style={{
+                width: "100vw",
+                maxWidth: "600px",
+                aspectRatio: "2037 / 319",
+                visibility: "hidden",
+              }}
+            />
+          </>
+        )}
       </div>
 
       <div className={styles.placarContainer}>
@@ -382,9 +431,9 @@ useEffect(() => {
               `${pontosAlianca_Azul?.pre_historico ?? 0}`,
             ],
             [
-              `${pontosAlianca_Vermelha?.idade_media ?? 0}`,
+              `${soma_v ?? 0}`,
               "Middle Ages",
-              `${pontosAlianca_Azul?.idade_media ?? 0}`,
+              `${soma_a ?? 0}`,
             ],
             [
               `${pontosAlianca_Vermelha?.estacionar ?? 0}`,
@@ -411,7 +460,7 @@ useEffect(() => {
             alignItems: "center",
           }}
         >
-          {vencedorCalc === "azul" ?  (
+          {vencedorCalc === "azul" ? (
             <>
               <ImageById
                 id={22}
@@ -423,7 +472,7 @@ useEffect(() => {
                 }}
                 pasta="winner"
               />
-              <ImageById
+              {/* <ImageById
                 id={23}
                 alt="Azul Winner"
                 style={{
@@ -432,9 +481,9 @@ useEffect(() => {
                   aspectRatio: "2037 / 319",
                 }}
                 pasta="winner"
-              />
+              /> */}
             </>
-          ):(
+          ) : (
             <>
               <div
                 style={{
@@ -467,7 +516,7 @@ useEffect(() => {
               <TeamBox
                 key={`blue-${i}`}
                 color="blue"
-                numbers={[numero, 0]}
+                numbers={[numero]}
                 teamName={nomeEncontrado || `Time ${numero}`}
                 variant="resultado"
               />
@@ -501,27 +550,27 @@ useEffect(() => {
               ))}
             </div>
           </>
-        ):(
-            <>
-              <div
-                style={{
-                  height: "8vh",
-                  width: "100w",
-                  maxWidth: "600px",
-                  aspectRatio: "2037 / 1011",
-                  visibility: "hidden",
-                }}
-              />
-              <div
-                style={{
-                  width: "100vw",
-                  maxWidth: "600px",
-                  aspectRatio: "2037 / 319",
-                  visibility: "hidden",
-                }}
-              />
-            </>
-          )}
+        ) : (
+          <>
+            <div
+              style={{
+                height: "8vh",
+                width: "100w",
+                maxWidth: "600px",
+                aspectRatio: "2037 / 1011",
+                visibility: "hidden",
+              }}
+            />
+            <div
+              style={{
+                width: "100vw",
+                maxWidth: "600px",
+                aspectRatio: "2037 / 319",
+                visibility: "hidden",
+              }}
+            />
+          </>
+        )}
       </div>
 
       <Footer />
